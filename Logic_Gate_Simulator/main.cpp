@@ -8,6 +8,7 @@
  *                      30026792
  * First Commit Date:   25/04/2020
  * Last Commit Date:    11/06/2020
+ * Version:             v0.01
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <QApplication>

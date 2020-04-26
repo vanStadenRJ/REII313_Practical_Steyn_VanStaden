@@ -26,10 +26,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    Simulation.cpp
+    Simulation.cpp \
+    Gate.cpp
 
 HEADERS += \
-    Simulation.h
+    Simulation.h \
+    Gate.h
 
 FORMS +=
 
@@ -37,3 +39,6 @@ FORMS +=
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc
