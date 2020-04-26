@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
     Simulation.cpp \
     Gate.cpp \
-    inputsize.cpp
+    inputsize.cpp \
+    BuildMode.cpp
 
 HEADERS += \
     Simulation.h \
     Gate.h \
-    inputsize.h
+    inputsize.h \
+    BuildMode.h
 
 FORMS += \
     inputsize.ui

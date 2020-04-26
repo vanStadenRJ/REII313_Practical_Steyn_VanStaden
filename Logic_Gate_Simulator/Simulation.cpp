@@ -1,5 +1,6 @@
 #include "Simulation.h"
-#include "Gate.h"
+#include "BuildMode.h"
+//#include "Gate.h"
 
 Simulation::Simulation()
 {
@@ -11,15 +12,53 @@ Simulation::Simulation()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    QGraphicsRectItem * rect = new QGraphicsRectItem();
-    rect->setRect(0,0,100,100);
-    scene->addItem(rect);
+//    Gate * gate = new Gate();
+//    gate->setPos(500,400);
+//    scene->addItem(gate);
 
-    Gate * gate = new Gate();
-    gate->setPos(500,400);
-    scene->addItem(gate);
+    //scene->addItem(gate->rect);
 
-    scene->addItem(gate->rect);
+    // set cursor
+    cursor = nullptr;
+    build_mode = nullptr;
+    this->setMouseTracking(true);
 
+    BuildMode * ic = new BuildMode();
+    scene->addItem(ic);
+}
 
+void Simulation::set_Cursor(QString filename)
+{
+    if(!(cursor == nullptr))
+    {
+        scene->removeItem(cursor);
+        delete cursor;
+    }
+    cursor = new QGraphicsPixmapItem();
+    cursor->setPixmap(QPixmap(filename));
+    scene->addItem(cursor);
+}
+
+void Simulation::mouseMoveEvent(QMouseEvent *event)
+{
+    if (!(cursor==nullptr))
+    {
+        cursor->setPos(event->pos());
+    }
+}
+
+void Simulation::mousePressEvent(QMouseEvent *event)
+{
+    if(build_mode)
+    {
+        scene->addItem(build_mode);
+        build_mode->setPos(event->pos());
+        delete cursor;
+        this->scene->removeItem(cursor);
+        cursor = nullptr;
+        build_mode = nullptr;
+    }
+    else {
+        QGraphicsView::mousePressEvent(event);
+    }
 }

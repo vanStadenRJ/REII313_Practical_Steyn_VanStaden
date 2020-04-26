@@ -1,6 +1,9 @@
 #include "Gate.h"
+#include "Simulation.h"
 #include <QDebug>
 #include <QInputDialog>
+
+extern Simulation * simulation;
 
 Gate::Gate(QGraphicsItem *parent)
 {

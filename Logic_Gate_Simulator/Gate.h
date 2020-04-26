@@ -7,10 +7,6 @@
 #include <QGraphicsRectItem>
 #include "inputsize.h"
 
-#include "Simulation.h"
-
-extern Simulation * simulation;
-
 class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -24,7 +20,6 @@ public:
 private:
     int input_size;
     int space;
-
 
 public slots:
 
