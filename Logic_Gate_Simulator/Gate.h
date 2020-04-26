@@ -5,6 +5,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
+#include "inputsize.h"
 
 #include "Simulation.h"
 
@@ -16,9 +17,13 @@ class Gate: public QObject, public QGraphicsPixmapItem
 public:
     Gate(QGraphicsItem * parent = 0);
     QGraphicsRectItem *rect;
-    QGraphicsEllipseItem *circle;
+    //QGraphicsEllipseItem *circle;
+    QGraphicsRectItem *input_rect;
+    InputSize *ye;
 
 private:
+    int input_size;
+    int space;
 
 
 public slots:

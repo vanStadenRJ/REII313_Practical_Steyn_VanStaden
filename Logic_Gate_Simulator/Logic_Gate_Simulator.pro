@@ -27,13 +27,16 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     Simulation.cpp \
-    Gate.cpp
+    Gate.cpp \
+    inputsize.cpp
 
 HEADERS += \
     Simulation.h \
-    Gate.h
+    Gate.h \
+    inputsize.h
 
-FORMS +=
+FORMS += \
+    inputsize.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
