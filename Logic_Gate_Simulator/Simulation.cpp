@@ -20,6 +20,7 @@ Simulation::Simulation()
 
     BuildMode * ic = new BuildMode();
     scene->addItem(ic);
+
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)

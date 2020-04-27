@@ -7,6 +7,8 @@
 #include <QGraphicsPixmapItem>
 #include <QMouseEvent>
 #include <QString>
+#include <QPainter>
+#include <QPaintEvent>
 
 #include "Gate.h"
 
