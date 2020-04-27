@@ -1,6 +1,8 @@
 #include "Simulation.h"
 #include "BuildMode.h"
 //#include "Gate.h"
+#include <QDebug>
+#include <QCursor>
 
 Simulation::Simulation()
 {
@@ -12,51 +14,37 @@ Simulation::Simulation()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-//    Gate * gate = new Gate();
-//    gate->setPos(500,400);
-//    scene->addItem(gate);
-
-    //scene->addItem(gate->rect);
-
     // set cursor
-    cursor = nullptr;
-    build_mode = nullptr;
+    isBuildMode = false;
     this->setMouseTracking(true);
 
     BuildMode * ic = new BuildMode();
     scene->addItem(ic);
 }
 
-void Simulation::set_Cursor(QString filename)
-{
-    if(!(cursor == nullptr))
-    {
-        scene->removeItem(cursor);
-        delete cursor;
-    }
-    cursor = new QGraphicsPixmapItem();
-    cursor->setPixmap(QPixmap(filename));
-    scene->addItem(cursor);
-}
-
-void Simulation::mouseMoveEvent(QMouseEvent *event)
-{
-    if (!(cursor==nullptr))
-    {
-        cursor->setPos(event->pos());
-    }
-}
-
 void Simulation::mousePressEvent(QMouseEvent *event)
 {
-    if(build_mode)
+    if(isBuildMode)
     {
-        scene->addItem(build_mode);
-        build_mode->setPos(event->pos());
-        delete cursor;
-        this->scene->removeItem(cursor);
-        cursor = nullptr;
-        build_mode = nullptr;
+        if(event->button() == Qt::LeftButton)
+        {
+            qDebug() << "yeet|;";
+            gate = new Gate();
+            scene->addItem(gate);
+            gate->setPos(event->pos());
+            //gate = nullptr;
+            isBuildMode = false;
+            QCursor def = QCursor();
+            def.setShape(Qt::ArrowCursor);
+            this->setCursor(def);
+        }
+        else if (event->button() == Qt::RightButton)
+        {
+            QCursor def = QCursor();
+            def.setShape(Qt::ArrowCursor);
+            this->setCursor(def);
+            isBuildMode = false;
+        }
     }
     else {
         QGraphicsView::mousePressEvent(event);

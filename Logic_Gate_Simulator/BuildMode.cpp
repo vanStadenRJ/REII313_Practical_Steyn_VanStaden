@@ -10,9 +10,11 @@ BuildMode::BuildMode(QGraphicsItem *parent): QGraphicsPixmapItem (parent)
 
 void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(simulation->build_mode == nullptr)
+    if(simulation->isBuildMode == false)
     {
-        simulation->build_mode = new Gate();
-        simulation->set_Cursor(QString(":/images/And_Icon.png"));
+        simulation->isBuildMode = true;
+        cur = QCursor(QPixmap(":/images/And_Gate.png"));
+        //simulation->set_Cursor(QString(":/images/And_Icon.png"));
+        simulation->setCursor(cur);
     }
 }

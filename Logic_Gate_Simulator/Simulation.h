@@ -16,14 +16,13 @@ class Simulation: public QGraphicsView
 public:
     //Member Functions
     Simulation();
-    void set_Cursor(QString filename);
-    void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
 
     //Member Attributes
     QGraphicsScene * scene;
-    QGraphicsPixmapItem * cursor;
-    Gate * build_mode;
+    Gate * gate;
+
+    bool isBuildMode;
 };
 
 #endif // SIMULATION_H
