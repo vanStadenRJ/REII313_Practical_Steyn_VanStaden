@@ -15,6 +15,7 @@ Gate::Gate(QGraphicsItem *parent)
     rect = new QGraphicsRectItem(this);
     rect->setRect(x(), y(), 20, 5);
     rect->setPos(pixmap().width()-5, pixmap().height()/2 - rect->rect().height()/2);
+
 //    circle = new QGraphicsEllipseItem(rect);
 //    circle->setRect(x(), y(), 10, 10);
 //    circle->setPos(rect->rect().width(),rect->rect().height()/2 - circle->rect().height()/2);
@@ -35,4 +36,12 @@ Gate::Gate(QGraphicsItem *parent)
         input_rect->setRect(x(), y(), 20, 5);
         input_rect->setPos(this->x() - input_rect->rect().width()+3, space*i + input_rect->rect().height()*(i-1));
     }
+}
+
+void Gate::Output()
+{
+    out = new OutputCon();
+    out->setPos(x()+ pixmap().width()-5 + rect->rect().width(),y() + pixmap().height()/2 - rect->rect().height()/2 +
+                rect->rect().height()/2 - out->rect().height()/2);
+    simulation->scene->addItem(out);
 }
