@@ -44,4 +44,5 @@ void Gate::Output()
     out->setPos(x()+ pixmap().width()-5 + rect->rect().width(),y() + pixmap().height()/2 - rect->rect().height()/2 +
                 rect->rect().height()/2 - out->rect().height()/2);
     simulation->scene->addItem(out);
+    out->source = simulation->mapFromGlobal(QCursor::pos());
 }

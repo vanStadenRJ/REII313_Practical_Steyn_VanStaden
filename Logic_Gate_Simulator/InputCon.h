@@ -1,11 +1,15 @@
 #ifndef INPUTCON_H
 #define INPUTCON_H
 
+#include <QGraphicsItem>
+#include <QObject>
+#include <QGraphicsEllipseItem>
 
-class InputCon
+class InputCon: public QObject, public QGraphicsEllipseItem
 {
+    Q_OBJECT
 public:
-    InputCon();
+    InputCon(QGraphicsItem * parent = 0);
 };
 
 #endif // INPUTCON_H

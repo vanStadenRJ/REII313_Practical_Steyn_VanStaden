@@ -5,7 +5,8 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
-#include "inputsize.h"
+#include "OutputCon.h"
+
 
 class Gate: public QObject, public QGraphicsPixmapItem
 {
@@ -13,9 +14,11 @@ class Gate: public QObject, public QGraphicsPixmapItem
 public:
     Gate(QGraphicsItem * parent = 0);
     QGraphicsRectItem *rect;
-    //QGraphicsEllipseItem *circle;
+    QGraphicsEllipseItem *circle;
     QGraphicsRectItem *input_rect;
-    InputSize *ye;
+    OutputCon * out;
+
+    void Output();
 
 private:
     int input_size;

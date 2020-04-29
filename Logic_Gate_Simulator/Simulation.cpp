@@ -1,5 +1,8 @@
 #include "Simulation.h"
 #include "BuildMode.h"
+#include "OutputCon.h"
+#include "Wire.h"
+
 //#include "Gate.h"
 #include <QDebug>
 #include <QCursor>
@@ -14,13 +17,21 @@ Simulation::Simulation()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    QGraphicsLineItem * ln = new QGraphicsLineItem();
+    ln->setLine(10,10,100,100);
+    scene->addItem(ln);
+
     // set cursor
     isBuildMode = false;
+    wireMode = false;
+    move_wire = nullptr;
     this->setMouseTracking(true);
 
     BuildMode * ic = new BuildMode();
     scene->addItem(ic);
 
+    canMove = false;
+    random = false;
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
@@ -33,6 +44,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             gate = new Gate();
             scene->addItem(gate);
             gate->setPos(event->pos());
+            gate->Output();
             //gate = nullptr;
             isBuildMode = false;
             QCursor def = QCursor();
@@ -47,7 +59,70 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             isBuildMode = false;
         }
     }
-    else {
+    else
+    {
         QGraphicsView::mousePressEvent(event);
     }
+
+    if(wireMode)
+    {
+        if(move_wire == nullptr)
+        {
+            qDebug() << "Wire";
+            move_wire = new Wire();
+            move_wire->source = this->mapFromGlobal(QCursor::pos());
+            scene->addItem(move_wire);
+            canMove = true;
+            emit clicked();
+        }
+        else
+        {
+            if(event->button() == Qt::LeftButton)
+            {
+                wire = new Wire();
+                wire->source = move_wire->source;
+                wire->dest = move_wire->dest;
+                QLineF line;
+                line.setPoints(move_wire->source, move_wire->dest);
+                wire->setLine(line);
+                scene->addItem(wire);
+            }
+            canMove = false;
+            scene->removeItem(move_wire);
+            move_wire = nullptr;
+            delete move_wire;
+            wireMode = false;
+        }
+    }
+    else
+    {
+        QGraphicsView::mousePressEvent(event);
+        qDebug() << "Not Wire";
+        if (!(move_wire == nullptr))
+        {
+            canMove = false;
+            scene->removeItem(move_wire);
+            move_wire = nullptr;
+            //scene->removeItem(move_wire);
+            delete move_wire;
+            wireMode = false;
+        }
+    }
+}
+
+void Simulation::mouseMoveEvent(QMouseEvent *event)
+{
+    if(canMove == true)
+    {
+        move_wire->dest = this->mapFromGlobal(QCursor::pos());
+        QLineF line;
+        line.setPoints(move_wire->source, move_wire->dest);
+        move_wire->setLine(line);
+        //scene->addItem(wire);
+        scene->update();
+    }
+    else {
+        QGraphicsView::mouseMoveEvent(event);
+    }
+
 }

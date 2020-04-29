@@ -12,8 +12,6 @@
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <QApplication>
-
-#include "inputsize.h"
 #include "Simulation.h"
 
 //External Global variable as to be used throughout program

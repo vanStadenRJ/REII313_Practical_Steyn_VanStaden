@@ -1,6 +1,6 @@
 #include "InputCon.h"
 
-InputCon::InputCon()
+InputCon::InputCon(QGraphicsItem *parent)
 {
 
 }

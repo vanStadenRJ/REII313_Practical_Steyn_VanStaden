@@ -28,17 +28,20 @@ SOURCES += \
         main.cpp \
     Simulation.cpp \
     Gate.cpp \
-    inputsize.cpp \
-    BuildMode.cpp
+    BuildMode.cpp \
+    InputCon.cpp \
+    OutputCon.cpp \
+    Wire.cpp
 
 HEADERS += \
     Simulation.h \
     Gate.h \
-    inputsize.h \
-    BuildMode.h
+    BuildMode.h \
+    InputCon.h \
+    OutputCon.h \
+    Wire.h
 
-FORMS += \
-    inputsize.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
