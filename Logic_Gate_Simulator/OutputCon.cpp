@@ -13,15 +13,8 @@ OutputCon::OutputCon()
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
-    this->canClick = true;
-    this->isSource = false;
 
     QObject::connect(simulation, SIGNAL(clicked()), this, SLOT(changeColor()));
-
-//    QBrush brush;
-//    brush.setColor(Qt::darkRed);
-//    brush.setStyle(Qt::SolidPattern);
-//    this->setBrush(brush);
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -44,22 +37,10 @@ void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     simulation->wireMode = false;
 }
 
-void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    //wire = new Wire();
-    //wire->source = simulation->mapFromGlobal(QCursor::pos());
-//    this->source = simulation->mapFromGlobal(QCursor::pos());
-
-//    if(canClick == false)
-//    {
-
-    //    }
-}
-
 void OutputCon::changeColor()
 {
     QBrush brush;
-    brush.setColor(Qt::red);
+    brush.setColor(Qt::darkGreen);
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 }

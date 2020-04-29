@@ -17,14 +17,10 @@ public:
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-    void mousePressEvent(QGraphicsSceneMouseEvent * event);
     //void mouseMoveEvent(QMouseEvent * event);
 
     //QGraphicsLineItem * wire;
-    Wire * wire = new Wire();
     QPointF source;
-    bool canClick;
-    bool isSource;
 
 public slots:
     void changeColor();

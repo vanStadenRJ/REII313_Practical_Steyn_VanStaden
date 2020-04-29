@@ -32,10 +32,10 @@ public:
     bool isBuildMode;
     bool wireMode;
     bool canMove;
-    bool random;
 
 signals:
     void clicked();
+    void un_Select();
 };
 
 #endif // SIMULATION_H
