@@ -11,7 +11,7 @@ class InputCon: public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
 public:
-    InputCon(QGraphicsItem * parent = 0);
+    InputCon(QGraphicsItem * parent);
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 

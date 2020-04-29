@@ -13,7 +13,7 @@ class OutputCon: public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
 public:
-    OutputCon();
+    OutputCon(QGraphicsItem * parent);
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
@@ -21,6 +21,7 @@ public:
 
     //QGraphicsLineItem * wire;
     QPointF source;
+
 
 public slots:
     void changeColor();

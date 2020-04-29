@@ -31,8 +31,7 @@ SOURCES += \
     BuildMode.cpp \
     InputCon.cpp \
     OutputCon.cpp \
-    Wire.cpp \
-    Highlight.cpp
+    Wire.cpp
 
 HEADERS += \
     Simulation.h \
@@ -40,8 +39,7 @@ HEADERS += \
     BuildMode.h \
     InputCon.h \
     OutputCon.h \
-    Wire.h \
-    Highlight.h
+    Wire.h
 
 FORMS +=
 

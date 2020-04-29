@@ -2,7 +2,7 @@
 
 #include <QPen>
 
-Wire::Wire(QGraphicsItem *parent)
+Wire::Wire()
 {
     QPen pen;
     pen.setWidth(2);

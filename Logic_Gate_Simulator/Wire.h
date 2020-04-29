@@ -9,7 +9,7 @@
 class Wire: public QObject, public QGraphicsLineItem
 {
 public:
-    Wire(QGraphicsItem * parent = 0);
+    Wire();
 
     QPointF source;
     QPointF dest;

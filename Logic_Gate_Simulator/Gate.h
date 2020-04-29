@@ -7,6 +7,7 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsEffect>
+#include <QKeyEvent>
 #include "OutputCon.h"
 #include "InputCon.h"
 
@@ -15,23 +16,24 @@ class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Gate(QGraphicsItem * parent = 0);
-    QGraphicsRectItem *rect;
-    QGraphicsEllipseItem *circle;
+    Gate();
     QGraphicsRectItem *input_rect;
+    QGraphicsRectItem *rect;
+
+    QGraphicsEllipseItem *circle;
+
     OutputCon * out;
     InputCon * in;
 
     QGraphicsDropShadowEffect * effect;
 
-    void Output();
-    void Input();
-
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
+    void keyPressEvent(QKeyEvent * event);
 
 private:
     int input_size;
     int space;
+
 
 public slots:
     void deleteEffect();

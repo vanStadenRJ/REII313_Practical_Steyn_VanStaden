@@ -114,12 +114,13 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             gate = new Gate();
             scene->addItem(gate);
             gate->setPos(event->pos());
-            gate->Output();
-            gate->Input();
             isBuildMode = false;
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
+
+            //scene->removeItem(gate);
+            //delete(gate);
         }
         else if (event->button() == Qt::RightButton)
         {

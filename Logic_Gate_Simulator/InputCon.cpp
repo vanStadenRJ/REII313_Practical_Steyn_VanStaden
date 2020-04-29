@@ -3,7 +3,7 @@
 
 extern Simulation * simulation;
 
-InputCon::InputCon(QGraphicsItem *parent)
+InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 {
     setRect(0,0,10,10);
 
