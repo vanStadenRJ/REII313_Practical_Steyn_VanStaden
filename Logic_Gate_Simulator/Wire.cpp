@@ -44,6 +44,7 @@ void Wire::keyPressEvent(QKeyEvent *event)
 {
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
     {
+        simulation->nr_Wires = simulation->nr_Wires - 1;
         delete this;
         return;
     }

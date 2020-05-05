@@ -65,16 +65,20 @@ void Gate::keyPressEvent(QKeyEvent *event)
 {
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
     {
-        if(!(simulation->list_Wires.size() == 0))
+        if(!(simulation->nr_Wires == 0))
         {
-            for(int i = 0, n = simulation->list_Wires.size(); i < n; ++i)
+            int i = 0;
+            int n = simulation->list_Wires.size();
+            while(i < n)
             {
-                if((simulation->list_Wires[i]->src_Gate == this->gate_Nr) || (simulation->list_Wires[i]->dest_Gate == this->gate_Nr))
+                if((simulation->list_Wires.at(i)->src_Gate == this->gate_Nr) || (simulation->list_Wires.at(i)->dest_Gate == this->gate_Nr))
                 {
-                    simulation->scene->removeItem(simulation->list_Wires[i]);
-                    delete simulation->list_Wires[i];
-                    //return;
+                    delete simulation->list_Wires.takeAt(i);
+                    i--;
+                    n--;
+                    simulation->nr_Wires = simulation->nr_Wires - 1;
                 }
+                i++;
             }
         }
         delete this;

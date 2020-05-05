@@ -33,6 +33,7 @@ public:
     bool wireMode;
     bool canMove;
     uint nr_Gates;
+    int nr_Wires;
     uint src_Gate;
     uint dest_Gate;
     QList<Wire *> list_Wires;

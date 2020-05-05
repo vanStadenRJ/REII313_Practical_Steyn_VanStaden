@@ -29,7 +29,7 @@ Simulation::Simulation()
 
     canMove = false;
     nr_Gates = 0;
-
+    nr_Wires = 0;
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
@@ -165,6 +165,9 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
+                nr_Wires++;
+                qDebug() << list_Wires.size();
+                //qDebug() << list_Wires.size();
             }
             canMove = false;
             scene->removeItem(move_wire);

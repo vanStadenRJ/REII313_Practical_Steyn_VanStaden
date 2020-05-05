@@ -13,14 +13,11 @@ extern Simulation * simulation;
 OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 {
     setRect(0,0,10,10);
-    //setParent(this);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
 
     QObject::connect(simulation, SIGNAL(clicked()), this, SLOT(changeColor()));
-    //QObject::connect(simulation->gate, SIGNAL(delete()), this, SLOT())
-    //QObject::connect(simulation->gate, SIGNAL(delete_Wire), this, SLOT(deleteWire()));
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
