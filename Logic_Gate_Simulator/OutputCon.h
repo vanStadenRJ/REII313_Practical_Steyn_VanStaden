@@ -22,6 +22,8 @@ public:
     //QGraphicsLineItem * wire;
     QPointF source;
 
+    uint parent_Gate;
+
 
 public slots:
     void changeColor();

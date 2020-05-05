@@ -1,6 +1,8 @@
 #include "InputCon.h"
 #include "Simulation.h"
 
+#include <QDebug>
+
 extern Simulation * simulation;
 
 InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
@@ -21,6 +23,14 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
     simulation->setCursor(Qt::CrossCursor);
     simulation->wireMode = true;
+    if(!(simulation->move_wire == nullptr))
+    {
+        simulation->dest_Gate = this->parent_Gate;
+    }
+    else
+    {
+        simulation->src_Gate = this->parent_Gate;
+    }
 }
 
 void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)

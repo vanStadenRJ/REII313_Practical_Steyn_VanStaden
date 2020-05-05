@@ -16,6 +16,7 @@ public:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 
     QPointF source;
+    uint parent_Gate;
 
 public slots:
     //void changeColor();

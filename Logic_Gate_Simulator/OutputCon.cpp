@@ -32,6 +32,14 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
     simulation->setCursor(Qt::CrossCursor);
     simulation->wireMode = true;
+    if(!(simulation->move_wire == nullptr))
+    {
+        simulation->dest_Gate = this->parent_Gate;
+    }
+    else
+    {
+        simulation->src_Gate = this->parent_Gate;
+    }
 }
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)

@@ -16,7 +16,7 @@ class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Gate();
+    Gate(uint gateNr);
     QGraphicsRectItem *input_rect;
     QGraphicsRectItem *rect;
 
@@ -24,6 +24,8 @@ public:
 
     OutputCon * out;
     InputCon * in;
+
+    uint gate_Nr;
 
     QGraphicsDropShadowEffect * effect;
 

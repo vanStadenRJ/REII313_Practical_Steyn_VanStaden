@@ -32,10 +32,14 @@ public:
     bool isBuildMode;
     bool wireMode;
     bool canMove;
+    uint nr_Gates;
+    uint src_Gate;
+    uint dest_Gate;
 
 signals:
     void clicked();
     void un_Select();
+    void unWire();
 };
 
 #endif // SIMULATION_H

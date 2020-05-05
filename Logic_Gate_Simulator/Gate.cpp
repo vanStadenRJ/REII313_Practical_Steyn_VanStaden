@@ -8,9 +8,10 @@
 
 extern Simulation * simulation;
 
-Gate::Gate()
+Gate::Gate(uint gateNr)
 {
     this->setPixmap(QPixmap(":/images/And_Gate.png"));
+    this->gate_Nr = gateNr;
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
@@ -20,6 +21,7 @@ Gate::Gate()
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
+    out->parent_Gate = gate_Nr;
 
     input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
     space = (pixmap().height() - input_size*5)/(input_size+1);
@@ -33,6 +35,7 @@ Gate::Gate()
         in = new InputCon(input_rect);
         in->setParentItem(input_rect);
         in->setPos(-in->rect().width(), - in->rect().height()/2 + input_rect->rect().height()/2);
+        in->parent_Gate = gate_Nr;
     }
 
     effect = nullptr;
@@ -53,6 +56,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             effect->setOffset(8);
             this->setGraphicsEffect(effect);
             this->setFocus();
+            qDebug() << this->gate_Nr;
         }
     }
 }

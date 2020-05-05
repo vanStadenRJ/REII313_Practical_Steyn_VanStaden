@@ -27,6 +27,7 @@ Simulation::Simulation()
     scene->addItem(ic);
 
     canMove = false;
+    nr_Gates = 0;
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
@@ -106,21 +107,23 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         emit un_Select();
     }
 
+    if(!(wire == nullptr))
+    {
+        emit unWire();
+    }
+
     if(isBuildMode)
     {
         if(event->button() == Qt::LeftButton)
-        {
-            qDebug() << "yeet|;";
-            gate = new Gate();
-            scene->addItem(gate);
-            gate->setPos(event->pos());
+        {            
+            this->nr_Gates = this->nr_Gates + 1;
+            gate = new Gate(this->nr_Gates);
+            scene->addItem(gate);            
+            gate->setPos(event->pos());           
             isBuildMode = false;
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
-
-            //scene->removeItem(gate);
-            //delete(gate);
         }
         else if (event->button() == Qt::RightButton)
         {
@@ -153,6 +156,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire = new Wire();
                 wire->source = move_wire->source;
                 wire->dest = move_wire->dest;
+                wire->src_Gate = this->src_Gate;
+                wire->dest_Gate = this->dest_Gate;
                 QLineF line;
                 line.setPoints(move_wire->source, move_wire->dest);
                 wire->setLine(line);
