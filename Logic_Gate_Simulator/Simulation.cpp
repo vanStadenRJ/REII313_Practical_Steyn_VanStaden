@@ -6,6 +6,7 @@
 //#include "Gate.h"
 #include <QDebug>
 #include <QCursor>
+#include <QList>
 
 Simulation::Simulation()
 {
@@ -28,6 +29,7 @@ Simulation::Simulation()
 
     canMove = false;
     nr_Gates = 0;
+
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
@@ -162,6 +164,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 line.setPoints(move_wire->source, move_wire->dest);
                 wire->setLine(line);
                 scene->addItem(wire);
+                list_Wires << wire;
             }
             canMove = false;
             scene->removeItem(move_wire);

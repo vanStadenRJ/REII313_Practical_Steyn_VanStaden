@@ -19,6 +19,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     this->setAcceptHoverEvents(true);
 
     QObject::connect(simulation, SIGNAL(clicked()), this, SLOT(changeColor()));
+    //QObject::connect(simulation->gate, SIGNAL(delete()), this, SLOT())
     //QObject::connect(simulation->gate, SIGNAL(delete_Wire), this, SLOT(deleteWire()));
 }
 

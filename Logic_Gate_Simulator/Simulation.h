@@ -35,6 +35,7 @@ public:
     uint nr_Gates;
     uint src_Gate;
     uint dest_Gate;
+    QList<Wire *> list_Wires;
 
 signals:
     void clicked();
