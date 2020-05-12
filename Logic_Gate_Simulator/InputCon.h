@@ -17,9 +17,14 @@ public:
 
     QPointF source;
     uint parent_Gate;
+    bool connected;
+    bool test;
+    int posGate;
 
 public slots:
-    //void changeColor();
+    void OutputToInput();
+    void clearNode();
+    void conNode();
 
 private:
 };

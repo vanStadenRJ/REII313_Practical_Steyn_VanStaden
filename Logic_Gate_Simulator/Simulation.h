@@ -28,6 +28,7 @@ public:
     Gate * gate;
     Wire * wire;
     Wire * move_wire;
+    bool Output;
 
     bool isBuildMode;
     bool wireMode;
@@ -42,6 +43,10 @@ signals:
     void clicked();
     void un_Select();
     void unWire();
+    void Output_Show();
+    void Input_Show();
+    void clear_Node();
+    void connected_Node();
 };
 
 #endif // SIMULATION_H

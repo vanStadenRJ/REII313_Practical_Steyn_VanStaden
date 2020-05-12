@@ -12,6 +12,7 @@ Gate::Gate(uint gateNr)
 {
     this->setPixmap(QPixmap(":/images/And_Gate.png"));
     this->gate_Nr = gateNr;
+    this->outputGate = 0;
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
@@ -26,6 +27,11 @@ Gate::Gate(uint gateNr)
     input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
     space = (pixmap().height() - input_size*5)/(input_size+1);
 
+    for(int i = 0; i < 5; i++)
+    {
+        arrInput[i] = 0;
+    }
+
     for(int i = 1; i <= input_size; i++)
     {
         input_rect = new QGraphicsRectItem(this);
@@ -35,6 +41,7 @@ Gate::Gate(uint gateNr)
         in = new InputCon(input_rect);
         in->setParentItem(input_rect);
         in->setPos(-in->rect().width(), - in->rect().height()/2 + input_rect->rect().height()/2);
+        in->posGate = i;
         in->parent_Gate = gate_Nr;
     }
 

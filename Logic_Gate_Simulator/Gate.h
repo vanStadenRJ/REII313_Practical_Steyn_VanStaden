@@ -11,31 +11,27 @@
 #include "OutputCon.h"
 #include "InputCon.h"
 
-
 class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
     Gate(uint gateNr);
+    QGraphicsDropShadowEffect * effect;
     QGraphicsRectItem *input_rect;
     QGraphicsRectItem *rect;
-
     QGraphicsEllipseItem *circle;
-
     OutputCon * out;
     InputCon * in;
-
+    uint outputGate;
     uint gate_Nr;
 
-    QGraphicsDropShadowEffect * effect;
-
+    int arrInput[5];
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
 
 private:
     int input_size;
     int space;
-
 
 public slots:
     void deleteEffect();

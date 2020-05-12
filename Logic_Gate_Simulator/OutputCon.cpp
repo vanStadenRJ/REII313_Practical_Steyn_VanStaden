@@ -16,56 +16,90 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
+    connected = false;
+    test = false;
+    test_src = false;
 
-    QObject::connect(simulation, SIGNAL(clicked()), this, SLOT(changeColor()));
+    QObject::connect(simulation, SIGNAL(Output_Show()), this, SLOT(InputToOutput()));
+    QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
+    QObject::connect(simulation,SIGNAL(connected_Node()), this, SLOT(conNode()));
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    //Change color
-    QBrush brush;
-    brush.setColor(Qt::black);
-    brush.setStyle(Qt::SolidPattern);
-    this->setBrush(brush);
+    if(connected == false)
+    {
+        //Change color
+        QBrush brush;
+        brush.setColor(Qt::black);
+        brush.setStyle(Qt::SolidPattern);
+        this->setBrush(brush);
 
-    simulation->setCursor(Qt::CrossCursor);
-    simulation->wireMode = true;
-    if(!(simulation->move_wire == nullptr))
-    {
-        simulation->dest_Gate = this->parent_Gate;
-    }
-    else
-    {
-        simulation->src_Gate = this->parent_Gate;
+        test = true;
+        simulation->setCursor(Qt::CrossCursor);
+        simulation->wireMode = true;
+        simulation->Output = true;
+        if(!(simulation->move_wire == nullptr))
+        {
+            simulation->dest_Gate = this->parent_Gate;
+        }
+        else
+        {
+            simulation->src_Gate = this->parent_Gate;
+        }
     }
 }
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this->setBrush(Qt::NoBrush);
-
-    simulation->setCursor(Qt::ArrowCursor);
-    simulation->wireMode = false;
+    if(connected == false)
+    {
+        if(test_src == false)
+        {
+            test = false;
+            this->setBrush(Qt::NoBrush);
+        }
+        simulation->setCursor(Qt::ArrowCursor);
+        simulation->wireMode = false;
+    }
 }
 
-//void OutputCon::deleteWire()
-//{
-//    QList<QGraphicsItem *> colliding = collidingItems();
-//    for(int i = 0, n = colliding.size(); i < n; i++)
-//    {
-//        if(typeid(*(colliding[i])) == typeid(Wire))
-//        {
-//            simulation->scene->removeItem(colliding[i]);
-//            delete colliding[i];
-//        }
-//    }
-    //qDebug() << "deleteWire";
-//}
+void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    test = true;
+    test_src = true;
+}
 
-void OutputCon::changeColor()
+void OutputCon::InputToOutput()
+{
+    if(!(simulation->src_Gate == this->parent_Gate))
+    {
+        QBrush brush;
+        brush.setColor(Qt::darkGreen);
+        brush.setStyle(Qt::SolidPattern);
+        this->setBrush(brush);
+    }
+}
+
+void OutputCon::clearNode()
 {
     QBrush brush;
-    brush.setColor(Qt::darkGreen);
+    brush.setColor(Qt::red);
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
+}
+
+void OutputCon::conNode()
+{
+    if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
+    {
+        if(test == true)
+        {
+            this->connected = true;
+            QBrush brush;
+            brush.setColor(Qt::black);
+            brush.setStyle(Qt::SolidPattern);
+            this->setBrush(brush);
+        }
+    }
 }
