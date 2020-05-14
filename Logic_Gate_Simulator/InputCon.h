@@ -14,17 +14,20 @@ public:
     InputCon(QGraphicsItem * parent);
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
+    void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
-    QPointF source;
-    uint parent_Gate;
+    QPointF wire_Pos;
+    int parent_Gate;
     bool connected;
     bool test;
     int posGate;
 
+    int Logic;
+
 public slots:
     void OutputToInput();
     void clearNode();
-    void conNode();
+    void conNode(int k);
 
 private:
 };

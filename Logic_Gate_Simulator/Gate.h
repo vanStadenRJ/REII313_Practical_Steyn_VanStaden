@@ -8,16 +8,16 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsEffect>
 #include <QKeyEvent>
+#include <QList>
+
 #include "OutputCon.h"
 #include "InputCon.h"
-
-//Yeet
 
 class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Gate(uint gateNr);
+    Gate(uint gateNr, uint typeGate);
     QGraphicsDropShadowEffect * effect;
     QGraphicsRectItem *input_rect;
     QGraphicsRectItem *rect;
@@ -27,11 +27,15 @@ public:
     uint outputGate;
     uint gate_Nr;
 
-    int stringiu;
-
+    QList<InputCon *> list_Inputs;
+    QList<OutputCon *> list_Outputs;
     int arrInput[5];
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
+    void updateLogic();
+
+    int LogicalOutput;
+    uint gateType;
 
 private:
     int input_size;
@@ -39,6 +43,7 @@ private:
 
 public slots:
     void deleteEffect();
+    //void updateLogic();
 };
 
 #endif // GATE_H

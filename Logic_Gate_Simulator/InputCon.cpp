@@ -8,16 +8,18 @@ extern Simulation * simulation;
 InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 {
     posGate = 0;
+    Logic = 0;
     setRect(0,0,10,10);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
     connected = false;
+    Logic = 0;
     test = false;
 
     QObject::connect(simulation, SIGNAL(Input_Show()), this, SLOT(OutputToInput()));
     QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
-    QObject::connect(simulation,SIGNAL(connected_Node()), this, SLOT(conNode()));
+    QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode(int)));
 }
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -57,6 +59,11 @@ void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 }
 
+void InputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    //
+}
+
 void InputCon::OutputToInput()
 {
     if(!(simulation->src_Gate == this->parent_Gate))
@@ -76,7 +83,7 @@ void InputCon::clearNode()
     this->setBrush(brush);
 }
 
-void InputCon::conNode()
+void InputCon::conNode(int k)
 {
     if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
     {
@@ -87,6 +94,9 @@ void InputCon::conNode()
             brush.setColor(Qt::black);
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
+            qDebug() << k;
+            this->Logic = k;
+            test = false;
         }
     }
 }
