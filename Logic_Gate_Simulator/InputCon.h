@@ -17,7 +17,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     QPointF wire_Pos;
-    uint parent_Gate;
+    int parent_Gate;
     bool connected;
     bool test;
     int posGate;

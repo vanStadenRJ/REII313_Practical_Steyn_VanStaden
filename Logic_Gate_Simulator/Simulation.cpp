@@ -1,9 +1,7 @@
 #include "Simulation.h"
-#include "BuildMode.h"
 #include "OutputCon.h"
 #include "Wire.h"
 
-//#include "Gate.h"
 #include <QDebug>
 #include <QCursor>
 #include <QList>
@@ -24,8 +22,17 @@ Simulation::Simulation()
     move_wire = nullptr;
     this->setMouseTracking(true);
 
-    BuildMode * ic = new BuildMode();
-    scene->addItem(ic);
+    andIcon = new BuildMode(1);
+    scene->addItem(andIcon);
+    andIcon->setPos(0,0);
+
+    highIcon = new BuildMode(2);
+    scene->addItem(highIcon);
+    highIcon->setPos(100,0);
+
+    lowIcon = new BuildMode(3);
+    scene->addItem(lowIcon);
+    lowIcon->setPos(200,0);
 
     canMove = false;
     nr_Gates = 0;
@@ -119,13 +126,14 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     if(isBuildMode)
     {
         if(event->button() == Qt::LeftButton)
-        {            
+        {
             this->nr_Gates = this->nr_Gates + 1;
-            gate = new Gate(this->nr_Gates);
-            scene->addItem(gate);            
+            gate = new Gate(this->nr_Gates, this->typeIcon);
+            scene->addItem(gate);
             gate->setPos(event->pos());
             list_Gates << gate;
             isBuildMode = false;
+
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
@@ -151,15 +159,6 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             move_wire = new Wire();
             move_wire->source = this->mapFromGlobal(QCursor::pos());
             qDebug() << move_wire->source;
-//            for(int g = 0; g < list_Gates.size(); g++)
-//            {
-//                for(int h = 0; h < list_Gates.at(g)->list_Outputs.size(); h++)
-//                {
-//                    if(list_Gates.at(g)->list_Outputs.at(g)->)
-//                }
-//            }
-
-
 
             scene->addItem(move_wire);
             canMove = true;
@@ -185,7 +184,6 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->src_Gate = this->src_Gate;
                 wire->dest_Gate = this->dest_Gate;
 
-
                 for(int g = 0; g < list_Gates.size(); g++)
                 {
                     if(list_Gates.at(g)->gate_Nr == wire->src_Gate)
@@ -206,7 +204,11 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 this->setCursor(Qt::ArrowCursor);
                 for(int g = 0; g < list_Gates.size(); g++)
                 {
-                    list_Gates.at(g)->updateLogic();
+                    if(list_Gates.at(g)->gateType == 1)
+                    {
+                        list_Gates.at(g)->updateLogic();
+                    }
+
                 }
             }
             else

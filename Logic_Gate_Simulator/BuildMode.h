@@ -10,9 +10,10 @@
 class BuildMode: public QGraphicsPixmapItem
 {
 public:
-    BuildMode(QGraphicsItem * parent=0);
+    BuildMode(uint typeIcon);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     QCursor cur;
+    uint Icon;
 };
 
 #endif // BUILDMODE_H

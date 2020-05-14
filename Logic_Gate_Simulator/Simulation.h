@@ -12,6 +12,7 @@
 #include <QPaintEvent>
 
 #include "Gate.h"
+#include "BuildMode.h"
 
 // Our main workspace will be Simulation which inherits from QGraphicsView
 class Simulation: public QGraphicsView
@@ -39,6 +40,11 @@ public:
     uint dest_Gate;
     QList<Wire *> list_Wires;
     QList<Gate *> list_Gates;
+
+    BuildMode * andIcon;
+    BuildMode * highIcon;
+    BuildMode * lowIcon;
+    uint typeIcon;
 
 signals:
     void clicked();

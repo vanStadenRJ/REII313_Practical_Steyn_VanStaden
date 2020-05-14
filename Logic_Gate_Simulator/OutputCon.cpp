@@ -24,7 +24,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 
     QObject::connect(simulation, SIGNAL(Output_Show()), this, SLOT(InputToOutput()));
     QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
-    QObject::connect(simulation,SIGNAL(connected_Node()), this, SLOT(conNode()));
+    QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode()));
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

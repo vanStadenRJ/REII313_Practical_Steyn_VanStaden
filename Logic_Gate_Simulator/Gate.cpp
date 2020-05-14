@@ -5,53 +5,85 @@
 #include <QGraphicsBlurEffect>
 #include <QtGui>
 
-
 extern Simulation * simulation;
 
-Gate::Gate(uint gateNr)
-{
-    this->setPixmap(QPixmap(":/images/And_Gate.png"));
+Gate::Gate(uint gateNr, uint typeGate)
+{    
     this->gate_Nr = gateNr;
-    this->outputGate = 0;
-    this->LogicalOutput = 0;
+    gateType = typeGate;
+    if(typeGate == 2 || typeGate == 3)
+    {
+        if(typeGate == 2)
+        {
+            this->setPixmap(QPixmap(":/images/High_Icon.png"));
+            this->LogicalOutput = 1;
+        }
+        else
+        {
+            this->setPixmap(QPixmap(":/images/Low_Icon.png"));
+            this->LogicalOutput = 0;
+        }
+    }
+    else
+    {
+        this->setPixmap(QPixmap(":/images/And_Gate.png"));
+        this->LogicalOutput = 0;
+
+        input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
+        space = (pixmap().height() - input_size*5)/(input_size+1);
+
+        for(int i = 0; i < 5; i++)
+        {
+            arrInput[i] = 0;
+        }
+
+        for(int i = 1; i <= input_size; i++)
+        {
+            input_rect = new QGraphicsRectItem(this);
+            input_rect->setRect(x(), y(), 20, 5);
+            input_rect->setParentItem(this);
+            input_rect->setPos(this->x() - input_rect->rect().width()+3, space*i + input_rect->rect().height()*(i-1));
+            in = new InputCon(input_rect);
+            in->setParentItem(input_rect);
+            in->setPos(-in->rect().width(), - in->rect().height()/2 + input_rect->rect().height()/2);
+            in->posGate = i;
+            in->parent_Gate = gate_Nr;
+            list_Inputs << in;
+        }
+
+    }
+    //this->outputGate = 0;
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
     rect->setRect(x(), y(), 20, 5);
     rect->setParentItem(this);
-    rect->setPos(pixmap().width()-5, pixmap().height()/2 - rect->rect().height()/2);
+    switch (typeGate)
+    {
+    case 1:
+        rect->setPos(pixmap().width()-5, pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
+
+    case 2:
+        rect->setPos(pixmap().width()-2, pixmap().height()/2 - rect->rect().height()/2);
+        break;
+
+    case 3:
+        rect->setPos(pixmap().width()-2, pixmap().height()/2 - rect->rect().height()/2);
+        break;
+    }
+
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
     this->list_Outputs << out;
     out->parent_Gate = gate_Nr;
 
-    input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
-    space = (pixmap().height() - input_size*5)/(input_size+1);
 
-    for(int i = 0; i < 5; i++)
-    {
-        arrInput[i] = 0;
-    }
-
-    for(int i = 1; i <= input_size; i++)
-    {
-        input_rect = new QGraphicsRectItem(this);
-        input_rect->setRect(x(), y(), 20, 5);
-        input_rect->setParentItem(this);
-        input_rect->setPos(this->x() - input_rect->rect().width()+3, space*i + input_rect->rect().height()*(i-1));
-        in = new InputCon(input_rect);
-        in->setParentItem(input_rect);
-        in->setPos(-in->rect().width(), - in->rect().height()/2 + input_rect->rect().height()/2);
-        in->posGate = i;
-        in->parent_Gate = gate_Nr;
-        list_Inputs << in;
-    }
-    this->updateLogic();
 
     effect = nullptr;
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
-
     this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
@@ -118,6 +150,6 @@ void Gate::updateLogic()
             LogicalOutput = 0;
             break;
         }
-        qDebug() << list_Inputs.at(i)->Logic;
     }
+    qDebug() << "Logic of Gate must be: " << LogicalOutput;
 }

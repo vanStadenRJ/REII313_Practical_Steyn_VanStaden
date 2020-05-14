@@ -95,6 +95,7 @@ void InputCon::conNode(int k)
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
             qDebug() << k;
+            this->Logic = k;
             test = false;
         }
     }
