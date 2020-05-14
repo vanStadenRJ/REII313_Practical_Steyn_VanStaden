@@ -19,6 +19,8 @@ public:
     uint src_Gate;
     uint dest_Gate;
 
+    int Logic_Wire;
+
     QGraphicsDropShadowEffect * effect;
 
     void mousePressEvent(QGraphicsSceneMouseEvent * event);

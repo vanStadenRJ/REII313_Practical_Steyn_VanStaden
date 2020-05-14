@@ -8,6 +8,8 @@
 #include "Wire.h"
 #include "Gate.h"
 
+//To delete wires at output node, we must make a QList of colliding items... if list nr of items = 0; reset node.
+
 extern Simulation * simulation;
 
 OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
@@ -68,6 +70,7 @@ void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     test = true;
     test_src = true;
+    wire_Pos = simulation->mapFromGlobal(QCursor::pos());;
 }
 
 void OutputCon::InputToOutput()

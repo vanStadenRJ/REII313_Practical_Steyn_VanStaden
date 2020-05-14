@@ -19,7 +19,7 @@ public:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
-    QPointF source;
+    QPointF wire_Pos;
     uint parent_Gate;
     bool connected;
     bool test;

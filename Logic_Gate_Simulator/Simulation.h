@@ -38,6 +38,7 @@ public:
     uint src_Gate;
     uint dest_Gate;
     QList<Wire *> list_Wires;
+    QList<Gate *> list_Gates;
 
 signals:
     void clicked();
@@ -46,7 +47,7 @@ signals:
     void Output_Show();
     void Input_Show();
     void clear_Node();
-    void connected_Node();
+    void connected_Node(int);
 };
 
 #endif // SIMULATION_H

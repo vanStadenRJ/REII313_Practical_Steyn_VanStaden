@@ -36,7 +36,7 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
             pen.setCapStyle(Qt::RoundCap);
             this->setPen(pen);
         }
-        qDebug() << this->src_Gate << "->" << this->dest_Gate;
+        qDebug() << this->src_Gate << "->" << this->dest_Gate << " logic: " << this->Logic_Wire;
     }
 }
 
