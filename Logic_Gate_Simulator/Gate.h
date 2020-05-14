@@ -11,6 +11,8 @@
 #include "OutputCon.h"
 #include "InputCon.h"
 
+//Yeet
+
 class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -24,6 +26,8 @@ public:
     InputCon * in;
     uint outputGate;
     uint gate_Nr;
+
+    int stringiu;
 
     int arrInput[5];
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
