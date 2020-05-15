@@ -27,6 +27,9 @@ public:
     uint outputGate;
     uint gate_Nr;
 
+    bool isMove;
+    QPointF pos_Gate;
+
     QList<InputCon *> list_Inputs;
     QList<OutputCon *> list_Outputs;
     int arrInput[5];

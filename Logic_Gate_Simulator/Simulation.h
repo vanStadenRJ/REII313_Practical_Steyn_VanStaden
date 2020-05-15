@@ -32,6 +32,8 @@ public:
     bool Output;
 
     bool isBuildMode;
+    bool isMove;
+    uint moveGate;
     bool wireMode;
     bool canMove;
     uint nr_Gates;
