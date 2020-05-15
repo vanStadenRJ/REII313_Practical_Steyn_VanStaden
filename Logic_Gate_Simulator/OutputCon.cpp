@@ -29,7 +29,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false)
+    if(connected == false && simulation->isBuildMode == false)
     {
         //Change color
         QBrush brush;
@@ -54,7 +54,7 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false)
+    if(connected == false && simulation->isBuildMode == false)
     {
         if(test_src == false)
         {
@@ -98,7 +98,7 @@ void OutputCon::conNode()
     {
         if(test == true)
         {
-            this->connected = true;
+            //this->connected = true;
             QBrush brush;
             brush.setColor(Qt::black);
             brush.setStyle(Qt::SolidPattern);

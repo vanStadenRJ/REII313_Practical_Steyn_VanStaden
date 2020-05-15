@@ -130,7 +130,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             this->nr_Gates = this->nr_Gates + 1;
             gate = new Gate(this->nr_Gates, this->typeIcon);
             scene->addItem(gate);
-            gate->setPos(event->pos());
+            gate->setPos(event->x()-gate->pixmap().width()/2, event->y() -
+                         gate->pixmap().height()/2);
             list_Gates << gate;
             isBuildMode = false;
 

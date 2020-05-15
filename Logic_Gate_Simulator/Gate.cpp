@@ -8,7 +8,8 @@
 extern Simulation * simulation;
 
 Gate::Gate(uint gateNr, uint typeGate)
-{    
+{
+    //this->setTransformOriginPoint(50,50);
     this->gate_Nr = gateNr;
     gateType = typeGate;
     if(typeGate == 2 || typeGate == 3)
