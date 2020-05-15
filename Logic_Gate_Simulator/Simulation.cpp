@@ -63,6 +63,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             scene->addItem(gate);
             gate->setPos(event->x()-gate->pixmap().width()/2, event->y() -
                          gate->pixmap().height()/2);
+            gate->pos_Gate = gate->pos();
             list_Gates << gate;
             isBuildMode = false;
 
@@ -92,6 +93,28 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 list_Gates.at(i)->setPos(event->x()-list_Gates.at(i)->pixmap()
                                          .width()/2, event->y() - list_Gates.at(i)
                                          ->pixmap().height()/2);
+                QPointF dif;
+                dif = list_Gates.at(i)->pos() - list_Gates.at(i)->pos_Gate;
+                list_Gates.at(i)->pos_Gate = list_Gates.at(i)->pos();
+                QLineF line;
+                for(int j = 0; j < list_Wires.size(); j++)
+                {
+                    if(list_Wires.at(j)->src_Gate == this->moveGate)
+                    {
+                        list_Wires.at(j)->source = list_Wires.at(j)->source + dif;
+                        line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
+                        list_Wires.at(j)->setLine(line);
+                    }
+                    else
+                    {
+                        if(list_Wires.at(j)->dest_Gate == this->moveGate)
+                        {
+                            list_Wires.at(j)->dest = list_Wires.at(j)->dest + dif;
+                            line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
+                            list_Wires.at(j)->setLine(line);
+                        }
+                    }
+                }
                 this->setCursor(Qt::ArrowCursor);
                 isMove = false;
             }
