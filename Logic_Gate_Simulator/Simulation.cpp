@@ -18,6 +18,7 @@ Simulation::Simulation()
 
     // set cursor
     isBuildMode = false;
+    isMove = false;
     wireMode = false;
     move_wire = nullptr;
     this->setMouseTracking(true);
@@ -43,76 +44,6 @@ Simulation::Simulation()
 
 void Simulation::mousePressEvent(QMouseEvent *event)
 {
-//    if(isBuildMode || wireMode)
-//    {
-//        if(isBuildMode)
-//        {
-//            if(event->button() == Qt::LeftButton)
-//            {
-//                qDebug() << "yeet|;";
-//                gate = new Gate();
-//                scene->addItem(gate);
-//                gate->setPos(event->pos());
-//                gate->Output();
-//                isBuildMode = false;
-//                QCursor def = QCursor();
-//                def.setShape(Qt::ArrowCursor);
-//                this->setCursor(def);
-//            }
-//            else if (event->button() == Qt::RightButton)
-//            {
-//                QCursor def = QCursor();
-//                def.setShape(Qt::ArrowCursor);
-//                this->setCursor(def);
-//                isBuildMode = false;
-//            }
-//        }
-//        else if(wireMode)
-//        {
-//            if(move_wire == nullptr)
-//            {
-//                qDebug() << "Wire";
-//                move_wire = new Wire();
-//                move_wire->source = this->mapFromGlobal(QCursor::pos());
-//                scene->addItem(move_wire);
-//                canMove = true;
-//                emit clicked();
-//            }
-//            else
-//            {
-//                if(event->button() == Qt::LeftButton)
-//                {
-//                    wire = new Wire();
-//                    wire->source = move_wire->source;
-//                    wire->dest = move_wire->dest;
-//                    QLineF line;
-//                    line.setPoints(move_wire->source, move_wire->dest);
-//                    wire->setLine(line);
-//                    scene->addItem(wire);
-//                }
-//                canMove = false;
-//                scene->removeItem(move_wire);
-//                move_wire = nullptr;
-//                delete move_wire;
-//                wireMode = false;
-//            }
-//        }
-//    }
-//    else
-//    {
-//        QGraphicsView::mousePressEvent(event);
-//        if (!(move_wire == nullptr))
-//        {
-//            canMove = false;
-//            scene->removeItem(move_wire);
-//            move_wire = nullptr;
-
-//            //scene->removeItem(move_wire);
-//            delete move_wire;
-//            wireMode = false;
-//        }
-//    }
-
     if(!(gate == nullptr))
     {
         emit un_Select();
@@ -130,7 +61,9 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             this->nr_Gates = this->nr_Gates + 1;
             gate = new Gate(this->nr_Gates, this->typeIcon);
             scene->addItem(gate);
-            gate->setPos(event->pos());
+            gate->setPos(event->x()-gate->pixmap().width()/2, event->y() -
+                         gate->pixmap().height()/2);
+            gate->pos_Gate = gate->pos();
             list_Gates << gate;
             isBuildMode = false;
 
@@ -150,6 +83,45 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         QGraphicsView::mousePressEvent(event);
     }
+
+    if(isMove)
+    {
+        for(int i = 0; i < list_Gates.size(); i++)
+        {
+            if(list_Gates.at(i)->gate_Nr == this->moveGate)
+            {
+                list_Gates.at(i)->setPos(event->x()-list_Gates.at(i)->pixmap()
+                                         .width()/2, event->y() - list_Gates.at(i)
+                                         ->pixmap().height()/2);
+                QPointF dif;
+                dif = list_Gates.at(i)->pos() - list_Gates.at(i)->pos_Gate;
+                list_Gates.at(i)->pos_Gate = list_Gates.at(i)->pos();
+                QLineF line;
+                for(int j = 0; j < list_Wires.size(); j++)
+                {
+                    if(list_Wires.at(j)->src_Gate == this->moveGate)
+                    {
+                        list_Wires.at(j)->source = list_Wires.at(j)->source + dif;
+                        line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
+                        list_Wires.at(j)->setLine(line);
+                    }
+                    else
+                    {
+                        if(list_Wires.at(j)->dest_Gate == this->moveGate)
+                        {
+                            list_Wires.at(j)->dest = list_Wires.at(j)->dest + dif;
+                            line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
+                            list_Wires.at(j)->setLine(line);
+                        }
+                    }
+                }
+                this->setCursor(Qt::ArrowCursor);
+                isMove = false;
+            }
+        }
+
+    }
+
 
     if(wireMode)
     {

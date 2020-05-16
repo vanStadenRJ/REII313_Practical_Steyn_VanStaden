@@ -24,7 +24,7 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false)
+    if(connected == false && simulation->isBuildMode == false  && simulation->isMove == false)
     {
         //Change color
         QBrush brush;
@@ -49,7 +49,7 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false)
+    if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
     {
         test = false;
         this->setBrush(Qt::NoBrush);

@@ -8,7 +8,8 @@
 extern Simulation * simulation;
 
 Gate::Gate(uint gateNr, uint typeGate)
-{    
+{
+    //this->setTransformOriginPoint(50,50);
     this->gate_Nr = gateNr;
     gateType = typeGate;
     if(typeGate == 2 || typeGate == 3)
@@ -53,6 +54,7 @@ Gate::Gate(uint gateNr, uint typeGate)
 
     }
     //this->outputGate = 0;
+    this->isMove = false;
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
@@ -80,8 +82,6 @@ Gate::Gate(uint gateNr, uint typeGate)
     this->list_Outputs << out;
     out->parent_Gate = gate_Nr;
 
-
-
     effect = nullptr;
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
     this->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -89,6 +89,20 @@ Gate::Gate(uint gateNr, uint typeGate)
 
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if(event->button() == Qt::RightButton)
+    {
+        //this->hide();
+        if (simulation->isMove == false)
+        {
+            QCursor cur = QCursor(QPixmap(":/images/And_Gate.png"));
+            simulation->setCursor(cur);
+            simulation->isMove = true;
+            this->isMove = true;
+            simulation->moveGate = this->gate_Nr;
+        }
+    }
+
+
     if(effect == nullptr)
     {
         effect = new QGraphicsDropShadowEffect();
