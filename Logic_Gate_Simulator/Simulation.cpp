@@ -2,6 +2,7 @@
 #include "OutputCon.h"
 #include "Wire.h"
 
+#include <QMainWindow>
 #include <QDebug>
 #include <QCursor>
 #include <QList>

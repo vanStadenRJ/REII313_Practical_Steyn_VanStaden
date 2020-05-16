@@ -1,14 +1,7 @@
-#include <QBrush>
-#include <QPoint>
-#include <QDebug>
-#include <QList>
-
-#include "OutputCon.h"
 #include "Simulation.h"
+#include "OutputCon.h"
 #include "Wire.h"
 #include "Gate.h"
-
-//To delete wires at output node, we must make a QList of colliding items... if list nr of items = 0; reset node.
 
 extern Simulation * simulation;
 

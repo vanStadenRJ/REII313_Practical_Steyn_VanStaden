@@ -1,15 +1,13 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
+#include <QGraphicsPixmapItem>
+#include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QGraphicsRectItem>
-#include <QGraphicsPixmapItem>
 #include <QMouseEvent>
 #include <QString>
 #include <QObject>
-#include <QPainter>
-#include <QPaintEvent>
 
 #include "Gate.h"
 #include "BuildMode.h"
@@ -19,12 +17,14 @@ class Simulation: public QGraphicsView
 {
     Q_OBJECT
 public:
-    //Member Functions
+    // Constructors
     Simulation();
+
+    //Public Methods
     void mousePressEvent(QMouseEvent * event);
     void mouseMoveEvent(QMouseEvent * event);
 
-    //Member Attributes
+    //Public Attributes
     QGraphicsScene * scene;
     Gate * gate;
     Wire * wire;
