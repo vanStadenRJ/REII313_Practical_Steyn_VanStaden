@@ -1,7 +1,9 @@
 #include "BuildMode.h"
 #include "Simulation.h"
+#include "mainwindow.h"
 
 extern Simulation * simulation;
+//MainWindow * mw;
 
 BuildMode::BuildMode(uint typeIcon)
 {
@@ -26,7 +28,7 @@ BuildMode::BuildMode(uint typeIcon)
 
 void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    // If clicked, buildmode entered to be placed on QGraphicsView
+    // If clicked, buildmode entered to be placed on QGraphicsView    
     if(simulation->isBuildMode == false)
     {
         simulation->isBuildMode = true;        

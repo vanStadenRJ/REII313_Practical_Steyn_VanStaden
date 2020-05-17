@@ -31,7 +31,8 @@ SOURCES += \
     BuildMode.cpp \
     InputCon.cpp \
     OutputCon.cpp \
-    Wire.cpp
+    Wire.cpp \
+    mainwindow.cpp
 
 HEADERS += \
     Simulation.h \
@@ -39,7 +40,8 @@ HEADERS += \
     BuildMode.h \
     InputCon.h \
     OutputCon.h \
-    Wire.h
+    Wire.h \
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui

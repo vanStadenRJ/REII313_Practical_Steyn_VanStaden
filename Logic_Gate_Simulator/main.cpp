@@ -16,24 +16,20 @@
 #include <QLayout>
 
 #include "Simulation.h"
+#include "mainwindow.h"
 
 //External Global variable as to be used throughout program
 Simulation * simulation;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-
-    simulation = new Simulation();
-    //simulation->show();
-    QMainWindow mw;
+    QApplication a(argc, argv);    
+    MainWindow mw;
+    simulation = new Simulation(&mw);
     mw.setCentralWidget(simulation);
+    mw.setFixedSize(1000,800);
+    mw.centralWidget()->setGeometry(0,0,1000,800);
     mw.show();
-
-    //Show QGraphicsView and start program
-
-
-
 
     return a.exec();
 }

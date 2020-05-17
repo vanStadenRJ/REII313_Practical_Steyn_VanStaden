@@ -7,9 +7,10 @@
 #include <QCursor>
 #include <QList>
 
-Simulation::Simulation()
+Simulation::Simulation(QWidget * parent)
 {
     //Set scene and show on view
+    this->setSceneRect(0,0,1000,800);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,1000,800);
     this->setScene(scene);

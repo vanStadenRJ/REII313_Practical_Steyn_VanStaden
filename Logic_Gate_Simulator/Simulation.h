@@ -18,7 +18,7 @@ class Simulation: public QGraphicsView
     Q_OBJECT
 public:
     // Constructors
-    Simulation();
+    Simulation(QWidget * parent);
 
     //Public Methods
     void mousePressEvent(QMouseEvent * event);
