@@ -36,7 +36,9 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
             pen.setCapStyle(Qt::RoundCap);
             this->setPen(pen);
         }
-        qDebug() << this->src_Gate << "->" << this->dest_Gate << " logic: " << this->Logic_Wire;
+        qDebug() << this->src_Gate << "(" << src_NodeNr << ")"
+                 << "->" << this->dest_Gate << "(" << dest_NodeNr << ")"
+                 <<" logic: " << this->Logic_Wire;
     }
 }
 
@@ -45,6 +47,26 @@ void Wire::keyPressEvent(QKeyEvent *event)
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
     {
         simulation->nr_Wires = simulation->nr_Wires - 1;
+        bool bFound = false;
+        int i = 0;
+        while(bFound == false)
+        {
+            int n = simulation->list_Gates.at(i)->list_Inputs.size();
+            if(simulation->list_Gates.at(i)->gate_Nr == this->dest_Gate)
+            {
+                for(int j = 0; j < simulation->list_Gates.at(i)->list_Inputs.size(); j++)
+                {
+                    if(simulation->list_Gates.at(i)->list_Inputs.at(j)->posGate == this->dest_NodeNr)
+                    {
+                        bFound = true;
+                        simulation->list_Gates.at(i)->list_Inputs.at(j)->connected = false;
+                        break;
+                    }
+                }
+            }
+            i++;
+        }
+
         delete this;
         return;
     }

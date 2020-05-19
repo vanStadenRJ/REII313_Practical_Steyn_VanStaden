@@ -157,6 +157,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->dest = move_wire->dest;
                 wire->src_Gate = this->src_Gate;
                 wire->dest_Gate = this->dest_Gate;
+                wire->src_NodeNr = this->src_NodeNr;
+                wire->dest_NodeNr = this->dest_NodeNr;
 
                 for(int g = 0; g < list_Gates.size(); g++)
                 {

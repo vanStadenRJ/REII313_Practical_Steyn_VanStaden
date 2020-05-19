@@ -48,6 +48,12 @@ public:
     BuildMode * lowIcon;
     uint typeIcon;
 
+    uint src_NodeNr;
+    uint dest_NodeNr;
+
+private:
+
+
 signals:
     void clicked();
     void un_Select();

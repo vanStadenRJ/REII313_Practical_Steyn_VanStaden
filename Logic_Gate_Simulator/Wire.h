@@ -17,7 +17,9 @@ public:
     QPointF source;
     QPointF dest;
     uint src_Gate;
+    uint src_NodeNr;
     uint dest_Gate;
+    uint dest_NodeNr;
 
     int Logic_Wire;
 
