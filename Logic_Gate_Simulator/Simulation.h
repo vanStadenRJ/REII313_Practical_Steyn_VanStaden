@@ -23,6 +23,7 @@ public:
     //Public Methods
     void mousePressEvent(QMouseEvent * event);
     void mouseMoveEvent(QMouseEvent * event);
+    void updateWireLogic();
 
     //Public Attributes
     QGraphicsScene * scene;
