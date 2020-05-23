@@ -175,6 +175,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
+                qDebug() << "Amount of wires: " << list_Wires.size();
                 nr_Wires++;
                 emit connected_Node(wire->Logic_Wire);
                 this->setCursor(Qt::ArrowCursor);

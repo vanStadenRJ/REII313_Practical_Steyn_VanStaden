@@ -20,6 +20,7 @@ Wire::Wire()
 
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    this->setFocus();
     if(effect == nullptr)
     {
         effect = new QGraphicsDropShadowEffect();
@@ -35,7 +36,7 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
             pen.setWidth(6);
             pen.setCapStyle(Qt::RoundCap);
             this->setPen(pen);
-        }
+        }        
         qDebug() << this->src_Gate << "(" << src_NodeNr << ")"
                  << "->" << this->dest_Gate << "(" << dest_NodeNr << ")"
                  <<" logic: " << this->Logic_Wire;
@@ -62,10 +63,23 @@ void Wire::keyPressEvent(QKeyEvent *event)
                         bFound = true;
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->connected = false;
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->Logic = 0;
+                        //delete this;
+                        //return;
                     }
                 }
             }
             i++;
+        }
+
+        // Upon Delete of Wire, Remove Wire from list of wires
+        for(int v = 0; v < simulation->list_Wires.size(); v++)
+        {
+            if(simulation->list_Wires.at(v)->source == this->source && simulation->list_Wires.at(v)->dest == this->dest)
+            {
+                simulation->list_Wires.takeAt(v);
+                qDebug() << "Amount of wires: " << simulation->list_Wires.size();
+                break;
+            }
         }
 
         for(int m = 0; m < simulation->list_Gates.size(); m++)
