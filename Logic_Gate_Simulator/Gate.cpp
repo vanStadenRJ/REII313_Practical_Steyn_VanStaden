@@ -5,6 +5,7 @@ extern Simulation * simulation;
 
 Gate::Gate(uint gateNr, uint typeGate)
 {
+    qDebug() << simulation->list_Gates.size();
     // Set default values
     this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->isMove = false;
@@ -88,6 +89,7 @@ Gate::Gate(uint gateNr, uint typeGate)
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    this->setFocus();
     // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {
@@ -130,6 +132,7 @@ void Gate::keyPressEvent(QKeyEvent *event)
             {
                 if((simulation->list_Wires.at(i)->src_Gate == this->gate_Nr) || (simulation->list_Wires.at(i)->dest_Gate == this->gate_Nr))
                 {
+                    qDebug() << "Toets";
                     delete simulation->list_Wires.takeAt(i);
                     i--;
                     n--;
@@ -138,6 +141,17 @@ void Gate::keyPressEvent(QKeyEvent *event)
                 i++;
             }
         }
+
+        // Upon Gate Delete, Remove Gate from list
+        for(int g = 0; g < simulation->list_Gates.size(); g++)
+        {
+            if(this->gate_Nr == simulation->list_Gates.at(g)->gate_Nr)
+            {
+                simulation->list_Gates.takeAt(g);
+                break;
+            }
+        }
+
         delete this;
         return;
     }
@@ -161,6 +175,7 @@ void Gate::updateLogic()
     LogicalOutput = 1;
     for(int i = 0; i < list_Inputs.size(); i++)
     {
+        //list_Inputs.at(i)->Logic =
         if(list_Inputs.at(i)->Logic == 0)
         {
             LogicalOutput = 0;

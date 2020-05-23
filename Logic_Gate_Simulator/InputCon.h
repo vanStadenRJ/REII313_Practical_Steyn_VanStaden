@@ -23,7 +23,7 @@ public:
     // Public Attributes
     int parent_Gate;                        // Gate Number of parent gate
     bool connected;                         // Is node connected
-    int posGate;                            // Position of node when gate created
+    uint posGate;                            // Position of node when gate created
     int Logic;                              // Logic of node
     bool test;
 
