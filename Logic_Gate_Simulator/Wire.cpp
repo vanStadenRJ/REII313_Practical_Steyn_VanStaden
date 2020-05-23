@@ -82,10 +82,7 @@ void Wire::keyPressEvent(QKeyEvent *event)
             }
         }
 
-        for(int m = 0; m < simulation->list_Gates.size(); m++)
-        {
-            simulation->list_Gates.at(m)->updateLogic();
-        }
+        simulation->updateWireLogic();
 
         delete this;
         return;

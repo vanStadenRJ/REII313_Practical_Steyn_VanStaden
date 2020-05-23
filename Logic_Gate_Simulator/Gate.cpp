@@ -182,5 +182,4 @@ void Gate::updateLogic()
             break;
         }
     }
-    qDebug() << "Logic of Gate must be: " << LogicalOutput;
 }
