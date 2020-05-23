@@ -49,6 +49,7 @@ void Wire::keyPressEvent(QKeyEvent *event)
         simulation->nr_Wires = simulation->nr_Wires - 1;
         bool bFound = false;
         int i = 0;
+
         while(bFound == false)
         {
             int n = simulation->list_Gates.at(i)->list_Inputs.size();
@@ -60,11 +61,16 @@ void Wire::keyPressEvent(QKeyEvent *event)
                     {
                         bFound = true;
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->connected = false;
-                        break;
+                        simulation->list_Gates.at(i)->list_Inputs.at(j)->Logic = 0;
                     }
                 }
             }
             i++;
+        }
+
+        for(int m = 0; m < simulation->list_Gates.size(); m++)
+        {
+            simulation->list_Gates.at(m)->updateLogic();
         }
 
         delete this;

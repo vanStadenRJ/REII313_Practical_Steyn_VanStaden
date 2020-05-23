@@ -45,7 +45,7 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
             simulation->src_NodeNr = this->posGate;
         }
 
-        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate;
+        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
     }
 }
 

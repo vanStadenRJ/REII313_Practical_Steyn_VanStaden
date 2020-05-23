@@ -161,6 +161,7 @@ void Gate::updateLogic()
     LogicalOutput = 1;
     for(int i = 0; i < list_Inputs.size(); i++)
     {
+        //list_Inputs.at(i)->Logic =
         if(list_Inputs.at(i)->Logic == 0)
         {
             LogicalOutput = 0;
