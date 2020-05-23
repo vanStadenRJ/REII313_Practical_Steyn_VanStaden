@@ -1,8 +1,8 @@
 #ifndef BUILDMODE_H
 #define BUILDMODE_H
 
-#include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QCursor>
@@ -10,10 +10,18 @@
 class BuildMode: public QGraphicsPixmapItem
 {
 public:
+    // Constructors
     BuildMode(uint typeIcon);
+
+    // Public Methods
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    QCursor cur;
+
+    // Public Attributes
     uint Icon;
+
+private:
+    // Private Methods
+    QCursor cur;
 };
 
 #endif // BUILDMODE_H

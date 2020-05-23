@@ -1,28 +1,33 @@
 #include "Gate.h"
 #include "Simulation.h"
-#include <QDebug>
-#include <QInputDialog>
-#include <QGraphicsBlurEffect>
-#include <QtGui>
 
 extern Simulation * simulation;
 
 Gate::Gate(uint gateNr, uint typeGate)
 {
-    //this->setTransformOriginPoint(50,50);
+    qDebug() << simulation->list_Gates.size();
+    // Set default values
+    this->setFlag(QGraphicsItem::ItemIsFocusable);
+    this->isMove = false;
+    this->effect = nullptr;
+
+    // Connect Signal and Slots
+    QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
+
+    // Upon icon clicked, type of gate needs to be identified and correct gate placed
     this->gate_Nr = gateNr;
     gateType = typeGate;
-    if(typeGate == 2 || typeGate == 3)
+    if(typeGate == 2 || typeGate == 3)                                  // If gate is of input type!
     {
-        if(typeGate == 2)
+        if(typeGate == 2)                                               // If type High Input
         {
             this->setPixmap(QPixmap(":/images/High_Icon.png"));
-            this->LogicalOutput = 1;
+            this->LogicalOutput = 1;                                    // Set logic of gate
         }
-        else
+        else                                                            // If type Low Input
         {
             this->setPixmap(QPixmap(":/images/Low_Icon.png"));
-            this->LogicalOutput = 0;
+            this->LogicalOutput = 0;                                    // Set logic of gate
         }
     }
     else
@@ -30,31 +35,28 @@ Gate::Gate(uint gateNr, uint typeGate)
         this->setPixmap(QPixmap(":/images/And_Gate.png"));
         this->LogicalOutput = 0;
 
+        // For different input size, nr of input nodes need to be configured
         input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
         space = (pixmap().height() - input_size*5)/(input_size+1);
-
-        for(int i = 0; i < 5; i++)
-        {
-            arrInput[i] = 0;
-        }
-
         for(int i = 1; i <= input_size; i++)
         {
+            // input_rect is visual connection of node and gate
             input_rect = new QGraphicsRectItem(this);
             input_rect->setRect(x(), y(), 20, 5);
             input_rect->setParentItem(this);
-            input_rect->setPos(this->x() - input_rect->rect().width()+3, space*i + input_rect->rect().height()*(i-1));
+            input_rect->setPos(this->x() - input_rect->rect().width()+3,
+                               space*i + input_rect->rect().height()*(i-1));
+
+            // in is of InputCon node
             in = new InputCon(input_rect);
             in->setParentItem(input_rect);
-            in->setPos(-in->rect().width(), - in->rect().height()/2 + input_rect->rect().height()/2);
+            in->setPos(-in->rect().width(), - in->rect().height()/2 +
+                       input_rect->rect().height()/2);
             in->posGate = i;
-            in->parent_Gate = gate_Nr;
-            list_Inputs << in;
+            in->parent_Gate = gate_Nr;                                  // Set parent as gate, to be moved and deleted
+            list_Inputs << in;                                          // Add input nodes to list
         }
-
     }
-    //this->outputGate = 0;
-    this->isMove = false;
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
@@ -76,22 +78,21 @@ Gate::Gate(uint gateNr, uint typeGate)
         break;
     }
 
+    // set output nodes and configure
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
     this->list_Outputs << out;
     out->parent_Gate = gate_Nr;
-
-    effect = nullptr;
-    QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
-    this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
+// MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    this->setFocus();
+    // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {
-        //this->hide();
         if (simulation->isMove == false)
         {
             QCursor cur = QCursor(QPixmap(":/images/And_Gate.png"));
@@ -102,7 +103,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-
+    // Left Button to show effect and make gate ready for delete
     if(effect == nullptr)
     {
         effect = new QGraphicsDropShadowEffect();
@@ -118,6 +119,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+// KeyPressEvent as gate needs to be deleted
 void Gate::keyPressEvent(QKeyEvent *event)
 {
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
@@ -130,6 +132,7 @@ void Gate::keyPressEvent(QKeyEvent *event)
             {
                 if((simulation->list_Wires.at(i)->src_Gate == this->gate_Nr) || (simulation->list_Wires.at(i)->dest_Gate == this->gate_Nr))
                 {
+                    qDebug() << "Toets";
                     delete simulation->list_Wires.takeAt(i);
                     i--;
                     n--;
@@ -138,11 +141,23 @@ void Gate::keyPressEvent(QKeyEvent *event)
                 i++;
             }
         }
+
+        // Upon Gate Delete, Remove Gate from list
+        for(int g = 0; g < simulation->list_Gates.size(); g++)
+        {
+            if(this->gate_Nr == simulation->list_Gates.at(g)->gate_Nr)
+            {
+                simulation->list_Gates.takeAt(g);
+                break;
+            }
+        }
+
         delete this;
         return;
     }
 }
 
+// Delete Effect of gate to be reset
 void Gate::deleteEffect()
 {
     if (!(effect == nullptr))
@@ -154,11 +169,13 @@ void Gate::deleteEffect()
     }
 }
 
+// Update Logic of gate when new wires connected and deleted
 void Gate::updateLogic()
 {
     LogicalOutput = 1;
     for(int i = 0; i < list_Inputs.size(); i++)
     {
+        //list_Inputs.at(i)->Logic =
         if(list_Inputs.at(i)->Logic == 0)
         {
             LogicalOutput = 0;

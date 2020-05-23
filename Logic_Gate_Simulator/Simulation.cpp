@@ -2,13 +2,15 @@
 #include "OutputCon.h"
 #include "Wire.h"
 
+#include <QMainWindow>
 #include <QDebug>
 #include <QCursor>
 #include <QList>
 
-Simulation::Simulation()
+Simulation::Simulation(QWidget * parent)
 {
     //Set scene and show on view
+    this->setSceneRect(0,0,1000,800);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,1000,800);
     this->setScene(scene);
@@ -155,6 +157,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->dest = move_wire->dest;
                 wire->src_Gate = this->src_Gate;
                 wire->dest_Gate = this->dest_Gate;
+                wire->src_NodeNr = this->src_NodeNr;
+                wire->dest_NodeNr = this->dest_NodeNr;
 
                 for(int g = 0; g < list_Gates.size(); g++)
                 {
@@ -171,6 +175,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
+                qDebug() << "Amount of wires: " << list_Wires.size();
                 nr_Wires++;
                 emit connected_Node(wire->Logic_Wire);
                 this->setCursor(Qt::ArrowCursor);

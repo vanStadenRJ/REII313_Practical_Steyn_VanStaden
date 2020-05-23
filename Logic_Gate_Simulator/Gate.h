@@ -1,13 +1,14 @@
 #ifndef GATE_H
 #define GATE_H
 
-#include <QObject>
-#include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
-#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsEffect>
+#include <QInputDialog>
 #include <QKeyEvent>
+#include <QObject>
+#include <QDebug>
 #include <QList>
 
 #include "OutputCon.h"
@@ -17,36 +18,38 @@ class Gate: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
+    // Constructors
     Gate(uint gateNr, uint typeGate);
-    QGraphicsDropShadowEffect * effect;
-    QGraphicsRectItem *input_rect;
-    QGraphicsRectItem *rect;
-    QGraphicsEllipseItem *circle;
-    OutputCon * out;
-    InputCon * in;
-    uint outputGate;
-    uint gate_Nr;
 
-    bool isMove;
-    QPointF pos_Gate;
-
-    QList<InputCon *> list_Inputs;
-    QList<OutputCon *> list_Outputs;
-    int arrInput[5];
+    // Public Methods
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
-    void updateLogic();
+    void updateLogic();                     // Updates logic output of gates
 
-    int LogicalOutput;
-    uint gateType;
+    // Public Attributes
+    QGraphicsDropShadowEffect * effect;     // Shadow Effect when gate is pressed
+    QGraphicsRectItem *input_rect;          // Input rect connecting nodes and gates
+    QGraphicsRectItem *rect;                // Output rect connecting nodes and gates
+    OutputCon * out;                        // Output node
+    InputCon * in;                          // Input nodes
+
+    QList<InputCon *> list_Inputs;          // List of Inputs connected to gate
+    QList<OutputCon *> list_Outputs;        // List of Outputs connected to gate
+
+    QPointF pos_Gate;                       // QPointF position of gate
+    uint gateType;                          // Normal gate, Input or Output gate
+    uint gate_Nr;                           // Gate number
+
+    int LogicalOutput;                      // Logic of gate
+    bool isMove;                            // Is gate being moved
 
 private:
-    int input_size;
-    int space;
+    // Private Attributes
+    int input_size;                         // How many inputs does gate have
+    int space;                              // Space between input nodes
 
 public slots:
-    void deleteEffect();
-    //void updateLogic();
+    void deleteEffect();                    // Delete effect when deselct gate
 };
 
 #endif // GATE_H
