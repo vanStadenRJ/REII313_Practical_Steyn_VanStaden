@@ -1,8 +1,5 @@
 #include "InputCon.h"
 #include "Simulation.h"
-
-#include <QDebug>
-
 extern Simulation * simulation;
 
 InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
@@ -24,7 +21,8 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false && simulation->isBuildMode == false  && simulation->isMove == false)
+    //if(connected == false && simulation->isBuildMode == false  && simulation->isMove == false)
+    if(!(simulation->move_wire == nullptr))
     {
         //Change color
         QBrush brush;
@@ -36,26 +34,33 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         simulation->setCursor(Qt::CrossCursor);
         simulation->wireMode = true;
         simulation->Output = false;
+
         if(!(simulation->move_wire == nullptr))
         {
             simulation->dest_Gate = this->parent_Gate;
+            simulation->dest_NodeNr = this->posGate;
         }
         else
         {
             simulation->src_Gate = this->parent_Gate;
+            simulation->src_NodeNr = this->posGate;
         }
+
+        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
     }
 }
 
 void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    //if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    if(!(simulation->move_wire == nullptr))
     {
         test = false;
         this->setBrush(Qt::NoBrush);
 
         simulation->setCursor(Qt::ArrowCursor);
         simulation->wireMode = false;
+        simulation->src_NodeNr = 0;
     }
 }
 

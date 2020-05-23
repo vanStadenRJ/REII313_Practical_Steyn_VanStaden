@@ -1,14 +1,7 @@
-#include <QBrush>
-#include <QPoint>
-#include <QDebug>
-#include <QList>
-
-#include "OutputCon.h"
 #include "Simulation.h"
+#include "OutputCon.h"
 #include "Wire.h"
 #include "Gate.h"
-
-//To delete wires at output node, we must make a QList of colliding items... if list nr of items = 0; reset node.
 
 extern Simulation * simulation;
 
@@ -29,7 +22,8 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    //if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    if(simulation->move_wire == nullptr)
     {
         //Change color
         this -> setRect(0,0,12,12);
@@ -57,7 +51,8 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     this -> setRect(0,0,10,10);
-    if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    //if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    if(simulation->move_wire == nullptr)
     {
         if(test_src == false)
         {
