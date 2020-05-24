@@ -18,9 +18,9 @@ public:
     // Public Methods
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-    void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     // Public Attributes
+    QPointF centerPoint;
     int parent_Gate;                        // Gate Number of parent gate
     bool connected;                         // Is node connected
     uint posGate;                            // Position of node when gate created

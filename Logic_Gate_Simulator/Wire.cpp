@@ -62,6 +62,8 @@ void Wire::keyPressEvent(QKeyEvent *event)
                     {
                         bFound = true;
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->connected = false;
+                        QBrush brush;
+                        simulation->list_Gates.at(i)->list_Inputs.at(j)->setBrush(brush);
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->Logic = 0;
                         //delete this;
                         //return;

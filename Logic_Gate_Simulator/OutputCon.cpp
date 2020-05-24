@@ -15,23 +15,34 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     test = false;
     test_src = false;
 
+    QBrush brush;
+    brush.setColor(Qt::black);
+    brush.setStyle(Qt::SolidPattern);
+    this->setBrush(brush);
+
     QObject::connect(simulation, SIGNAL(Output_Show()), this, SLOT(InputToOutput()));
     QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
     QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode()));
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-{
-    //if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
-    if(simulation->move_wire == nullptr)
+{    
+    if((connected == false && simulation->isBuildMode == false && simulation->isMove == false) && (simulation->move_wire == nullptr))
+    //if(simulation->move_wire == nullptr)
     {
         //Change color
-        this -> setRect(0,0,12,12);
+        this -> setRect(0,0,13,13);
 
         QBrush brush;
         brush.setColor(Qt::black);
         brush.setStyle(Qt::SolidPattern);
         this->setBrush(brush);
+
+        effect = new QGraphicsDropShadowEffect();
+        effect->setEnabled(true);
+        effect->setColor(Qt::lightGray);
+        effect->setOffset(6);
+        this->setGraphicsEffect(effect);
 
         test = true;
         simulation->setCursor(Qt::CrossCursor);
@@ -45,23 +56,33 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         {
             simulation->src_Gate = this->parent_Gate;
         }
+        simulation->sourceNode = this->centerPoint;
     }
 }
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     this -> setRect(0,0,10,10);
-    //if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
-    if(simulation->move_wire == nullptr)
+    if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
     {
         if(test_src == false)
         {
             test = false;
-            this->setBrush(Qt::NoBrush);
+            //this->setBrush(Qt::NoBrush);
+            QBrush brush;
+            brush.setColor(Qt::black);
+            brush.setStyle(Qt::SolidPattern);
+            this->setBrush(brush);
         }
         simulation->setCursor(Qt::ArrowCursor);
         simulation->wireMode = false;
     }
+    QBrush brush;
+    brush.setColor(Qt::black);
+    brush.setStyle(Qt::SolidPattern);
+    this->setBrush(brush);
+
+    effect->setEnabled(false);
 }
 
 void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -75,19 +96,19 @@ void OutputCon::InputToOutput()
 {
     if(!(simulation->src_Gate == this->parent_Gate))
     {
-        QBrush brush;
-        brush.setColor(Qt::darkGreen);
-        brush.setStyle(Qt::SolidPattern);
-        this->setBrush(brush);
+        if(this->connected == false)
+        {
+            QBrush brush;
+            brush.setColor(Qt::darkGreen);
+            brush.setStyle(Qt::SolidPattern);
+            this->setBrush(brush);
+        }
     }
 }
 
 void OutputCon::clearNode()
 {
-    QBrush brush;
-    brush.setColor(Qt::red);
-    brush.setStyle(Qt::SolidPattern);
-    this->setBrush(brush);
+    //
 }
 
 void OutputCon::conNode()

@@ -4,6 +4,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
+#include <QGraphicsEffect>
 #include <QMouseEvent>
 #include <QObject>
 #include <QBrush>
@@ -25,6 +26,10 @@ public:
 
     // Public Attributes
     QPointF wire_Pos;
+    QPointF centerPoint;
+
+    QGraphicsDropShadowEffect * effect;
+
     int parent_Gate;
     bool connected;
     bool test_src;

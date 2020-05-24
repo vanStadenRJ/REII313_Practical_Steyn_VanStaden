@@ -21,8 +21,8 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    //if(connected == false && simulation->isBuildMode == false  && simulation->isMove == false)
-    if(!(simulation->move_wire == nullptr))
+    if((connected == false && simulation->isBuildMode == false  && simulation->isMove == false) && !(simulation->move_wire == nullptr))
+    //if(!(simulation->move_wire == nullptr))
     {
         //Change color
         QBrush brush;
@@ -45,6 +45,7 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
             simulation->src_Gate = this->parent_Gate;
             simulation->src_NodeNr = this->posGate;
         }
+        simulation->destNode = this->centerPoint;
 
         qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
     }
@@ -52,11 +53,22 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    //if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
-    if(!(simulation->move_wire == nullptr))
+    if((connected == false && simulation->isBuildMode == false && simulation->isMove == false) && !(simulation->move_wire == nullptr))
+    //if(!(simulation->move_wire == nullptr))
     {
         test = false;
-        this->setBrush(Qt::NoBrush);
+        if(simulation->wireMode == false)
+        {
+            this->setBrush(Qt::NoBrush);
+        }
+        else
+        {
+            QBrush brush;
+            brush.setColor(Qt::darkGreen);
+            brush.setStyle(Qt::SolidPattern);
+            this->setBrush(brush);
+        }
+
 
         simulation->setCursor(Qt::ArrowCursor);
         simulation->wireMode = false;
@@ -64,14 +76,9 @@ void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     }
 }
 
-void InputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    //
-}
-
 void InputCon::OutputToInput()
 {
-    if(!(simulation->src_Gate == this->parent_Gate))
+    if(!(simulation->src_Gate == this->parent_Gate) && (this->connected == false))
     {
         QBrush brush;
         brush.setColor(Qt::darkGreen);
@@ -82,10 +89,10 @@ void InputCon::OutputToInput()
 
 void InputCon::clearNode()
 {
-    QBrush brush;
-    brush.setColor(Qt::red);
-    brush.setStyle(Qt::SolidPattern);
-    this->setBrush(brush);
+    if(this->connected == false)
+    {
+        this->setBrush(Qt::NoBrush);
+    }
 }
 
 void InputCon::conNode(int k)

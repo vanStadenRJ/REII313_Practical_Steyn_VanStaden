@@ -37,15 +37,20 @@ Gate::Gate(uint gateNr, uint typeGate)
 
         // For different input size, nr of input nodes need to be configured
         input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
-        space = (pixmap().height() - input_size*5)/(input_size+1);
+        space = (pixmap().height() - input_size*2)/(input_size+1);
         for(int i = 1; i <= input_size; i++)
         {
             // input_rect is visual connection of node and gate
             input_rect = new QGraphicsRectItem(this);
-            input_rect->setRect(x(), y(), 20, 5);
+            input_rect->setRect(x(), y(), 20, 2);
             input_rect->setParentItem(this);
             input_rect->setPos(this->x() - input_rect->rect().width()+3,
                                space*i + input_rect->rect().height()*(i-1));
+
+            QBrush brush;
+            brush.setColor(Qt::black);
+            brush.setStyle(Qt::SolidPattern);
+            input_rect->setBrush(brush);
 
             // in is of InputCon node
             in = new InputCon(input_rect);
@@ -60,7 +65,11 @@ Gate::Gate(uint gateNr, uint typeGate)
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
-    rect->setRect(x(), y(), 20, 5);
+    rect->setRect(x(), y(), 20, 2);
+    QBrush brush;
+    brush.setColor(Qt::black);
+    brush.setStyle(Qt::SolidPattern);
+    rect->setBrush(brush);
     rect->setParentItem(this);
     switch (typeGate)
     {
@@ -82,8 +91,11 @@ Gate::Gate(uint gateNr, uint typeGate)
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
+    //out->centerPoint = this->pos() + rect->pos() + out->rect().center();
     this->list_Outputs << out;
     out->parent_Gate = gate_Nr;
+
+
 }
 
 // MousePressEvent to handle effects and movement of gates
@@ -117,6 +129,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             qDebug() << "Gate " << this->gate_Nr << ": " << this->LogicalOutput;
         }
     }
+    this->setCenterPos();
 }
 
 // KeyPressEvent as gate needs to be deleted
@@ -181,5 +194,24 @@ void Gate::updateLogic()
             LogicalOutput = 0;
             break;
         }
+    }
+}
+
+void Gate::setCenterPos()
+{
+    this->out->centerPoint = this->pos() + this->rect->pos();
+    this->out->centerPoint.setX(this->out->centerPoint.x() + this->rect->rect().width() + this->out->rect().width()/2);
+
+    for(int i = 0; i < list_Inputs.size(); i++)
+    {
+
+
+        this->list_Inputs.at(i)->centerPoint = this->pos();
+        this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x()
+                                                  - this->rect->rect().width() - this->out->rect().width()/2);
+
+        this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
+                                                  + (i)*rect->rect().height() + (i+1)*space);
+
     }
 }

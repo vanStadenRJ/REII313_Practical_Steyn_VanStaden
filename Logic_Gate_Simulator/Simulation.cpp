@@ -67,6 +67,10 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                          gate->pixmap().height()/2);
             gate->pos_Gate = gate->pos();
             list_Gates << gate;
+            for(int j = 0; j < list_Gates.size(); j++)
+            {
+                list_Gates.at(j)->setCenterPos();
+            }
             isBuildMode = false;
 
             QCursor def = QCursor();
@@ -129,9 +133,12 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if(move_wire == nullptr)
         {
+
+
             qDebug() << "Wire";
             move_wire = new Wire();
-            move_wire->source = this->mapFromGlobal(QCursor::pos());
+            //move_wire->source = this->mapFromGlobal(QCursor::pos());
+            move_wire->source = this->sourceNode;
             qDebug() << move_wire->source;
 
             scene->addItem(move_wire);
@@ -155,6 +162,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire = new Wire();
                 wire->source = move_wire->source;
                 wire->dest = move_wire->dest;
+                wire->dest = this->destNode;
                 wire->src_Gate = this->src_Gate;
                 wire->dest_Gate = this->dest_Gate;
                 wire->src_NodeNr = this->src_NodeNr;
@@ -171,7 +179,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 }
                 //emit connected_Node();
                 QLineF line;
-                line.setPoints(move_wire->source, move_wire->dest);
+                line.setPoints(wire->source, wire->dest);
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
@@ -180,6 +188,11 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 emit connected_Node(wire->Logic_Wire);
                 this->setCursor(Qt::ArrowCursor);            
                 this->updateWireLogic();
+
+                for(int v = 0; v < list_Gates.size(); v++)
+                {
+                    list_Gates.at(v)->updateLogic();
+                }
             }
             else
             {
@@ -188,7 +201,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             canMove = false;
             scene->removeItem(move_wire);
             move_wire = nullptr;
-            delete move_wire;
+            delete move_wire;           
             wireMode = false;
         }
     }

@@ -52,6 +52,9 @@ public:
     uint src_NodeNr;
     uint dest_NodeNr;
 
+    QPointF sourceNode;
+    QPointF destNode;
+
 private:
 
 

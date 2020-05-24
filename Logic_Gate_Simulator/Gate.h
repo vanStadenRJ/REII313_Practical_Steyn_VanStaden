@@ -25,6 +25,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
     void updateLogic();                     // Updates logic output of gates
+    void setCenterPos();
 
     // Public Attributes
     QGraphicsDropShadowEffect * effect;     // Shadow Effect when gate is pressed
@@ -37,6 +38,7 @@ public:
     QList<OutputCon *> list_Outputs;        // List of Outputs connected to gate
 
     QPointF pos_Gate;                       // QPointF position of gate
+    QPointF change;
     uint gateType;                          // Normal gate, Input or Output gate
     uint gate_Nr;                           // Gate number
 
