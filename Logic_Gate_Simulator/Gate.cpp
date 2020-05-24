@@ -140,6 +140,10 @@ void Gate::keyPressEvent(QKeyEvent *event)
     {
         if(!(simulation->nr_Wires == 0))
         {
+            // Update Logic Before Delete of gate
+            emit simulation->clear_Node(true);
+
+            // Delete all wires connected to gate to be deleted
             int i = 0;
             int n = simulation->list_Wires.size();
             while(i < n)
@@ -165,6 +169,9 @@ void Gate::keyPressEvent(QKeyEvent *event)
                 break;
             }
         }
+
+        //Update logic of all other gates
+        emit simulation->updateWireLogic();
 
         delete this;
         return;

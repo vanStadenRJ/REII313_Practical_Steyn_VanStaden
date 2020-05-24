@@ -184,15 +184,15 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 list_Wires << wire;
                 qDebug() << "Amount of wires: " << list_Wires.size();
                 nr_Wires++;
-                emit connected_Node(wire->Logic_Wire);
+                emit connected_Node(wire->Logic_Wire, wire->src_Gate);
                 this->setCursor(Qt::ArrowCursor);            
                 this->updateWireLogic();
 
-                emit clear_Node();
+                emit clear_Node(false);
             }
             else
             {
-                emit clear_Node();
+                emit clear_Node(false);
             }
             canMove = false;
             scene->removeItem(move_wire);
@@ -209,7 +209,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             canMove = false;
             scene->removeItem(move_wire);
             move_wire = nullptr;
-            emit clear_Node();
+            emit clear_Node(false);
 
             delete move_wire;
             wireMode = false;

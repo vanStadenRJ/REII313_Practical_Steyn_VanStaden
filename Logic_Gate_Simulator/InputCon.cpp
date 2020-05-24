@@ -15,8 +15,8 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
     test = false;
 
     QObject::connect(simulation, SIGNAL(Input_Show()), this, SLOT(OutputToInput()));
-    QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
-    QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode(int)));
+    QObject::connect(simulation, SIGNAL(clear_Node(bool)), this, SLOT(clearNode(bool)));
+    QObject::connect(simulation,SIGNAL(connected_Node(int, int)), this, SLOT(conNode(int, int)));
     QObject::connect(simulation, SIGNAL(changeInputLogic()), this, SLOT(getWireLogic()));
 }
 
@@ -52,7 +52,7 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     }
     else
     {
-        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
+        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic << " Con Gate: " << conGate;
     }
 }
 
@@ -92,12 +92,13 @@ void InputCon::OutputToInput()
     }
 }
 
-void InputCon::clearNode()
+void InputCon::clearNode(bool gate)
 {
-    if(this->connected == false)
+    if(this->connected == false || gate == true)
     {
         this->setBrush(Qt::NoBrush);
         this->Logic = 0;
+        this->connected = false;
     }
 }
 
@@ -121,7 +122,7 @@ void InputCon::getWireLogic()
     }
 }
 
-void InputCon::conNode(int k)
+void InputCon::conNode(int k, int h)
 {
     if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
     {
@@ -134,6 +135,7 @@ void InputCon::conNode(int k)
             this->setBrush(brush);
             qDebug() << k;
             this->Logic = k;
+            this->conGate = h;
             test = false;
         }
     }

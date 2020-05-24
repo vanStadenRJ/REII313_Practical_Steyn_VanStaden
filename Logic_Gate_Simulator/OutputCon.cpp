@@ -21,7 +21,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     this->setBrush(brush);
 
     QObject::connect(simulation, SIGNAL(Output_Show()), this, SLOT(InputToOutput()));
-    QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
+    //QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
     QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode()));
 }
 
@@ -106,10 +106,10 @@ void OutputCon::InputToOutput()
     }
 }
 
-void OutputCon::clearNode()
-{
-    //
-}
+//void OutputCon::clearNode()
+//{
+//    //
+//}
 
 void OutputCon::conNode()
 {
