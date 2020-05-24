@@ -177,7 +177,6 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                         break;
                     }
                 }
-                //emit connected_Node();
                 QLineF line;
                 line.setPoints(wire->source, wire->dest);
                 wire->setLine(line);
@@ -189,10 +188,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 this->setCursor(Qt::ArrowCursor);            
                 this->updateWireLogic();
 
-                for(int v = 0; v < list_Gates.size(); v++)
-                {
-                    list_Gates.at(v)->updateLogic();
-                }
+                emit clear_Node();
             }
             else
             {
@@ -239,10 +235,7 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
 
 void Simulation::updateWireLogic()
 {
-    for(int v = 0; v < list_Gates.size(); v++)
-    {
-        list_Gates.at(v)->updateLogic();
-    }
+    emit changeGateLogic();
 
     for(int v = 0; v < list_Wires.size(); v++)
     {
@@ -251,22 +244,10 @@ void Simulation::updateWireLogic()
             if(list_Gates.at(b)->gate_Nr == list_Wires.at(v)->src_Gate)
             {
                 list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
-            }
+            }            
         }
     }
 
-    for(int v = 0; v < list_Gates.size(); v++)
-    {
-        for(int b = 0; b < list_Gates.at(v)->list_Inputs.size(); b++)
-        {
-            for(int c = 0; c < list_Wires.size(); c++)
-            {
-                if(list_Wires.at(c)->dest_NodeNr == list_Gates.at(v)->list_Inputs.at(b)->posGate)
-                {
-                    list_Gates.at(v)->list_Inputs.at(b)->Logic = list_Wires.at(c)->Logic_Wire;
-                }
-            }
-        }
-        list_Gates.at(v)->updateLogic();
-    }
+    emit changeInputLogic();
+    emit changeGateLogic();
 }

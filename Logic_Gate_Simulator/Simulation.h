@@ -66,6 +66,8 @@ signals:
     void Input_Show();
     void clear_Node();
     void connected_Node(int);
+    void changeInputLogic();
+    void changeGateLogic();
 };
 
 #endif // SIMULATION_H

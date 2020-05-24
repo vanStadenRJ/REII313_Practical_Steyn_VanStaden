@@ -31,6 +31,7 @@ public slots:
     void OutputToInput();                   // Called when node not connected to show notable connections
     void conNode(int k);                    // Called to give node the logic of wire connected
     void clearNode();                       // Cleared when wire not connected
+    void getWireLogic();
 };
 
 #endif // INPUTCON_H

@@ -24,7 +24,6 @@ public:
     // Public Methods
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
-    void updateLogic();                     // Updates logic output of gates
     void setCenterPos();
 
     // Public Attributes
@@ -52,6 +51,7 @@ private:
 
 public slots:
     void deleteEffect();                    // Delete effect when deselct gate
+    void updateLogic();                     // Updates logic output of gates
 };
 
 #endif // GATE_H

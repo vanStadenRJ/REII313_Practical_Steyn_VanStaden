@@ -13,6 +13,7 @@ Gate::Gate(uint gateNr, uint typeGate)
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
+    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
     this->gate_Nr = gateNr;

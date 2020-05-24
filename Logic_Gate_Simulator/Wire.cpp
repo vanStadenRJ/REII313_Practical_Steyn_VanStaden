@@ -53,7 +53,7 @@ void Wire::keyPressEvent(QKeyEvent *event)
 
         while(bFound == false)
         {
-            int n = simulation->list_Gates.at(i)->list_Inputs.size();
+            //int n = simulation->list_Gates.at(i)->list_Inputs.size();
             if(simulation->list_Gates.at(i)->gate_Nr == this->dest_Gate)
             {
                 for(int j = 0; j < simulation->list_Gates.at(i)->list_Inputs.size(); j++)
@@ -63,6 +63,8 @@ void Wire::keyPressEvent(QKeyEvent *event)
                         bFound = true;
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->connected = false;
                         QBrush brush;
+
+                        //emit simulation->clear_Node();
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->setBrush(brush);
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->Logic = 0;
                         //delete this;
@@ -73,6 +75,7 @@ void Wire::keyPressEvent(QKeyEvent *event)
             i++;
         }
 
+        //simulation->updateWireLogic();
         // Upon Delete of Wire, Remove Wire from list of wires
         for(int v = 0; v < simulation->list_Wires.size(); v++)
         {
@@ -83,6 +86,11 @@ void Wire::keyPressEvent(QKeyEvent *event)
                 break;
             }
         }
+
+//        for(int v = 0; v < simulation->list_Gates.size(); v++)
+//        {
+//            simulation->list_Gates.at(v)->updateLogic();
+//        }
 
         simulation->updateWireLogic();
 

@@ -17,6 +17,7 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
     QObject::connect(simulation, SIGNAL(Input_Show()), this, SLOT(OutputToInput()));
     QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
     QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode(int)));
+    QObject::connect(simulation, SIGNAL(changeInputLogic()), this, SLOT(getWireLogic()));
 }
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -47,6 +48,10 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         }
         simulation->destNode = this->centerPoint;
 
+        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
+    }
+    else
+    {
         qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
     }
 }
@@ -92,6 +97,27 @@ void InputCon::clearNode()
     if(this->connected == false)
     {
         this->setBrush(Qt::NoBrush);
+        this->Logic = 0;
+    }
+}
+
+void InputCon::getWireLogic()
+{
+    if(this->connected == true)
+    {
+        for(int i = 0; i < simulation->list_Wires.size(); i++)
+        {
+            if(simulation->list_Wires.at(i)->dest_NodeNr == this->posGate && this->parent_Gate == simulation->list_Wires.at(i)->dest_Gate)
+            {
+                this->Logic = simulation->list_Wires.at(i)->Logic_Wire;
+                return;
+            }
+        }
+    }
+    else
+    {
+        Logic = 0;
+        return;
     }
 }
 
