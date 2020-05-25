@@ -11,6 +11,7 @@
 
 #include "Gate.h"
 #include "BuildMode.h"
+#include "ButtonPanel.h"
 
 // Our main workspace will be Simulation which inherits from QGraphicsView
 class Simulation: public QGraphicsView
@@ -30,6 +31,7 @@ public:
     Gate * gate;
     Wire * wire;
     Wire * move_wire;
+    ButtonPanel * panel;
     bool Output;
 
     bool isBuildMode;

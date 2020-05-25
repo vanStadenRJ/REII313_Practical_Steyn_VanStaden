@@ -10,13 +10,27 @@
 Simulation::Simulation(QWidget * parent)
 {
     //Set scene and show on view
-    this->setSceneRect(0,0,1000,800);
+    this->setSceneRect(0,0,1600,900);
     scene = new QGraphicsScene(this);
-    scene->setSceneRect(0,0,1000,800);
+    scene->setSceneRect(0,0,1600,900);
     this->setScene(scene);
-    this->setFixedSize(1000,800);
+    this->setFixedSize(1600,900);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // Initialize Panel where all logic gates to be put
+    panel = new ButtonPanel();
+    //panel->setBrush(QColor(Qt::darkGray));
+    scene->addItem(panel);
+
+
+
+
+
+
+
+
+
 
     // set cursor
     isBuildMode = false;

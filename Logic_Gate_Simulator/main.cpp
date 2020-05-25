@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
 
     //Set GraphicsView as central widget
     mw.setCentralWidget(simulation);
-    mw.setFixedSize(1000,800);
-    mw.centralWidget()->setGeometry(0,0,1000,800);
+    mw.setFixedSize(1600,900);
+    mw.centralWidget()->setGeometry(0,0,1600,900);
     mw.show();
 
     return a.exec();

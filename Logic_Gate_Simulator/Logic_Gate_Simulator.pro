@@ -32,7 +32,8 @@ SOURCES += \
     InputCon.cpp \
     OutputCon.cpp \
     Wire.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ButtonPanel.cpp
 
 HEADERS += \
     Simulation.h \
@@ -41,7 +42,8 @@ HEADERS += \
     InputCon.h \
     OutputCon.h \
     Wire.h \
-    mainwindow.h
+    mainwindow.h \
+    ButtonPanel.h
 
 FORMS += \
     mainwindow.ui
