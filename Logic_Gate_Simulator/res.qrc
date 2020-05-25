@@ -4,5 +4,7 @@
         <file>And_Icon.png</file>
         <file>High_Icon.png</file>
         <file>Low_Icon.png</file>
+        <file>Nand_Icon.jpg</file>
+        <file>Nand_Gate.png</file>
     </qresource>
 </RCC>

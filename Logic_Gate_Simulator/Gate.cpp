@@ -10,6 +10,7 @@ Gate::Gate(uint gateNr, uint typeGate)
     this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->isMove = false;
     this->effect = nullptr;
+    this->isNot = false;
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
@@ -33,7 +34,18 @@ Gate::Gate(uint gateNr, uint typeGate)
     }
     else
     {
-        this->setPixmap(QPixmap(":/images/And_Gate.png"));
+        switch(gateType)
+        {
+        case 1:
+            this->setPixmap(QPixmap(":/images/And_Gate.png"));
+            break;
+
+        case 4:
+            this->setPixmap(QPixmap(":/images/And_Gate.png"));
+            isNot = true;
+            break;
+
+        }
         this->LogicalOutput = 0;
 
         // For different input size, nr of input nodes need to be configured
@@ -67,6 +79,18 @@ Gate::Gate(uint gateNr, uint typeGate)
     // set draw output branch
     rect = new QGraphicsRectItem(this);
     rect->setRect(x(), y(), 20, 2);
+    if(isNot == true)
+    {
+        circle = new QGraphicsEllipseItem(this);
+        circle->setRect(0,0,10,10);
+        circle->setParentItem(this);
+        circle->setPos(pixmap().width()-5, pixmap().height()/2 - circle->rect().height()/2);
+    }
+    else
+    {
+        //
+    }
+
     QBrush brush;
     brush.setColor(Qt::black);
     brush.setStyle(Qt::SolidPattern);
@@ -86,17 +110,19 @@ Gate::Gate(uint gateNr, uint typeGate)
     case 3:
         rect->setPos(pixmap().width()-2, pixmap().height()/2 - rect->rect().height()/2);
         break;
+
+    case 4:
+        rect->setPos(pixmap().width()-5 + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
     }
 
     // set output nodes and configure
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
-    //out->centerPoint = this->pos() + rect->pos() + out->rect().center();
     this->list_Outputs << out;
     out->parent_Gate = gate_Nr;
-
-
 }
 
 // MousePressEvent to handle effects and movement of gates
@@ -193,15 +219,15 @@ void Gate::deleteEffect()
 // Update Logic of gate when new wires connected and deleted
 void Gate::updateLogic()
 {
-    LogicalOutput = 1;
-    for(int i = 0; i < list_Inputs.size(); i++)
+    switch(this->gateType)
     {
-        //list_Inputs.at(i)->Logic =
-        if(list_Inputs.at(i)->Logic == 0)
-        {
-            LogicalOutput = 0;
-            break;
-        }
+    case 1:
+        this->andLogic();
+        break;
+
+    case 4:
+        this->andLogic();
+        break;
     }
 }
 
@@ -221,5 +247,30 @@ void Gate::setCenterPos()
         this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
                                                   + (i)*rect->rect().height() + (i+1)*space);
 
+    }
+}
+
+void Gate::andLogic()
+{
+    int def;
+    int change;
+    if(isNot == false)
+    {
+        def = 1;
+        change = 0;
+    }
+    else
+    {
+        def = 0;
+        change = 1;
+    }
+    LogicalOutput = def;
+    for(int i = 0; i < list_Inputs.size(); i++)
+    {
+        if(list_Inputs.at(i)->Logic == 0)
+        {
+            LogicalOutput = change;
+            return;
+        }
     }
 }

@@ -25,17 +25,12 @@ Simulation::Simulation(QWidget * parent)
     move_wire = nullptr;
     this->setMouseTracking(true);
 
-    andIcon = new BuildMode(1);
-    scene->addItem(andIcon);
-    andIcon->setPos(0,0);
-
-    highIcon = new BuildMode(2);
-    scene->addItem(highIcon);
-    highIcon->setPos(100,0);
-
-    lowIcon = new BuildMode(3);
-    scene->addItem(lowIcon);
-    lowIcon->setPos(200,0);
+    for(int i = 1; i <= 4; i++)
+    {
+        andIcon = new BuildMode(i);
+        scene->addItem(andIcon);
+        andIcon->setPos((i-1)*100,0);
+    }
 
     canMove = false;
     nr_Gates = 0;

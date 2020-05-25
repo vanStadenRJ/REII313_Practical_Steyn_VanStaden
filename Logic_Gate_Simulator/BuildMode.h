@@ -11,13 +11,13 @@ class BuildMode: public QGraphicsPixmapItem
 {
 public:
     // Constructors
-    BuildMode(uint typeIcon);
+    BuildMode(int typeIcon);
 
     // Public Methods
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     // Public Attributes
-    uint Icon;
+    int Icon;
 
 private:
     // Private Methods

@@ -38,7 +38,7 @@ public:
 public slots:
     void InputToOutput();
     //void clearNode();
-    void conNode();
+    //void conNode();
 };
 
 #endif // OUTPUTCON_H

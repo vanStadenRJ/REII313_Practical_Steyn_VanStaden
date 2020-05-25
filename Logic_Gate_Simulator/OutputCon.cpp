@@ -22,7 +22,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 
     QObject::connect(simulation, SIGNAL(Output_Show()), this, SLOT(InputToOutput()));
     //QObject::connect(simulation, SIGNAL(clear_Node()), this, SLOT(clearNode()));
-    QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode()));
+    //QObject::connect(simulation,SIGNAL(connected_Node(int)), this, SLOT(conNode()));
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -111,17 +111,17 @@ void OutputCon::InputToOutput()
 //    //
 //}
 
-void OutputCon::conNode()
-{
-    if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
-    {
-        if(test == true)
-        {
-            //this->connected = true;
-            QBrush brush;
-            brush.setColor(Qt::black);
-            brush.setStyle(Qt::SolidPattern);
-            this->setBrush(brush);
-        }
-    }
-}
+//void OutputCon::conNode()
+//{
+//    if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
+//    {
+//        if(test == true)
+//        {
+//            //this->connected = true;
+//            QBrush brush;
+//            brush.setColor(Qt::black);
+//            brush.setStyle(Qt::SolidPattern);
+//            this->setBrush(brush);
+//        }
+//    }
+//}

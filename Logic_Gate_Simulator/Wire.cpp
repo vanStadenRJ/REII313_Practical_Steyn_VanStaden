@@ -11,6 +11,7 @@ Wire::Wire()
     QPen pen;
     pen.setWidth(5);
     pen.setCapStyle(Qt::RoundCap);
+    pen.setColor(Qt::magenta);
     this->setPen(pen);
 
     effect = nullptr;

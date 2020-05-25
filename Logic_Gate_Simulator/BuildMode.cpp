@@ -5,7 +5,7 @@
 extern Simulation * simulation;
 //MainWindow * mw;
 
-BuildMode::BuildMode(uint typeIcon)
+BuildMode::BuildMode(int typeIcon)
 {
     // All gates share same Icon class
     this->Icon = typeIcon;
@@ -21,6 +21,10 @@ BuildMode::BuildMode(uint typeIcon)
 
     case 3:     // 3 = Low Input
         this->setPixmap(QPixmap(":/images/Low_Icon.png"));
+        break;
+
+    case 4:     // 4 = Nand Gate
+        this->setPixmap(QPixmap(":/images/Nand_Icon.jpg"));
         break;
     }
 
@@ -48,6 +52,10 @@ void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
             cur = QCursor(QPixmap(":/images/Low_Icon.png"));
             simulation->typeIcon = 3;
             break;
+
+        case 4:
+            cur = QCursor(QPixmap(":/images/Nand_Gate.png"));
+            simulation->typeIcon = 4;
         }
         simulation->setCursor(cur);
     }
