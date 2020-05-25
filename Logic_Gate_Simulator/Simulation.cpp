@@ -25,17 +25,12 @@ Simulation::Simulation(QWidget * parent)
     move_wire = nullptr;
     this->setMouseTracking(true);
 
-    andIcon = new BuildMode(1);
-    scene->addItem(andIcon);
-    andIcon->setPos(0,0);
-
-    highIcon = new BuildMode(2);
-    scene->addItem(highIcon);
-    highIcon->setPos(100,0);
-
-    lowIcon = new BuildMode(3);
-    scene->addItem(lowIcon);
-    lowIcon->setPos(200,0);
+    for(int i = 1; i <= 4; i++)
+    {
+        andIcon = new BuildMode(i);
+        scene->addItem(andIcon);
+        andIcon->setPos((i-1)*100,0);
+    }
 
     canMove = false;
     nr_Gates = 0;
@@ -67,6 +62,10 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                          gate->pixmap().height()/2);
             gate->pos_Gate = gate->pos();
             list_Gates << gate;
+            for(int j = 0; j < list_Gates.size(); j++)
+            {
+                list_Gates.at(j)->setCenterPos();
+            }
             isBuildMode = false;
 
             QCursor def = QCursor();
@@ -129,9 +128,12 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if(move_wire == nullptr)
         {
+
+
             qDebug() << "Wire";
             move_wire = new Wire();
-            move_wire->source = this->mapFromGlobal(QCursor::pos());
+            //move_wire->source = this->mapFromGlobal(QCursor::pos());
+            move_wire->source = this->sourceNode;
             qDebug() << move_wire->source;
 
             scene->addItem(move_wire);
@@ -155,6 +157,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire = new Wire();
                 wire->source = move_wire->source;
                 wire->dest = move_wire->dest;
+                wire->dest = this->destNode;
                 wire->src_Gate = this->src_Gate;
                 wire->dest_Gate = this->dest_Gate;
                 wire->src_NodeNr = this->src_NodeNr;
@@ -169,26 +172,27 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                         break;
                     }
                 }
-                //emit connected_Node();
                 QLineF line;
-                line.setPoints(move_wire->source, move_wire->dest);
+                line.setPoints(wire->source, wire->dest);
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
                 qDebug() << "Amount of wires: " << list_Wires.size();
                 nr_Wires++;
-                emit connected_Node(wire->Logic_Wire);
+                emit connected_Node(wire->Logic_Wire, wire->src_Gate);
                 this->setCursor(Qt::ArrowCursor);            
                 this->updateWireLogic();
+
+                emit clear_Node(false);
             }
             else
             {
-                emit clear_Node();
+                emit clear_Node(false);
             }
             canMove = false;
             scene->removeItem(move_wire);
             move_wire = nullptr;
-            delete move_wire;
+            delete move_wire;           
             wireMode = false;
         }
     }
@@ -200,7 +204,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             canMove = false;
             scene->removeItem(move_wire);
             move_wire = nullptr;
-            emit clear_Node();
+            emit clear_Node(false);
 
             delete move_wire;
             wireMode = false;
@@ -226,10 +230,7 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
 
 void Simulation::updateWireLogic()
 {
-    for(int v = 0; v < list_Gates.size(); v++)
-    {
-        list_Gates.at(v)->updateLogic();
-    }
+    emit changeGateLogic();
 
     for(int v = 0; v < list_Wires.size(); v++)
     {
@@ -238,22 +239,10 @@ void Simulation::updateWireLogic()
             if(list_Gates.at(b)->gate_Nr == list_Wires.at(v)->src_Gate)
             {
                 list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
-            }
+            }            
         }
     }
 
-    for(int v = 0; v < list_Gates.size(); v++)
-    {
-        for(int b = 0; b < list_Gates.at(v)->list_Inputs.size(); b++)
-        {
-            for(int c = 0; c < list_Wires.size(); c++)
-            {
-                if(list_Wires.at(c)->dest_NodeNr == list_Gates.at(v)->list_Inputs.at(b)->posGate)
-                {
-                    list_Gates.at(v)->list_Inputs.at(b)->Logic = list_Wires.at(c)->Logic_Wire;
-                }
-            }
-        }
-        list_Gates.at(v)->updateLogic();
-    }
+    emit changeInputLogic();
+    emit changeGateLogic();
 }

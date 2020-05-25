@@ -10,9 +10,11 @@ Gate::Gate(uint gateNr, uint typeGate)
     this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->isMove = false;
     this->effect = nullptr;
+    this->isNot = false;
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
+    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
     this->gate_Nr = gateNr;
@@ -32,20 +34,36 @@ Gate::Gate(uint gateNr, uint typeGate)
     }
     else
     {
-        this->setPixmap(QPixmap(":/images/And_Gate.png"));
+        switch(gateType)
+        {
+        case 1:
+            this->setPixmap(QPixmap(":/images/And_Gate.png"));
+            break;
+
+        case 4:
+            this->setPixmap(QPixmap(":/images/And_Gate.png"));
+            isNot = true;
+            break;
+
+        }
         this->LogicalOutput = 0;
 
         // For different input size, nr of input nodes need to be configured
         input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
-        space = (pixmap().height() - input_size*5)/(input_size+1);
+        space = (pixmap().height() - input_size*2)/(input_size+1);
         for(int i = 1; i <= input_size; i++)
         {
             // input_rect is visual connection of node and gate
             input_rect = new QGraphicsRectItem(this);
-            input_rect->setRect(x(), y(), 20, 5);
+            input_rect->setRect(x(), y(), 20, 2);
             input_rect->setParentItem(this);
             input_rect->setPos(this->x() - input_rect->rect().width()+3,
                                space*i + input_rect->rect().height()*(i-1));
+
+            QBrush brush;
+            brush.setColor(Qt::black);
+            brush.setStyle(Qt::SolidPattern);
+            input_rect->setBrush(brush);
 
             // in is of InputCon node
             in = new InputCon(input_rect);
@@ -60,7 +78,23 @@ Gate::Gate(uint gateNr, uint typeGate)
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
-    rect->setRect(x(), y(), 20, 5);
+    rect->setRect(x(), y(), 20, 2);
+    if(isNot == true)
+    {
+        circle = new QGraphicsEllipseItem(this);
+        circle->setRect(0,0,10,10);
+        circle->setParentItem(this);
+        circle->setPos(pixmap().width()-5, pixmap().height()/2 - circle->rect().height()/2);
+    }
+    else
+    {
+        //
+    }
+
+    QBrush brush;
+    brush.setColor(Qt::black);
+    brush.setStyle(Qt::SolidPattern);
+    rect->setBrush(brush);
     rect->setParentItem(this);
     switch (typeGate)
     {
@@ -75,6 +109,11 @@ Gate::Gate(uint gateNr, uint typeGate)
 
     case 3:
         rect->setPos(pixmap().width()-2, pixmap().height()/2 - rect->rect().height()/2);
+        break;
+
+    case 4:
+        rect->setPos(pixmap().width()-5 + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
         break;
     }
 
@@ -117,6 +156,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             qDebug() << "Gate " << this->gate_Nr << ": " << this->LogicalOutput;
         }
     }
+    this->setCenterPos();
 }
 
 // KeyPressEvent as gate needs to be deleted
@@ -126,6 +166,10 @@ void Gate::keyPressEvent(QKeyEvent *event)
     {
         if(!(simulation->nr_Wires == 0))
         {
+            // Update Logic Before Delete of gate
+            emit simulation->clear_Node(true);
+
+            // Delete all wires connected to gate to be deleted
             int i = 0;
             int n = simulation->list_Wires.size();
             while(i < n)
@@ -152,6 +196,9 @@ void Gate::keyPressEvent(QKeyEvent *event)
             }
         }
 
+        //Update logic of all other gates
+        emit simulation->updateWireLogic();
+
         delete this;
         return;
     }
@@ -172,14 +219,58 @@ void Gate::deleteEffect()
 // Update Logic of gate when new wires connected and deleted
 void Gate::updateLogic()
 {
-    LogicalOutput = 1;
+    switch(this->gateType)
+    {
+    case 1:
+        this->andLogic();
+        break;
+
+    case 4:
+        this->andLogic();
+        break;
+    }
+}
+
+void Gate::setCenterPos()
+{
+    this->out->centerPoint = this->pos() + this->rect->pos();
+    this->out->centerPoint.setX(this->out->centerPoint.x() + this->rect->rect().width() + this->out->rect().width()/2);
+
     for(int i = 0; i < list_Inputs.size(); i++)
     {
-        //list_Inputs.at(i)->Logic =
+
+
+        this->list_Inputs.at(i)->centerPoint = this->pos();
+        this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x()
+                                                  - this->rect->rect().width() - this->out->rect().width()/2);
+
+        this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
+                                                  + (i)*rect->rect().height() + (i+1)*space);
+
+    }
+}
+
+void Gate::andLogic()
+{
+    int def;
+    int change;
+    if(isNot == false)
+    {
+        def = 1;
+        change = 0;
+    }
+    else
+    {
+        def = 0;
+        change = 1;
+    }
+    LogicalOutput = def;
+    for(int i = 0; i < list_Inputs.size(); i++)
+    {
         if(list_Inputs.at(i)->Logic == 0)
         {
-            LogicalOutput = 0;
-            break;
+            LogicalOutput = change;
+            return;
         }
     }
 }

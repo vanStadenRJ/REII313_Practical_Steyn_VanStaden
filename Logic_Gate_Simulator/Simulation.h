@@ -52,6 +52,9 @@ public:
     uint src_NodeNr;
     uint dest_NodeNr;
 
+    QPointF sourceNode;
+    QPointF destNode;
+
 private:
 
 
@@ -61,8 +64,10 @@ signals:
     void unWire();
     void Output_Show();
     void Input_Show();
-    void clear_Node();
-    void connected_Node(int);
+    void clear_Node(bool);
+    void connected_Node(int, int);
+    void changeInputLogic();
+    void changeGateLogic();
 };
 
 #endif // SIMULATION_H

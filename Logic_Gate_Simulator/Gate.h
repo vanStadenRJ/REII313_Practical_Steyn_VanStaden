@@ -4,6 +4,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
+#include <QGraphicsEllipseItem>
 #include <QGraphicsEffect>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -24,12 +25,18 @@ public:
     // Public Methods
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
-    void updateLogic();                     // Updates logic output of gates
+    void setCenterPos();
+
+    // Logic Functions
+    void andLogic();
+    void orLogic();
+    void xorLogic();
 
     // Public Attributes
     QGraphicsDropShadowEffect * effect;     // Shadow Effect when gate is pressed
     QGraphicsRectItem *input_rect;          // Input rect connecting nodes and gates
     QGraphicsRectItem *rect;                // Output rect connecting nodes and gates
+    QGraphicsEllipseItem * circle;          // Not circle visual
     OutputCon * out;                        // Output node
     InputCon * in;                          // Input nodes
 
@@ -37,11 +44,13 @@ public:
     QList<OutputCon *> list_Outputs;        // List of Outputs connected to gate
 
     QPointF pos_Gate;                       // QPointF position of gate
+    QPointF change;
     uint gateType;                          // Normal gate, Input or Output gate
     uint gate_Nr;                           // Gate number
 
     int LogicalOutput;                      // Logic of gate
     bool isMove;                            // Is gate being moved
+    bool isNot;                             // Does gate have not output
 
 private:
     // Private Attributes
@@ -50,6 +59,7 @@ private:
 
 public slots:
     void deleteEffect();                    // Delete effect when deselct gate
+    void updateLogic();                     // Updates logic output of gates
 };
 
 #endif // GATE_H
