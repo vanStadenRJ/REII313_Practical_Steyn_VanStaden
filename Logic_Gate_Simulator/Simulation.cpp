@@ -210,23 +210,24 @@ void Simulation::mousePressEvent(QMouseEvent *event)
 void Simulation::mouseMoveEvent(QMouseEvent *event)
 {
     if(canMove == true)
-    {
-        QGraphicsView::mousePressEvent(event);
+    {        
         move_wire->dest = this->mapFromGlobal(QCursor::pos());
         QLineF line;
         line.setPoints(move_wire->source, move_wire->dest);
         move_wire->setLine(line);
         scene->update();
     }
-    else {
-        QGraphicsView::mouseMoveEvent(event);
-    }
+
+    // Enable default QGraphicsView mousePressEvent()
+    QGraphicsView::mousePressEvent(event);
 }
 
 void Simulation::updateWireLogic()
 {
+    // Update gate logic on current logic of inputs
     emit changeGateLogic();
 
+    // Update logic of each wire
     for(int v = 0; v < list_Wires.size(); v++)
     {
         for(int b = 0; b < list_Gates.size(); b++)
@@ -238,9 +239,11 @@ void Simulation::updateWireLogic()
         }
     }
 
+    // Update Logic of all Inputs
     emit changeInputLogic();
+
+    // Update Logic of all gates
     emit changeGateLogic();
-    emit changeWireColor();
 
     // Only change color logic of wire if there are wires
     if(!(this->list_Wires.size() == 0))

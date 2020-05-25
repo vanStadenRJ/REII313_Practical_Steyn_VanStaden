@@ -25,7 +25,6 @@ public:
 
     QGraphicsDropShadowEffect * effect;
 
-
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget) override;
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
