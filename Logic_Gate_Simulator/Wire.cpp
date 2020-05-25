@@ -1,13 +1,14 @@
 #include "Wire.h"
 #include "Simulation.h"
 
-#include <QPen>
 #include <QDebug>
+#include <QPen>
 
 extern Simulation * simulation;
 
 Wire::Wire()
 {
+    setZValue(0);
     QPen pen;
     pen.setWidth(5);
     pen.setCapStyle(Qt::RoundCap);
@@ -16,7 +17,28 @@ Wire::Wire()
 
     effect = nullptr;
     QObject::connect(simulation, SIGNAL(unWire()), this, SLOT(deleteEffect()));
+    QObject::connect(simulation, SIGNAL(changeWireColor()), this, SLOT(colorLogic()));
     this->setFlag(QGraphicsItem::ItemIsFocusable);
+}
+
+void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QPainterPath outline;
+
+    outline.moveTo(line().p1());
+    outline.lineTo(line().p2());
+
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    QPen pen1;
+    pen1.setColor(QColor(0,0,0));
+    pen1.setWidth(4 + pen().width());
+    pen1.setCapStyle(Qt::RoundCap);
+    painter->strokePath(outline, pen1);
+    painter->setPen(pen());
+    pen().setCapStyle(Qt::RoundCap);
+    painter->drawLine(line());
+    painter->restore();
 }
 
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -32,11 +54,6 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
             effect->setOffset(8);
             this->setGraphicsEffect(effect);
             this->setFocus();
-
-            QPen pen;
-            pen.setWidth(6);
-            pen.setCapStyle(Qt::RoundCap);
-            this->setPen(pen);
         }        
         qDebug() << this->src_Gate << "(" << src_NodeNr << ")"
                  << "->" << this->dest_Gate << "(" << dest_NodeNr << ")"
@@ -108,10 +125,26 @@ void Wire::deleteEffect()
         this->setGraphicsEffect(effect);
         effect = nullptr;
         this->clearFocus();
+    }
+}
 
+void Wire::colorLogic()
+{
+    if(this->Logic_Wire == 1)
+    {
         QPen pen;
+        pen.setColor(QColor(0,75,200));
         pen.setWidth(5);
         pen.setCapStyle(Qt::RoundCap);
+        this->setPen(pen);
+    }
+    else
+    {
+        QPen pen;
+        pen.setColor(QColor(255,255,255));
+        pen.setWidth(5);
+        pen.setCapStyle(Qt::RoundCap);
+        //this->setOut
         this->setPen(pen);
     }
 }

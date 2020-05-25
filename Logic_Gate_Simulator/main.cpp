@@ -23,9 +23,13 @@ Simulation * simulation;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);    
+    QApplication a(argc, argv);
+
+    //Mainwindow start
     MainWindow mw;
     simulation = new Simulation(&mw);
+
+    //Set GraphicsView as central widget
     mw.setCentralWidget(simulation);
     mw.setFixedSize(1000,800);
     mw.centralWidget()->setGeometry(0,0,1000,800);

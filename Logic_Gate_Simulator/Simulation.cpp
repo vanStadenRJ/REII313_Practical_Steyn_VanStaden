@@ -3,8 +3,8 @@
 #include "Wire.h"
 
 #include <QMainWindow>
-#include <QDebug>
 #include <QCursor>
+#include <QDebug>
 #include <QList>
 
 Simulation::Simulation(QWidget * parent)
@@ -67,7 +67,6 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 list_Gates.at(j)->setCenterPos();
             }
             isBuildMode = false;
-
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
@@ -79,10 +78,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             this->setCursor(def);
             isBuildMode = false;            
         }
-    }
-    else
-    {
-        QGraphicsView::mousePressEvent(event);
+        return;
     }
 
     if(isMove)
@@ -120,7 +116,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 isMove = false;
             }
         }
-
+        return;
     }
 
 
@@ -128,11 +124,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if(move_wire == nullptr)
         {
-
-
             qDebug() << "Wire";
             move_wire = new Wire();
-            //move_wire->source = this->mapFromGlobal(QCursor::pos());
             move_wire->source = this->sourceNode;
             qDebug() << move_wire->source;
 
@@ -172,6 +165,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                         break;
                     }
                 }
+
                 QLineF line;
                 line.setPoints(wire->source, wire->dest);
                 wire->setLine(line);
@@ -183,11 +177,11 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 this->setCursor(Qt::ArrowCursor);            
                 this->updateWireLogic();
 
-                emit clear_Node(false);
+                emit clear_Node(false, 0, 0);
             }
             else
             {
-                emit clear_Node(false);
+                emit clear_Node(false, 0, 0);
             }
             canMove = false;
             scene->removeItem(move_wire);
@@ -195,6 +189,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             delete move_wire;           
             wireMode = false;
         }
+        return;
     }
     else
     {
@@ -204,7 +199,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             canMove = false;
             scene->removeItem(move_wire);
             move_wire = nullptr;
-            emit clear_Node(false);
+            emit clear_Node(false, 0, 0);
 
             delete move_wire;
             wireMode = false;
@@ -245,4 +240,11 @@ void Simulation::updateWireLogic()
 
     emit changeInputLogic();
     emit changeGateLogic();
+    emit changeWireColor();
+
+    // Only change color logic of wire if there are wires
+    if(!(this->list_Wires.size() == 0))
+    {
+        emit changeWireColor();
+    }
 }

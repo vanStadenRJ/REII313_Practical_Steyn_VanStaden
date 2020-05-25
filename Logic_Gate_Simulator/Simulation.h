@@ -64,10 +64,11 @@ signals:
     void unWire();
     void Output_Show();
     void Input_Show();
-    void clear_Node(bool);
+    void clear_Node(bool, int, int);
     void connected_Node(int, int);
     void changeInputLogic();
     void changeGateLogic();
+    void changeWireColor();
 };
 
 #endif // SIMULATION_H

@@ -7,7 +7,8 @@ extern Simulation * simulation;
 
 OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 {
-    setRect(0,0,10,10);
+    this->setRect(0,0,12,12);
+    this->setZValue(2);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
@@ -16,7 +17,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     test_src = false;
 
     QBrush brush;
-    brush.setColor(Qt::black);
+    brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 
@@ -62,7 +63,7 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this -> setRect(0,0,10,10);
+    this -> setRect(0,0,12,12);
     if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
     {
         if(test_src == false)
@@ -70,7 +71,7 @@ void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
             test = false;
             //this->setBrush(Qt::NoBrush);
             QBrush brush;
-            brush.setColor(Qt::black);
+            brush.setColor(QColor(255,255,255));
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
         }
@@ -78,7 +79,7 @@ void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         simulation->wireMode = false;
     }
     QBrush brush;
-    brush.setColor(Qt::black);
+    brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 

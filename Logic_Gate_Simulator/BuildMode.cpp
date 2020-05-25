@@ -1,9 +1,8 @@
-#include "BuildMode.h"
 #include "Simulation.h"
 #include "mainwindow.h"
+#include "BuildMode.h"
 
 extern Simulation * simulation;
-//MainWindow * mw;
 
 BuildMode::BuildMode(int typeIcon)
 {
