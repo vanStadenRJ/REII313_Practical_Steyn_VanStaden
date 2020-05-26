@@ -67,7 +67,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
 
     if(isBuildMode)
     {
-        if(event->button() == Qt::LeftButton)
+        if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
             this->nr_Gates = this->nr_Gates + 1;
             gate = new Gate(this->nr_Gates, this->typeIcon);
@@ -85,7 +85,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
         }
-        else if (event->button() == Qt::RightButton)
+        else
         {
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
@@ -130,7 +130,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 isMove = false;
             }
         }
-        return;
+        //return;
     }
 
 
@@ -232,8 +232,20 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         scene->update();
     }
 
+    if(isBuildMode)
+    {
+        if(this->mapFromGlobal(QCursor::pos()).x() < 300)
+        {
+            this->insidePanel = true;
+        }
+        else
+        {
+            this->insidePanel = false;
+        }
+    }
+
     // Enable default QGraphicsView mousePressEvent()
-    QGraphicsView::mousePressEvent(event);
+    //QGraphicsView::mousePressEvent(event);
 }
 
 void Simulation::updateWireLogic()

@@ -36,6 +36,7 @@ public:
 
     bool isBuildMode;
     bool isMove;
+    bool insidePanel;
     uint moveGate;
     bool wireMode;
     bool canMove;
