@@ -26,7 +26,6 @@ BuildMode::BuildMode(int typeIcon)
         this->setPixmap(QPixmap(":/images/Nand_Icon.jpg"));
         break;
     }
-
 }
 
 void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)

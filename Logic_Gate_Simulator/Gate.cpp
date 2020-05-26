@@ -87,6 +87,7 @@ Gate::Gate(uint gateNr, uint typeGate)
         circle->setRect(0,0,10,10);
         circle->setParentItem(this);
         circle->setPos(pixmap().width()-5, pixmap().height()/2 - circle->rect().height()/2);
+        circle->setBrush(QColor(255,255,255));
     }
 
     rect->setBrush(QColor(0,0,0));

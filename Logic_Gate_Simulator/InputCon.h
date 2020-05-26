@@ -18,6 +18,7 @@ public:
     // Public Methods
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
+    //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     // Public Attributes
     QPointF centerPoint;

@@ -9,6 +9,8 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
     setRect(0,0,12,12);
     QBrush brush;
     brush.setColor(QColor(255,255,255));
+    brush.setStyle(Qt::SolidPattern);
+    this->setBrush(brush);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);

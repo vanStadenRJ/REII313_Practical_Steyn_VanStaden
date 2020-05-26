@@ -23,6 +23,7 @@ public:
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
+    //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     // Public Attributes
     QPointF wire_Pos;

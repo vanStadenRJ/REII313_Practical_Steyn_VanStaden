@@ -1,6 +1,7 @@
 #ifndef BUTTONPANEL_H
 #define BUTTONPANEL_H
 
+#include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
 #include <QPainter>
 

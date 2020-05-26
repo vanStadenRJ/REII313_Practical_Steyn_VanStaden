@@ -9,6 +9,9 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 {
     this->setRect(0,0,12,12);
     this->setZValue(2);
+    QPen pen;
+    pen.setWidth(2);
+    this->setPen(pen);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
@@ -33,6 +36,8 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     {
         //Change color
         this -> setRect(0,0,13,13);
+        //this->setPen(QPen)
+        //this->paint();
 
         QBrush brush;
         brush.setColor(Qt::black);
@@ -92,6 +97,16 @@ void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
     test_src = true;
     wire_Pos = simulation->mapFromGlobal(QCursor::pos());;
 }
+
+//void OutputCon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+//{
+//    painter->setBrush(QColor(255,255,255));
+
+//    QPen pen;
+//    pen.setWidth(2);
+//    painter->setPen(pen);
+//    painter->drawEllipse(0,0,12,12);
+//}
 
 void OutputCon::InputToOutput()
 {

@@ -23,14 +23,7 @@ Simulation::Simulation(QWidget * parent)
     //panel->setBrush(QColor(Qt::darkGray));
     scene->addItem(panel);
 
-
-
-
-
-
-
-
-
+    this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
     // set cursor
     isBuildMode = false;
@@ -92,7 +85,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             this->setCursor(def);
             isBuildMode = false;            
         }
-        return;
+        //return;
     }
 
     if(isMove)
@@ -203,7 +196,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             delete move_wire;           
             wireMode = false;
         }
-        return;
+        //return;
     }
     else
     {
@@ -245,7 +238,7 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
     }
 
     // Enable default QGraphicsView mousePressEvent()
-    //QGraphicsView::mousePressEvent(event);
+    QGraphicsView::mousePressEvent(event);
 }
 
 void Simulation::updateWireLogic()
