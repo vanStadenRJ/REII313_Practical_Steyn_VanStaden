@@ -25,13 +25,14 @@ public:
 
     QGraphicsDropShadowEffect * effect;
 
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget) override;
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
-
     bool draw;
 
 public slots:
     void deleteEffect();
+    void colorLogic();
 };
 
 #endif // WIRE_H

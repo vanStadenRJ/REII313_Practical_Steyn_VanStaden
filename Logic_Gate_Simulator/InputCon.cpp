@@ -6,7 +6,11 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 {
     posGate = 0;
     Logic = 0;
-    setRect(0,0,10,10);
+    setRect(0,0,12,12);
+    QBrush brush;
+    brush.setColor(QColor(255,255,255));
+    brush.setStyle(Qt::SolidPattern);
+    this->setBrush(brush);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
@@ -15,7 +19,7 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
     test = false;
 
     QObject::connect(simulation, SIGNAL(Input_Show()), this, SLOT(OutputToInput()));
-    QObject::connect(simulation, SIGNAL(clear_Node(bool)), this, SLOT(clearNode(bool)));
+    QObject::connect(simulation, SIGNAL(clear_Node(bool, int, int)), this, SLOT(clearNode(bool, int, int)));
     QObject::connect(simulation,SIGNAL(connected_Node(int, int)), this, SLOT(conNode(int, int)));
     QObject::connect(simulation, SIGNAL(changeInputLogic()), this, SLOT(getWireLogic()));
 }
@@ -64,7 +68,7 @@ void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         test = false;
         if(simulation->wireMode == false)
         {
-            this->setBrush(Qt::NoBrush);
+            this->setBrush(QColor(255,255,255));
         }
         else
         {
@@ -92,13 +96,25 @@ void InputCon::OutputToInput()
     }
 }
 
-void InputCon::clearNode(bool gate)
+void InputCon::clearNode(bool gate, int g, int h)
 {
-    if(this->connected == false || gate == true)
+    if(gate == true)
     {
-        this->setBrush(Qt::NoBrush);
-        this->Logic = 0;
-        this->connected = false;
+        if(g == conGate && h == posGate)
+        {
+            this->setBrush(QColor(255,255,255));
+            this->Logic = 0;
+            this->connected = false;
+        }
+    }
+    else
+    {
+        if(this->connected == false)
+        {
+            this->setBrush(QColor(255,255,255));
+            this->Logic = 0;
+            this->connected = false;
+        }
     }
 }
 
@@ -130,7 +146,7 @@ void InputCon::conNode(int k, int h)
         {
             this->connected = true;
             QBrush brush;
-            brush.setColor(Qt::black);
+            brush.setColor(Qt::white);
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
             qDebug() << k;

@@ -7,7 +7,11 @@ extern Simulation * simulation;
 
 OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 {
-    setRect(0,0,10,10);
+    this->setRect(0,0,12,12);
+    this->setZValue(2);
+    QPen pen;
+    pen.setWidth(2);
+    this->setPen(pen);
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
@@ -16,7 +20,7 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     test_src = false;
 
     QBrush brush;
-    brush.setColor(Qt::black);
+    brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 
@@ -32,6 +36,8 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     {
         //Change color
         this -> setRect(0,0,13,13);
+        //this->setPen(QPen)
+        //this->paint();
 
         QBrush brush;
         brush.setColor(Qt::black);
@@ -62,7 +68,7 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this -> setRect(0,0,10,10);
+    this -> setRect(0,0,12,12);
     if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
     {
         if(test_src == false)
@@ -70,7 +76,7 @@ void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
             test = false;
             //this->setBrush(Qt::NoBrush);
             QBrush brush;
-            brush.setColor(Qt::black);
+            brush.setColor(QColor(255,255,255));
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
         }
@@ -78,7 +84,7 @@ void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
         simulation->wireMode = false;
     }
     QBrush brush;
-    brush.setColor(Qt::black);
+    brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 
@@ -91,6 +97,16 @@ void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
     test_src = true;
     wire_Pos = simulation->mapFromGlobal(QCursor::pos());;
 }
+
+//void OutputCon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+//{
+//    painter->setBrush(QColor(255,255,255));
+
+//    QPen pen;
+//    pen.setWidth(2);
+//    painter->setPen(pen);
+//    painter->drawEllipse(0,0,12,12);
+//}
 
 void OutputCon::InputToOutput()
 {

@@ -3,20 +3,27 @@
 #include "Wire.h"
 
 #include <QMainWindow>
-#include <QDebug>
 #include <QCursor>
+#include <QDebug>
 #include <QList>
 
 Simulation::Simulation(QWidget * parent)
 {
     //Set scene and show on view
-    this->setSceneRect(0,0,1000,800);
+    this->setSceneRect(0,0,1600,900);
     scene = new QGraphicsScene(this);
-    scene->setSceneRect(0,0,1000,800);
+    scene->setSceneRect(0,0,1600,900);
     this->setScene(scene);
-    this->setFixedSize(1000,800);
+    this->setFixedSize(1600,900);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // Initialize Panel where all logic gates to be put
+    panel = new ButtonPanel();
+    //panel->setBrush(QColor(Qt::darkGray));
+    scene->addItem(panel);
+
+    this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
     // set cursor
     isBuildMode = false;
@@ -53,7 +60,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
 
     if(isBuildMode)
     {
-        if(event->button() == Qt::LeftButton)
+        if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
             this->nr_Gates = this->nr_Gates + 1;
             gate = new Gate(this->nr_Gates, this->typeIcon);
@@ -67,22 +74,18 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 list_Gates.at(j)->setCenterPos();
             }
             isBuildMode = false;
-
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
         }
-        else if (event->button() == Qt::RightButton)
+        else
         {
             QCursor def = QCursor();
             def.setShape(Qt::ArrowCursor);
             this->setCursor(def);
             isBuildMode = false;            
         }
-    }
-    else
-    {
-        QGraphicsView::mousePressEvent(event);
+        //return;
     }
 
     if(isMove)
@@ -120,7 +123,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 isMove = false;
             }
         }
-
+        //return;
     }
 
 
@@ -128,11 +131,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if(move_wire == nullptr)
         {
-
-
             qDebug() << "Wire";
             move_wire = new Wire();
-            //move_wire->source = this->mapFromGlobal(QCursor::pos());
             move_wire->source = this->sourceNode;
             qDebug() << move_wire->source;
 
@@ -172,6 +172,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                         break;
                     }
                 }
+
                 QLineF line;
                 line.setPoints(wire->source, wire->dest);
                 wire->setLine(line);
@@ -183,11 +184,11 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 this->setCursor(Qt::ArrowCursor);            
                 this->updateWireLogic();
 
-                emit clear_Node(false);
+                emit clear_Node(false, 0, 0);
             }
             else
             {
-                emit clear_Node(false);
+                emit clear_Node(false, 0, 0);
             }
             canMove = false;
             scene->removeItem(move_wire);
@@ -195,6 +196,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             delete move_wire;           
             wireMode = false;
         }
+        //return;
     }
     else
     {
@@ -204,7 +206,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             canMove = false;
             scene->removeItem(move_wire);
             move_wire = nullptr;
-            emit clear_Node(false);
+            emit clear_Node(false, 0, 0);
 
             delete move_wire;
             wireMode = false;
@@ -215,23 +217,36 @@ void Simulation::mousePressEvent(QMouseEvent *event)
 void Simulation::mouseMoveEvent(QMouseEvent *event)
 {
     if(canMove == true)
-    {
-        QGraphicsView::mousePressEvent(event);
+    {        
         move_wire->dest = this->mapFromGlobal(QCursor::pos());
         QLineF line;
         line.setPoints(move_wire->source, move_wire->dest);
         move_wire->setLine(line);
         scene->update();
     }
-    else {
-        QGraphicsView::mouseMoveEvent(event);
+
+    if(isBuildMode)
+    {
+        if(this->mapFromGlobal(QCursor::pos()).x() < 300)
+        {
+            this->insidePanel = true;
+        }
+        else
+        {
+            this->insidePanel = false;
+        }
     }
+
+    // Enable default QGraphicsView mousePressEvent()
+    QGraphicsView::mousePressEvent(event);
 }
 
 void Simulation::updateWireLogic()
 {
+    // Update gate logic on current logic of inputs
     emit changeGateLogic();
 
+    // Update logic of each wire
     for(int v = 0; v < list_Wires.size(); v++)
     {
         for(int b = 0; b < list_Gates.size(); b++)
@@ -243,6 +258,15 @@ void Simulation::updateWireLogic()
         }
     }
 
+    // Update Logic of all Inputs
     emit changeInputLogic();
+
+    // Update Logic of all gates
     emit changeGateLogic();
+
+    // Only change color logic of wire if there are wires
+    if(!(this->list_Wires.size() == 0))
+    {
+        emit changeWireColor();
+    }
 }

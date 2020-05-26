@@ -11,6 +11,7 @@
 
 #include "Gate.h"
 #include "BuildMode.h"
+#include "ButtonPanel.h"
 
 // Our main workspace will be Simulation which inherits from QGraphicsView
 class Simulation: public QGraphicsView
@@ -30,10 +31,12 @@ public:
     Gate * gate;
     Wire * wire;
     Wire * move_wire;
+    ButtonPanel * panel;
     bool Output;
 
     bool isBuildMode;
     bool isMove;
+    bool insidePanel;
     uint moveGate;
     bool wireMode;
     bool canMove;
@@ -64,10 +67,11 @@ signals:
     void unWire();
     void Output_Show();
     void Input_Show();
-    void clear_Node(bool);
+    void clear_Node(bool, int, int);
     void connected_Node(int, int);
     void changeInputLogic();
     void changeGateLogic();
+    void changeWireColor();
 };
 
 #endif // SIMULATION_H

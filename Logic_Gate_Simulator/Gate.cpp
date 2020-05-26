@@ -6,8 +6,14 @@ extern Simulation * simulation;
 Gate::Gate(uint gateNr, uint typeGate)
 {
     qDebug() << simulation->list_Gates.size();
-    // Set default values
+
+    // Change z value as to ensure that gate on top of wire
+    this->setZValue(1);
+
+    // Item can accept keyboard events
     this->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    // Set default values
     this->isMove = false;
     this->effect = nullptr;
     this->isNot = false;
@@ -44,7 +50,6 @@ Gate::Gate(uint gateNr, uint typeGate)
             this->setPixmap(QPixmap(":/images/And_Gate.png"));
             isNot = true;
             break;
-
         }
         this->LogicalOutput = 0;
 
@@ -60,10 +65,7 @@ Gate::Gate(uint gateNr, uint typeGate)
             input_rect->setPos(this->x() - input_rect->rect().width()+3,
                                space*i + input_rect->rect().height()*(i-1));
 
-            QBrush brush;
-            brush.setColor(Qt::black);
-            brush.setStyle(Qt::SolidPattern);
-            input_rect->setBrush(brush);
+            input_rect->setBrush(QColor(0,0,0));
 
             // in is of InputCon node
             in = new InputCon(input_rect);
@@ -85,16 +87,10 @@ Gate::Gate(uint gateNr, uint typeGate)
         circle->setRect(0,0,10,10);
         circle->setParentItem(this);
         circle->setPos(pixmap().width()-5, pixmap().height()/2 - circle->rect().height()/2);
-    }
-    else
-    {
-        //
+        circle->setBrush(QColor(255,255,255));
     }
 
-    QBrush brush;
-    brush.setColor(Qt::black);
-    brush.setStyle(Qt::SolidPattern);
-    rect->setBrush(brush);
+    rect->setBrush(QColor(0,0,0));
     rect->setParentItem(this);
     switch (typeGate)
     {
@@ -167,7 +163,7 @@ void Gate::keyPressEvent(QKeyEvent *event)
         if(!(simulation->nr_Wires == 0))
         {
             // Update Logic Before Delete of gate
-            emit simulation->clear_Node(true);
+            //emit simulation->clear_Node(true);
 
             // Delete all wires connected to gate to be deleted
             int i = 0;
@@ -176,7 +172,10 @@ void Gate::keyPressEvent(QKeyEvent *event)
             {
                 if((simulation->list_Wires.at(i)->src_Gate == this->gate_Nr) || (simulation->list_Wires.at(i)->dest_Gate == this->gate_Nr))
                 {
-                    qDebug() << "Toets";
+                    if(!(simulation->list_Wires.at(i)->dest_Gate == this->gate_Nr))
+                    {
+                        emit simulation->clear_Node(true, simulation->list_Wires.at(i)->src_Gate , simulation->list_Wires.at(i)->dest_NodeNr);
+                    }
                     delete simulation->list_Wires.takeAt(i);
                     i--;
                     n--;
@@ -231,6 +230,7 @@ void Gate::updateLogic()
     }
 }
 
+// Function to center gate upon moving
 void Gate::setCenterPos()
 {
     this->out->centerPoint = this->pos() + this->rect->pos();
@@ -238,18 +238,16 @@ void Gate::setCenterPos()
 
     for(int i = 0; i < list_Inputs.size(); i++)
     {
-
-
         this->list_Inputs.at(i)->centerPoint = this->pos();
         this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x()
                                                   - this->rect->rect().width() - this->out->rect().width()/2);
 
         this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
                                                   + (i)*rect->rect().height() + (i+1)*space);
-
     }
 }
 
+// Function handling AND logic of gate
 void Gate::andLogic()
 {
     int def;

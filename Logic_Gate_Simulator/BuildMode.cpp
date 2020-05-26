@@ -1,9 +1,8 @@
-#include "BuildMode.h"
 #include "Simulation.h"
 #include "mainwindow.h"
+#include "BuildMode.h"
 
 extern Simulation * simulation;
-//MainWindow * mw;
 
 BuildMode::BuildMode(int typeIcon)
 {
@@ -27,7 +26,6 @@ BuildMode::BuildMode(int typeIcon)
         this->setPixmap(QPixmap(":/images/Nand_Icon.jpg"));
         break;
     }
-
 }
 
 void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
