@@ -7,8 +7,6 @@ extern Simulation * simulation;
 
 ButtonPanel::ButtonPanel()
 {
-//    this->setRect(5,5,250,864);
-//    this->update();
     this->setZValue(0);
 
     QGraphicsTextItem * text = new QGraphicsTextItem(this);
@@ -28,8 +26,3 @@ void ButtonPanel::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setPen(pen);
     painter->drawRoundedRect(7, 7, 300, 860, 5, 5);
 }
-
-//void ButtonPanel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-//{
-
-//}

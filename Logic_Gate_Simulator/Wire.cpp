@@ -93,7 +93,6 @@ void Wire::keyPressEvent(QKeyEvent *event)
             i++;
         }
 
-        //simulation->updateWireLogic();
         // Upon Delete of Wire, Remove Wire from list of wires
         for(int v = 0; v < simulation->list_Wires.size(); v++)
         {

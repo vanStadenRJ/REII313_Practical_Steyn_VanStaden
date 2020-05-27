@@ -2,9 +2,9 @@
 #define GATE_H
 
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsEllipseItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
-#include <QGraphicsEllipseItem>
 #include <QGraphicsEffect>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -20,7 +20,7 @@ class Gate: public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     // Constructors
-    Gate(uint gateNr, uint typeGate);
+    Gate(int gateNr, int typeGate, int amnt);
 
     // Public Methods
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
@@ -45,8 +45,8 @@ public:
 
     QPointF pos_Gate;                       // QPointF position of gate
     QPointF change;
-    uint gateType;                          // Normal gate, Input or Output gate
-    uint gate_Nr;                           // Gate number
+    int gateType;                          // Normal gate, Input or Output gate
+    int gate_Nr;                           // Gate number
 
     int LogicalOutput;                      // Logic of gate
     bool isMove;                            // Is gate being moved

@@ -12,12 +12,16 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 
-    //ALLOW RESPONDING TO HOVER EVENTS
+    // ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
-    connected = false;
-    Logic = 0;
-    test = false;
 
+    // Initialize Variables
+    connected = false;
+    test = false;
+    Logic = 0;
+
+
+    // Connect Signals and Slots
     QObject::connect(simulation, SIGNAL(Input_Show()), this, SLOT(OutputToInput()));
     QObject::connect(simulation, SIGNAL(clear_Node(bool, int, int)), this, SLOT(clearNode(bool, int, int)));
     QObject::connect(simulation,SIGNAL(connected_Node(int, int)), this, SLOT(conNode(int, int)));
@@ -27,7 +31,6 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     if((connected == false && simulation->isBuildMode == false  && simulation->isMove == false) && !(simulation->move_wire == nullptr))
-    //if(!(simulation->move_wire == nullptr))
     {
         //Change color
         QBrush brush;
@@ -63,7 +66,6 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     if((connected == false && simulation->isBuildMode == false && simulation->isMove == false) && !(simulation->move_wire == nullptr))
-    //if(!(simulation->move_wire == nullptr))
     {
         test = false;
         if(simulation->wireMode == false)

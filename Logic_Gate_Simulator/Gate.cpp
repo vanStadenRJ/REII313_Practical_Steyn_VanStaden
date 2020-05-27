@@ -3,7 +3,7 @@
 
 extern Simulation * simulation;
 
-Gate::Gate(uint gateNr, uint typeGate)
+Gate::Gate(int gateNr, int typeGate, int amnt)
 {
     qDebug() << simulation->list_Gates.size();
 
@@ -43,18 +43,18 @@ Gate::Gate(uint gateNr, uint typeGate)
         switch(gateType)
         {
         case 1:
-            this->setPixmap(QPixmap(":/images/And_Gate.png"));
+            this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
             break;
 
         case 4:
-            this->setPixmap(QPixmap(":/images/And_Gate.png"));
+            this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
             isNot = true;
             break;
         }
         this->LogicalOutput = 0;
 
         // For different input size, nr of input nodes need to be configured
-        input_size = QInputDialog::getInt(simulation, "Logic Gate Input Selector", "Input Count", 2, 2, 5);
+        input_size = amnt;
         space = (pixmap().height() - input_size*2)/(input_size+1);
         for(int i = 1; i <= input_size; i++)
         {
@@ -86,7 +86,7 @@ Gate::Gate(uint gateNr, uint typeGate)
         circle = new QGraphicsEllipseItem(this);
         circle->setRect(0,0,10,10);
         circle->setParentItem(this);
-        circle->setPos(pixmap().width()-5, pixmap().height()/2 - circle->rect().height()/2);
+        circle->setPos(pixmap().width(), pixmap().height()/2 - circle->rect().height()/2);
         circle->setBrush(QColor(255,255,255));
     }
 
@@ -95,20 +95,20 @@ Gate::Gate(uint gateNr, uint typeGate)
     switch (typeGate)
     {
     case 1:
-        rect->setPos(pixmap().width()-5, pixmap().height()/2 - rect->rect().height()/2);
+        rect->setPos(pixmap().width(), pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
 
     case 2:
-        rect->setPos(pixmap().width()-2, pixmap().height()/2 - rect->rect().height()/2);
+        rect->setPos(pixmap().width(), pixmap().height()/2 - rect->rect().height()/2);
         break;
 
     case 3:
-        rect->setPos(pixmap().width()-2, pixmap().height()/2 - rect->rect().height()/2);
+        rect->setPos(pixmap().width(), pixmap().height()/2 - rect->rect().height()/2);
         break;
 
     case 4:
-        rect->setPos(pixmap().width()-5 + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        rect->setPos(pixmap().width() + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
     }
@@ -162,9 +162,6 @@ void Gate::keyPressEvent(QKeyEvent *event)
     {
         if(!(simulation->nr_Wires == 0))
         {
-            // Update Logic Before Delete of gate
-            //emit simulation->clear_Node(true);
-
             // Delete all wires connected to gate to be deleted
             int i = 0;
             int n = simulation->list_Wires.size();

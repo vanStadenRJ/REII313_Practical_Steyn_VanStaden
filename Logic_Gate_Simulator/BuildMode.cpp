@@ -23,7 +23,7 @@ BuildMode::BuildMode(int typeIcon)
         break;
 
     case 4:     // 4 = Nand Gate
-        this->setPixmap(QPixmap(":/images/Nand_Icon.jpg"));
+        this->setPixmap(QPixmap(":/images/Nandd_Icon.png"));
         break;
     }
 }

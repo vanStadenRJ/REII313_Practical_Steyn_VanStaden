@@ -37,28 +37,29 @@ public:
     bool isBuildMode;
     bool isMove;
     bool insidePanel;
-    uint moveGate;
+    int moveGate;
     bool wireMode;
     bool canMove;
-    uint nr_Gates;
+    int nr_Gates;
     int nr_Wires;
-    uint src_Gate;
-    uint dest_Gate;
+    int src_Gate;
+    int dest_Gate;
     QList<Wire *> list_Wires;
     QList<Gate *> list_Gates;
 
     BuildMode * andIcon;
     BuildMode * highIcon;
     BuildMode * lowIcon;
-    uint typeIcon;
+    int typeIcon;
 
-    uint src_NodeNr;
-    uint dest_NodeNr;
+    int src_NodeNr;
+    int dest_NodeNr;
 
     QPointF sourceNode;
     QPointF destNode;
 
 private:
+    void initGates(int nrIn, int x, int y);
 
 
 signals:

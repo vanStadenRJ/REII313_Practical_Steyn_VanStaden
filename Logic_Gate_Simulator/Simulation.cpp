@@ -20,16 +20,19 @@ Simulation::Simulation(QWidget * parent)
 
     // Initialize Panel where all logic gates to be put
     panel = new ButtonPanel();
-    //panel->setBrush(QColor(Qt::darkGray));
     scene->addItem(panel);
 
     this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
-    // set cursor
     isBuildMode = false;
     isMove = false;
     wireMode = false;
-    move_wire = nullptr;
+    move_wire = nullptr;    
+    canMove = false;
+    Output = true;
+    nr_Gates = 0;
+    nr_Wires = 0;
+
     this->setMouseTracking(true);
 
     for(int i = 1; i <= 4; i++)
@@ -38,12 +41,6 @@ Simulation::Simulation(QWidget * parent)
         scene->addItem(andIcon);
         andIcon->setPos((i-1)*100,0);
     }
-
-    canMove = false;
-    nr_Gates = 0;
-    nr_Wires = 0;
-
-    Output = true;
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
@@ -62,27 +59,25 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
-            this->nr_Gates = this->nr_Gates + 1;
-            gate = new Gate(this->nr_Gates, this->typeIcon);
-            scene->addItem(gate);
-            gate->setPos(event->x()-gate->pixmap().width()/2, event->y() -
-                         gate->pixmap().height()/2);
-            gate->pos_Gate = gate->pos();
-            list_Gates << gate;
-            for(int j = 0; j < list_Gates.size(); j++)
+            if(!(this->typeIcon == 2) && !(this->typeIcon == 3))
             {
-                list_Gates.at(j)->setCenterPos();
+                bool ok;
+                int input_size = QInputDialog::getInt(this, "Logic Gate Input Selector", "Input Count", 2, 2, 5, 1, &ok);
+                if(ok == true)
+                {
+                    this->initGates(input_size, event->x(), event->y());
+                }
+            }
+            else
+            {
+                this->initGates(0, event->x(), event->y());
             }
             isBuildMode = false;
-            QCursor def = QCursor();
-            def.setShape(Qt::ArrowCursor);
-            this->setCursor(def);
+            this->setCursor(QCursor(Qt::ArrowCursor));
         }
         else
         {
-            QCursor def = QCursor();
-            def.setShape(Qt::ArrowCursor);
-            this->setCursor(def);
+            this->setCursor(QCursor(Qt::ArrowCursor));
             isBuildMode = false;            
         }
         //return;
@@ -126,7 +121,6 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         //return;
     }
 
-
     if(wireMode)
     {
         if(move_wire == nullptr)
@@ -153,7 +147,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         {
             if(event->button() == Qt::LeftButton)
             {
-                QGraphicsView::mousePressEvent(event);
+                //QGraphicsView::mousePressEvent(event);
                 wire = new Wire();
                 wire->source = move_wire->source;
                 wire->dest = move_wire->dest;
@@ -200,7 +194,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     }
     else
     {
-        QGraphicsView::mousePressEvent(event);
+        //QGraphicsView::mousePressEvent(event);
         if (!(move_wire == nullptr))
         {
             canMove = false;
@@ -212,6 +206,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             wireMode = false;
         }
     }
+    QGraphicsView::mousePressEvent(event);
 }
 
 void Simulation::mouseMoveEvent(QMouseEvent *event)
@@ -268,5 +263,20 @@ void Simulation::updateWireLogic()
     if(!(this->list_Wires.size() == 0))
     {
         emit changeWireColor();
+    }
+}
+
+void Simulation::initGates(int nrIn, int x, int y)
+{
+    this->nr_Gates = this->nr_Gates + 1;
+    gate = new Gate(this->nr_Gates, this->typeIcon, nrIn);
+    scene->addItem(gate);
+    gate->setPos(x-gate->pixmap().width()/2, y -
+                 gate->pixmap().height()/2);
+    gate->pos_Gate = gate->pos();
+    list_Gates << gate;
+    for(int j = 0; j < list_Gates.size(); j++)
+    {
+        list_Gates.at(j)->setCenterPos();
     }
 }

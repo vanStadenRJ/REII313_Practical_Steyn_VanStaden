@@ -24,7 +24,7 @@ public:
     QPointF centerPoint;
     int parent_Gate;                        // Gate Number of parent gate
     bool connected;                         // Is node connected
-    uint posGate;                            // Position of node when gate created
+    int posGate;                            // Position of node when gate created
     int conGate;
     int Logic;                              // Logic of node
     bool test;
