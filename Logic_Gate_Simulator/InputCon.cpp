@@ -3,7 +3,10 @@
 extern Simulation * simulation;
 
 InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
-{
+{    
+    QPen pen;
+    pen.setWidth(2);
+    this->setPen(pen);
     posGate = 0;
     Logic = 0;
     setRect(0,0,12,12);

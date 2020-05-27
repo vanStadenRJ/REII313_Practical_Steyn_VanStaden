@@ -48,7 +48,16 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
         case 4:
             this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
-            isNot = true;
+            this->isNot = true;
+            break;
+
+        case 5:
+            this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
+            break;
+
+        case 6:
+            this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
+            this->isNot = true;
             break;
         }
         this->LogicalOutput = 0;
@@ -59,10 +68,19 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         for(int i = 1; i <= input_size; i++)
         {
             // input_rect is visual connection of node and gate
+
             input_rect = new QGraphicsRectItem(this);
+
             input_rect->setRect(x(), y(), 20, 2);
             input_rect->setParentItem(this);
-            input_rect->setPos(this->x() - input_rect->rect().width()+3,
+
+            // If OR, NOR, XOR, XNOR, position of lines need adjusting
+            int plus = 0;
+            if(gateType == 5)
+            {
+                plus = 16;
+            }
+            input_rect->setPos(this->x() - input_rect->rect().width() + plus,
                                space*i + input_rect->rect().height()*(i-1));
 
             input_rect->setBrush(QColor(0,0,0));
@@ -88,6 +106,10 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         circle->setParentItem(this);
         circle->setPos(pixmap().width(), pixmap().height()/2 - circle->rect().height()/2);
         circle->setBrush(QColor(255,255,255));
+
+        QPen pen;
+        pen.setWidth(2);
+        circle->setPen(pen);
     }
 
     rect->setBrush(QColor(0,0,0));
@@ -109,6 +131,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     case 4:
         rect->setPos(pixmap().width() + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
+
+    case 5:
+        rect->setPos(pixmap().width() - 2, pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
     }
@@ -224,6 +251,14 @@ void Gate::updateLogic()
     case 4:
         this->andLogic();
         break;
+
+    case 5:
+        this->orLogic();
+        break;
+
+    case 6:
+        this->orLogic();
+        break;
     }
 }
 
@@ -263,6 +298,31 @@ void Gate::andLogic()
     for(int i = 0; i < list_Inputs.size(); i++)
     {
         if(list_Inputs.at(i)->Logic == 0)
+        {
+            LogicalOutput = change;
+            return;
+        }
+    }
+}
+
+void Gate::orLogic()
+{
+    int def;
+    int change;
+    if(isNot == false)
+    {
+        def = 0;
+        change = 1;
+    }
+    else
+    {
+        def = 1;
+        change = 0;
+    }
+    LogicalOutput = def;
+    for(int i = 0; i < list_Inputs.size(); i++)
+    {
+        if(list_Inputs.at(i)->Logic == 1)
         {
             LogicalOutput = change;
             return;

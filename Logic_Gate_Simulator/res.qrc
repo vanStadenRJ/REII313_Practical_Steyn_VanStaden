@@ -10,5 +10,7 @@
         <file>pp.jpg</file>
         <file>And_Gate_View.png</file>
         <file>Nandd_Icon.png</file>
+        <file>Or_Icon.png</file>
+        <file>Or_Gate_View.png</file>
     </qresource>
 </RCC>

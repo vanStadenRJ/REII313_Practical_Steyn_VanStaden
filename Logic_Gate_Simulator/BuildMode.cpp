@@ -25,6 +25,10 @@ BuildMode::BuildMode(int typeIcon)
     case 4:     // 4 = Nand Gate
         this->setPixmap(QPixmap(":/images/Nandd_Icon.png"));
         break;
+
+    case 5:
+        this->setPixmap(QPixmap(":/images/Or_Icon.png"));
+        break;
     }
 }
 
@@ -54,6 +58,12 @@ void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
         case 4:
             cur = QCursor(QPixmap(":/images/Nand_Gate.png"));
             simulation->typeIcon = 4;
+            break;
+
+        case 5:
+            cur = QCursor(QPixmap(":/images/Or_Gate_View.png"));
+            simulation->typeIcon = 5;
+            break;
         }
         simulation->setCursor(cur);
     }
