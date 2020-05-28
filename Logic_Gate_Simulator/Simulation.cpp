@@ -35,7 +35,7 @@ Simulation::Simulation(QWidget * parent)
 
     this->setMouseTracking(true);
 
-    for(int i = 1; i <= 7; i++)
+    for(int i = 1; i <= 8; i++)
     {
         andIcon = new BuildMode(i);
         scene->addItem(andIcon);
@@ -90,6 +90,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         {
             if(list_Gates.at(i)->gate_Nr == this->moveGate)
             {
+                list_Gates.at(i)->effect->setEnabled(false);
                 list_Gates.at(i)->setPos(event->x()-list_Gates.at(i)->pixmap()
                                          .width()/2, event->y() - list_Gates.at(i)
                                          ->pixmap().height()/2);

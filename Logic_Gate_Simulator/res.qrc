@@ -16,5 +16,7 @@
         <file>XOR_Gate_View.png</file>
         <file>XOR_Gate.png</file>
         <file>XOR_Icon.png</file>
+        <file>XNOR_Gate.png</file>
+        <file>XNOR_Icon.png</file>
     </qresource>
 </RCC>

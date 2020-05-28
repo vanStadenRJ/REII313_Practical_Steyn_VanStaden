@@ -15,8 +15,12 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     // Set default values
     this->isMove = false;
-    this->effect = nullptr;
     this->isNot = false;
+
+    // Set up QGraphicsEffect
+    this->effect = new QGraphicsDropShadowEffect();
+    this->effect->setColor(Qt::lightGray);
+    this->effect->setOffset(8);
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
@@ -70,6 +74,12 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
             this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
             this->rightClick = QPixmap(":/images/XOR_Gate.png");
             break;
+
+        case 8:
+            this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/XNOR_Gate.png");
+            this->isNot = true;
+            break;
         }
         this->LogicalOutput = 0;
 
@@ -92,7 +102,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
             }
             else
             {
-                if(gateType == 7)
+                if(gateType == 7 || gateType == 8)
                 {
                     plusB = 15;
                     plus = 31;
@@ -182,6 +192,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         rect->setPos(pixmap().width() - 2, pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
+
+    case 8:
+        rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
     }
 
     // set output nodes and configure
@@ -210,17 +225,10 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
     else
     {
-        // Left Button to show effect and make gate ready for delet
-        if(effect == nullptr)
-        {
-            effect = new QGraphicsDropShadowEffect();
-            effect->setColor(Qt::lightGray);
-            effect->setOffset(8);
-        }
-        else
-        {
-            effect->setEnabled(true);
-        }
+        // Left Button to show effect and make gate ready for delete
+        this->prepareGeometryChange();
+        this->effect->setEnabled(true);
+        this->effect->update();
         this->setGraphicsEffect(effect);
         this->setFocus();
     }
@@ -276,11 +284,10 @@ void Gate::keyPressEvent(QKeyEvent *event)
 // Delete Effect of gate to be reset
 void Gate::deleteEffect()
 {
-    if (!(effect == nullptr))
-    {
-        effect->setEnabled(false);
-        this->clearFocus();
-    }
+    this->prepareGeometryChange();
+    this->effect->setEnabled(false);
+    this->effect->update();
+    this->clearFocus();
 }
 
 // Update Logic of gate when new wires connected and deleted
