@@ -18,5 +18,8 @@
         <file>XOR_Icon.png</file>
         <file>XNOR_Gate.png</file>
         <file>XNOR_Icon.png</file>
+        <file>NOT_Gate_View.png</file>
+        <file>NOT_Gate.png</file>
+        <file>NOT_Icon.png</file>
     </qresource>
 </RCC>

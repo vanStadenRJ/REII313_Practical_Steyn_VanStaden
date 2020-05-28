@@ -80,6 +80,12 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
             this->rightClick = QPixmap(":/images/XNOR_Gate.png");
             this->isNot = true;
             break;
+
+        case 9:
+            this->setPixmap(QPixmap(":/images/NOT_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/NOT_Gate.png");
+            this->isNot = true;
+            break;
         }
         this->LogicalOutput = 0;
 
@@ -194,6 +200,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         break;
 
     case 8:
+        rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
+
+    case 9:
         rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
@@ -317,6 +328,17 @@ void Gate::updateLogic()
 
     case 8:
         this->xorLogic();
+        break;
+
+    case 9:
+        if(in->Logic == 0)
+        {
+            this->LogicalOutput = 1;
+        }
+        else
+        {
+            this->LogicalOutput = 0;
+        }
         break;
     }
 }

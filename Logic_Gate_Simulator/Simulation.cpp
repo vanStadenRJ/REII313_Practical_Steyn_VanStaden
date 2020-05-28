@@ -35,7 +35,7 @@ Simulation::Simulation(QWidget * parent)
 
     this->setMouseTracking(true);
 
-    for(int i = 1; i <= 8; i++)
+    for(int i = 1; i <= 9; i++)
     {
         andIcon = new BuildMode(i);
         scene->addItem(andIcon);
@@ -62,11 +62,18 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         {
             if(!(this->typeIcon == 2) && !(this->typeIcon == 3))
             {
-                bool ok;
-                int input_size = QInputDialog::getInt(this, "Logic Gate Input Selector", "Input Count", 2, 2, 5, 1, &ok);
-                if(ok == true)
+                if(this->typeIcon == 9)
                 {
-                    this->initGates(input_size, event->x(), event->y());
+                    this->initGates(1, event->x(), event->y());
+                }
+                else
+                {
+                    bool ok;
+                    int input_size = QInputDialog::getInt(this, "Logic Gate Input Selector", "Input Count", 2, 2, 5, 1, &ok);
+                    if(ok == true)
+                    {
+                        this->initGates(input_size, event->x(), event->y());
+                    }
                 }
             }
             else
