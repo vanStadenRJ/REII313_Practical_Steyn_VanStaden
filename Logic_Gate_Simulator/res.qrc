@@ -3,14 +3,15 @@
         <file>And_Gate.png</file>
         <file>And_Gate_View.png</file>
         <file>And_Icon.png</file>
-        <file>Nand_dIcon.png</file>
+        <file>High_Icon.png</file>
+        <file>Low_Icon.png</file>
         <file>Nand_Gate.png</file>
         <file>Nandd_Icon.png</file>
         <file>Or_Gate.png</file>
         <file>Or_Gate_View.png</file>
         <file>Or_Icon.png</file>
         <file>pp.jpg</file>
-        <file>High_Icon.png</file>
-        <file>Low_Icon.png</file>
+        <file>Nor_Gate.png</file>
+        <file>Nor_Icon.png</file>
     </qresource>
 </RCC>

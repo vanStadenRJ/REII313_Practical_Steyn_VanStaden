@@ -23,7 +23,7 @@ Wire::Wire()
     QObject::connect(simulation, SIGNAL(unWire()), this, SLOT(deleteEffect()));
     QObject::connect(simulation, SIGNAL(changeWireColor()), this, SLOT(colorLogic()));
 
-    // Item ka respond to keypress event
+    // Item can respond to keypress event
     this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
 

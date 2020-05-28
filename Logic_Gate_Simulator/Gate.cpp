@@ -62,6 +62,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
         case 6:
             this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/Nor_Gate.png");
             this->isNot = true;
             break;
         }
@@ -81,7 +82,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
             // If OR, NOR, XOR, XNOR, position of lines need adjusting
             this->plus = 0;
-            if(gateType == 5)
+            if(gateType == 5 || gateType == 6)
             {
                 plus = 16;
             }
@@ -109,7 +110,12 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         circle = new QGraphicsEllipseItem(this);
         circle->setRect(0,0,10,10);
         circle->setParentItem(this);
-        circle->setPos(pixmap().width(), pixmap().height()/2 - circle->rect().height()/2);
+        this->plusC = 0;
+        if(gateType == 6)
+        {
+            this->plusC = 2;
+        }
+        circle->setPos(pixmap().width() - plusC, pixmap().height()/2 - circle->rect().height()/2);
         circle->setBrush(QColor(255,255,255));
 
         QPen pen;
@@ -143,14 +149,19 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         rect->setPos(pixmap().width() - 2, pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
+
+    case 6:
+        rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
     }
 
     // set output nodes and configure
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
-    this->list_Outputs << out;
     out->parent_Gate = gate_Nr;
+    this->list_Outputs << out;    
 }
 
 // MousePressEvent to handle effects and movement of gates

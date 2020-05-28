@@ -22,7 +22,7 @@ Simulation::Simulation(QWidget * parent)
     panel = new ButtonPanel();
     scene->addItem(panel);
 
-    this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
+    //this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
     isBuildMode = false;
     isMove = false;
@@ -35,7 +35,7 @@ Simulation::Simulation(QWidget * parent)
 
     this->setMouseTracking(true);
 
-    for(int i = 1; i <= 5; i++)
+    for(int i = 1; i <= 6; i++)
     {
         andIcon = new BuildMode(i);
         scene->addItem(andIcon);
