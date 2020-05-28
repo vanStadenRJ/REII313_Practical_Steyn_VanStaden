@@ -30,11 +30,13 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         if(typeGate == 2)                                               // If type High Input
         {
             this->setPixmap(QPixmap(":/images/High_Icon.png"));
+            this->rightClick = QPixmap(":/images/High_Icon.png");
             this->LogicalOutput = 1;                                    // Set logic of gate
         }
         else                                                            // If type Low Input
         {
             this->setPixmap(QPixmap(":/images/Low_Icon.png"));
+            this->rightClick = QPixmap(":/images/Low_Icon.png");
             this->LogicalOutput = 0;                                    // Set logic of gate
         }
     }
@@ -44,15 +46,18 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         {
         case 1:
             this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/And_Gate.png");
             break;
 
         case 4:
             this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/Nand_Gate.png");
             this->isNot = true;
             break;
 
         case 5:
             this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/Or_Gate.png");
             break;
 
         case 6:
@@ -75,7 +80,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
             input_rect->setParentItem(this);
 
             // If OR, NOR, XOR, XNOR, position of lines need adjusting
-            int plus = 0;
+            this->plus = 0;
             if(gateType == 5)
             {
                 plus = 16;
@@ -157,28 +162,29 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         if (simulation->isMove == false)
         {
-            QCursor cur = QCursor(QPixmap(":/images/And_Gate.png"));
-            simulation->setCursor(cur);
+            simulation->setCursor(this->rightClick);
             simulation->isMove = true;
             this->isMove = true;
             simulation->moveGate = this->gate_Nr;
         }
     }
-
-    // Left Button to show effect and make gate ready for delete
-    if(effect == nullptr)
+    else
     {
-        effect = new QGraphicsDropShadowEffect();
-        if(event->button() == Qt::LeftButton)
+        // Left Button to show effect and make gate ready for delet
+        if(effect == nullptr)
         {
-            effect->setEnabled(true);
+            effect = new QGraphicsDropShadowEffect();
             effect->setColor(Qt::lightGray);
             effect->setOffset(8);
-            this->setGraphicsEffect(effect);
-            this->setFocus();
-            qDebug() << "Gate " << this->gate_Nr << ": " << this->LogicalOutput;
         }
+        else
+        {
+            effect->setEnabled(true);
+        }
+        this->setGraphicsEffect(effect);
+        this->setFocus();
     }
+
     this->setCenterPos();
 }
 
@@ -233,8 +239,6 @@ void Gate::deleteEffect()
     if (!(effect == nullptr))
     {
         effect->setEnabled(false);
-        this->setGraphicsEffect(effect);
-        effect = nullptr;
         this->clearFocus();
     }
 }
@@ -271,7 +275,7 @@ void Gate::setCenterPos()
     for(int i = 0; i < list_Inputs.size(); i++)
     {
         this->list_Inputs.at(i)->centerPoint = this->pos();
-        this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x()
+        this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x() + this->plus
                                                   - this->rect->rect().width() - this->out->rect().width()/2);
 
         this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()

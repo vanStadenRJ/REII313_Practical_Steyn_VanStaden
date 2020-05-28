@@ -61,7 +61,7 @@ void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
             break;
 
         case 5:
-            cur = QCursor(QPixmap(":/images/Or_Gate_View.png"));
+            cur = QCursor(QPixmap(":/images/Or_Gate.png"));
             simulation->typeIcon = 5;
             break;
         }

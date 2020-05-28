@@ -45,10 +45,13 @@ public:
 
     QPointF pos_Gate;                       // QPointF position of gate
     QPointF change;
+    QPixmap rightClick;
+    QPixmap gateBuild;
     int gateType;                          // Normal gate, Input or Output gate
     int gate_Nr;                           // Gate number
 
     int LogicalOutput;                      // Logic of gate
+    uint plus;                              // Value inputrect should be adjusted to
     bool isMove;                            // Is gate being moved
     bool isNot;                             // Does gate have not output
 

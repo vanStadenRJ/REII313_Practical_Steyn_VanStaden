@@ -45,6 +45,7 @@ Simulation::Simulation(QWidget * parent)
 
 void Simulation::mousePressEvent(QMouseEvent *event)
 {
+    qDebug() << "Toetsssss";
     if(!(gate == nullptr))
     {
         emit un_Select();

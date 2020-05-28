@@ -73,6 +73,9 @@ signals:
     void changeInputLogic();
     void changeGateLogic();
     void changeWireColor();
+
+public slots:
+    //void mousepress(QMouseEvent * event);
 };
 
 #endif // SIMULATION_H
