@@ -1,12 +1,25 @@
 <RCC>
     <qresource prefix="/images">
         <file>And_Gate.png</file>
+        <file>And_Gate_View.png</file>
         <file>And_Icon.png</file>
         <file>High_Icon.png</file>
         <file>Low_Icon.png</file>
-        <file>Nand_Icon.jpg</file>
         <file>Nand_Gate.png</file>
-        <file>unnamed.jpg</file>
+        <file>Nandd_Icon.png</file>
+        <file>Or_Gate.png</file>
+        <file>Or_Gate_View.png</file>
+        <file>Or_Icon.png</file>
         <file>pp.jpg</file>
+        <file>Nor_Gate.png</file>
+        <file>Nor_Icon.png</file>
+        <file>XOR_Gate_View.png</file>
+        <file>XOR_Gate.png</file>
+        <file>XOR_Icon.png</file>
+        <file>XNOR_Gate.png</file>
+        <file>XNOR_Icon.png</file>
+        <file>NOT_Gate_View.png</file>
+        <file>NOT_Gate.png</file>
+        <file>NOT_Icon.png</file>
     </qresource>
 </RCC>

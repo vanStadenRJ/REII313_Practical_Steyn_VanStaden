@@ -8,7 +8,9 @@ extern Simulation * simulation;
 
 Wire::Wire()
 {
+    // Set ZValue to 0 to enable wire to be under the input nodes
     setZValue(0);
+
     QPen pen;
     pen.setWidth(5);
     pen.setCapStyle(Qt::RoundCap);
@@ -16,8 +18,12 @@ Wire::Wire()
     this->setPen(pen);
 
     effect = nullptr;
+
+    // Connect Signals and Slots
     QObject::connect(simulation, SIGNAL(unWire()), this, SLOT(deleteEffect()));
     QObject::connect(simulation, SIGNAL(changeWireColor()), this, SLOT(colorLogic()));
+
+    // Item can respond to keypress event
     this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
@@ -52,13 +58,14 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
             effect->setEnabled(true);
             effect->setColor(Qt::lightGray);
             effect->setOffset(8);
-            this->setGraphicsEffect(effect);
-            this->setFocus();
         }        
-        qDebug() << this->src_Gate << "(" << src_NodeNr << ")"
-                 << "->" << this->dest_Gate << "(" << dest_NodeNr << ")"
-                 <<" logic: " << this->Logic_Wire;
     }
+    else
+    {
+        effect->setEnabled(true);
+    }
+    this->setFocus();
+    this->setGraphicsEffect(effect);
 }
 
 void Wire::keyPressEvent(QKeyEvent *event)
@@ -93,7 +100,6 @@ void Wire::keyPressEvent(QKeyEvent *event)
             i++;
         }
 
-        //simulation->updateWireLogic();
         // Upon Delete of Wire, Remove Wire from list of wires
         for(int v = 0; v < simulation->list_Wires.size(); v++)
         {
@@ -117,8 +123,6 @@ void Wire::deleteEffect()
     if (!(effect == nullptr))
     {
         effect->setEnabled(false);
-        this->setGraphicsEffect(effect);
-        effect = nullptr;
         this->clearFocus();
     }
 }
@@ -139,7 +143,6 @@ void Wire::colorLogic()
         pen.setColor(QColor(255,255,255));
         pen.setWidth(5);
         pen.setCapStyle(Qt::RoundCap);
-        //this->setOut
         this->setPen(pen);
     }
 }

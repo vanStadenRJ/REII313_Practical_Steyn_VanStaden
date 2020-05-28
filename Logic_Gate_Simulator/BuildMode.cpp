@@ -23,7 +23,27 @@ BuildMode::BuildMode(int typeIcon)
         break;
 
     case 4:     // 4 = Nand Gate
-        this->setPixmap(QPixmap(":/images/Nand_Icon.jpg"));
+        this->setPixmap(QPixmap(":/images/Nandd_Icon.png"));
+        break;
+
+    case 5:
+        this->setPixmap(QPixmap(":/images/Or_Icon.png"));
+        break;
+
+    case 6:
+        this->setPixmap(QPixmap(":/images/Nor_Icon.png"));
+        break;
+
+    case 7:
+        this->setPixmap(QPixmap(":/images/XOR_Icon.png"));
+        break;
+
+    case 8:
+        this->setPixmap(QPixmap(":/images/XNOR_Icon.png"));
+        break;
+
+    case 9:
+        this->setPixmap(QPixmap(":/images/NOT_Icon.png"));
         break;
     }
 }
@@ -33,28 +53,47 @@ void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
     // If clicked, buildmode entered to be placed on QGraphicsView    
     if(simulation->isBuildMode == false)
     {
-        simulation->isBuildMode = true;        
+        simulation->isBuildMode = true;
+
         switch(Icon)
         {
         case 1:     // 1 = and gate
             cur = QCursor(QPixmap(":/images/And_Gate.png"));
-            simulation->typeIcon = 1;
             break;
 
         case 2:     // 2 = High Input
             cur = QCursor(QPixmap(":/images/High_Icon.png"));
-            simulation->typeIcon = 2;
             break;
 
         case 3:
             cur = QCursor(QPixmap(":/images/Low_Icon.png"));
-            simulation->typeIcon = 3;
             break;
 
         case 4:
             cur = QCursor(QPixmap(":/images/Nand_Gate.png"));
-            simulation->typeIcon = 4;
+            break;
+
+        case 5:
+            cur = QCursor(QPixmap(":/images/Or_Gate.png"));
+            break;
+
+        case 6:
+            cur = QCursor(QPixmap(":/images/Nor_Gate.png"));
+            break;
+
+        case 7:
+            cur = QCursor(QPixmap(":/images/XOR_Gate.png"));
+            break;
+
+        case 8:
+            cur = QCursor(QPixmap(":/images/XNOR_Gate.png"));
+            break;
+
+        case 9:
+            cur = QCursor(QPixmap(":/images/NOT_Gate.png"));
+            break;
         }
+        simulation->typeIcon = this->Icon;
         simulation->setCursor(cur);
     }
 }
