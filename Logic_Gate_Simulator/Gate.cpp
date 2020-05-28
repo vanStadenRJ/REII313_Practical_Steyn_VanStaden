@@ -65,6 +65,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
             this->rightClick = QPixmap(":/images/Nor_Gate.png");
             this->isNot = true;
             break;
+
+        case 7:
+            this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
+            this->rightClick = QPixmap(":/images/XOR_Gate.png");
+            break;
         }
         this->LogicalOutput = 0;
 
@@ -77,15 +82,25 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
             input_rect = new QGraphicsRectItem(this);
 
-            input_rect->setRect(x(), y(), 20, 2);
-            input_rect->setParentItem(this);
 
             // If OR, NOR, XOR, XNOR, position of lines need adjusting
             this->plus = 0;
+            this->plusB = 0;
             if(gateType == 5 || gateType == 6)
             {
                 plus = 16;
             }
+            else
+            {
+                if(gateType == 7)
+                {
+                    plusB = 15;
+                    plus = 31;
+
+                }
+            }
+            input_rect->setRect(x(), y(), 20 + plusB, 2);
+            input_rect->setParentItem(this);
             input_rect->setPos(this->x() - input_rect->rect().width() + plus,
                                space*i + input_rect->rect().height()*(i-1));
 
@@ -104,7 +119,15 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     // set draw output branch
     rect = new QGraphicsRectItem(this);
-    rect->setRect(x(), y(), 20, 2);
+    if(gateType == 7 || gateType == 8)
+    {
+        rect->setRect(x(), y(), 20, 2);
+    }
+    else
+    {
+        rect->setRect(x(), y(), 20, 2);
+    }
+
     if(isNot == true)
     {
         circle = new QGraphicsEllipseItem(this);
@@ -154,6 +177,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
         this->updateLogic();
         break;
+
+    case 7:
+        rect->setPos(pixmap().width() - 2, pixmap().height()/2 - rect->rect().height()/2);
+        this->updateLogic();
+        break;
     }
 
     // set output nodes and configure
@@ -177,6 +205,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             simulation->isMove = true;
             this->isMove = true;
             simulation->moveGate = this->gate_Nr;
+            this->deleteEffect();
         }
     }
     else
@@ -274,6 +303,14 @@ void Gate::updateLogic()
     case 6:
         this->orLogic();
         break;
+
+    case 7:
+        this->xorLogic();
+        break;
+
+    case 8:
+        this->xorLogic();
+        break;
     }
 }
 
@@ -286,7 +323,7 @@ void Gate::setCenterPos()
     for(int i = 0; i < list_Inputs.size(); i++)
     {
         this->list_Inputs.at(i)->centerPoint = this->pos();
-        this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x() + this->plus
+        this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x() + this->plus - plusB
                                                   - this->rect->rect().width() - this->out->rect().width()/2);
 
         this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
@@ -341,6 +378,36 @@ void Gate::orLogic()
         {
             LogicalOutput = change;
             return;
+        }
+    }
+}
+
+void Gate::xorLogic()
+{
+    int change = list_Inputs.at(0)->Logic;
+    bool bCheck = true;
+    for(int i = 0; i < list_Inputs.size(); i++)
+    {
+        if(!(change == list_Inputs.at(i)->Logic))
+        {
+            bCheck = false;
+            break;
+        }
+    }
+    if(bCheck == false)
+    {
+        LogicalOutput = 1;
+        if(this->isNot == true)
+        {
+            LogicalOutput = 0;
+        }
+    }
+    else
+    {
+        LogicalOutput = 0;
+        if(this->isNot == true)
+        {
+            LogicalOutput = 1;
         }
     }
 }

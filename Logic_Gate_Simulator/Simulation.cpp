@@ -35,7 +35,7 @@ Simulation::Simulation(QWidget * parent)
 
     this->setMouseTracking(true);
 
-    for(int i = 1; i <= 6; i++)
+    for(int i = 1; i <= 7; i++)
     {
         andIcon = new BuildMode(i);
         scene->addItem(andIcon);

@@ -33,6 +33,10 @@ BuildMode::BuildMode(int typeIcon)
     case 6:
         this->setPixmap(QPixmap(":/images/Nor_Icon.png"));
         break;
+
+    case 7:
+        this->setPixmap(QPixmap(":/images/XOR_Icon.png"));
+        break;
     }
 }
 
@@ -72,6 +76,11 @@ void BuildMode::mousePressEvent(QGraphicsSceneMouseEvent *event)
         case 6:
             cur = QCursor(QPixmap(":/images/Nor_Gate.png"));
             simulation->typeIcon = 6;
+            break;
+
+        case 7:
+            cur = QCursor(QPixmap(":/images/XOR_Gate.png"));
+            simulation->typeIcon = 7;
             break;
         }
         simulation->setCursor(cur);

@@ -58,13 +58,14 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
             effect->setEnabled(true);
             effect->setColor(Qt::lightGray);
             effect->setOffset(8);
-            this->setGraphicsEffect(effect);
-            this->setFocus();
         }        
-        qDebug() << this->src_Gate << "(" << src_NodeNr << ")"
-                 << "->" << this->dest_Gate << "(" << dest_NodeNr << ")"
-                 <<" logic: " << this->Logic_Wire;
     }
+    else
+    {
+        effect->setEnabled(true);
+    }
+    this->setFocus();
+    this->setGraphicsEffect(effect);
 }
 
 void Wire::keyPressEvent(QKeyEvent *event)
@@ -122,8 +123,6 @@ void Wire::deleteEffect()
     if (!(effect == nullptr))
     {
         effect->setEnabled(false);
-        this->setGraphicsEffect(effect);
-        effect = nullptr;
         this->clearFocus();
     }
 }

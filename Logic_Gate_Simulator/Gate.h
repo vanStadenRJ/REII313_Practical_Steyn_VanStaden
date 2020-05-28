@@ -27,10 +27,7 @@ public:
     void keyPressEvent(QKeyEvent * event);
     void setCenterPos();
 
-    // Logic Functions
-    void andLogic();
-    void orLogic();
-    void xorLogic();
+
 
     // Public Attributes
     QGraphicsDropShadowEffect * effect;     // Shadow Effect when gate is pressed
@@ -53,6 +50,7 @@ public:
     int LogicalOutput;                      // Logic of gate
     uint plus;                              // Value inputrect should be adjusted to
     uint plusC;
+    uint plusB;
     bool isMove;                            // Is gate being moved
     bool isNot;                             // Does gate have not output
 
@@ -60,6 +58,11 @@ private:
     // Private Attributes
     int input_size;                         // How many inputs does gate have
     int space;                              // Space between input nodes
+
+    // Logic Functions
+    void andLogic();
+    void orLogic();
+    void xorLogic();
 
 public slots:
     void deleteEffect();                    // Delete effect when deselct gate
