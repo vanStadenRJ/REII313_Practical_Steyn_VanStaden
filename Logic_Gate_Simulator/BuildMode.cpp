@@ -74,8 +74,8 @@ BuildMode::BuildMode(int typeIcon)
         break;
 
     case 10:     // 10 = OUTPUT
-        this->setPixmap(QPixmap(":/images/NOT_Icon.png"));
-        this->cur = QCursor(QPixmap(":/images/NOT_Gate.png"));
+        this->setPixmap(QPixmap(":/images/output_Icon.png"));
+        this->cur = QCursor(QPixmap(":/images/output_Gate.png"));
         this->viewPix = QPixmap(":/images/outputSmile.png");
         this->isNot = false;
         break;

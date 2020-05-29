@@ -23,5 +23,7 @@
         <file>NOT_Icon.png</file>
         <file>outputFrown.png</file>
         <file>outputSmile.png</file>
+        <file>output_Gate.png</file>
+        <file>output_Icon.png</file>
     </qresource>
 </RCC>

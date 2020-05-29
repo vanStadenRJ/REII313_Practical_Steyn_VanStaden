@@ -79,6 +79,10 @@ Simulation::Simulation(QWidget * parent)
         case 9:
             this->gateDesc->setPlainText("NOT Gate");
             break;
+
+        case 10:
+            this->gateDesc->setPlainText("Output Gate");
+            break;
         }
 
         andIcon = new BuildMode(i);
@@ -88,11 +92,18 @@ Simulation::Simulation(QWidget * parent)
 
         if (i > 2)
         {
-            plus = 50;
+            if(i == 10)
+            {
+                plus = 100;
+            }
+            else
+            {
+                plus = 50;
+            }
         }
         andIcon->setY(45 + y_coordinate*tet + plus);
 
-        if(i%2 == 0)
+        if(i%2 == 0 && !(i == 10))
         {
             andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
             gateDesc->setPos(309 - 80 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
@@ -100,6 +111,10 @@ Simulation::Simulation(QWidget * parent)
         }
         else
         {
+            if(i == 9)
+            {
+                y_coordinate++;
+            }
             andIcon->setX(9 + 75 - andIcon->pixmap().width()/2);
             gateDesc->setPos(9 + 75 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
         }
