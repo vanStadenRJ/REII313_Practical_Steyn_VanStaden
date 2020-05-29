@@ -17,10 +17,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     this->isMove = false;
     this->isNot = false;
 
-    // Set up QGraphicsEffect
+    // Apply QGraphicsEffect
     this->effect = new QGraphicsDropShadowEffect();
     this->effect->setColor(Qt::lightGray);
     this->effect->setOffset(8);
+    this->setGraphicsEffect(effect);
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
@@ -28,19 +29,20 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
     this->gate_Nr = gateNr;
+    this->rightClick = simulation->cursor().pixmap();
     gateType = typeGate;
     if(typeGate == 2 || typeGate == 3)                                  // If gate is of input type!
     {
         if(typeGate == 2)                                               // If type High Input
         {
             this->setPixmap(QPixmap(":/images/High_Icon.png"));
-            this->rightClick = QPixmap(":/images/High_Icon.png");
+            //this->rightClick = QPixmap(":/images/High_Icon.png");
             this->LogicalOutput = 1;                                    // Set logic of gate
         }
         else                                                            // If type Low Input
         {
             this->setPixmap(QPixmap(":/images/Low_Icon.png"));
-            this->rightClick = QPixmap(":/images/Low_Icon.png");
+            //this->rightClick = QPixmap(":/images/Low_Icon.png");
             this->LogicalOutput = 0;                                    // Set logic of gate
         }
     }
@@ -50,40 +52,40 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         {
         case 1:
             this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/And_Gate.png");
+            //this->rightClick = QPixmap(":/images/And_Gate.png");
             break;
 
         case 4:
             this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/Nand_Gate.png");
+            //this->rightClick = QPixmap(":/images/Nand_Gate.png");
             this->isNot = true;
             break;
 
         case 5:
             this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/Or_Gate.png");
+            //this->rightClick = QPixmap(":/images/Or_Gate.png");
             break;
 
         case 6:
             this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/Nor_Gate.png");
+            //this->rightClick = QPixmap(":/images/Nor_Gate.png");
             this->isNot = true;
             break;
 
         case 7:
             this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/XOR_Gate.png");
+            //this->rightClick = QPixmap(":/images/XOR_Gate.png");
             break;
 
         case 8:
             this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/XNOR_Gate.png");
+            //this->rightClick = QPixmap(":/images/XNOR_Gate.png");
             this->isNot = true;
             break;
 
         case 9:
             this->setPixmap(QPixmap(":/images/NOT_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/NOT_Gate.png");
+            //this->rightClick = QPixmap(":/images/NOT_Gate.png");
             this->isNot = true;
             break;
         }
@@ -221,7 +223,10 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    this->prepareGeometryChange();
+    this->effect->setEnabled(true);
     this->setFocus();
+
     // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {
@@ -231,19 +236,9 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             simulation->isMove = true;
             this->isMove = true;
             simulation->moveGate = this->gate_Nr;
-            this->deleteEffect();
+            //this->deleteEffect();
         }
     }
-    else
-    {
-        // Left Button to show effect and make gate ready for delete
-        this->prepareGeometryChange();
-        this->effect->setEnabled(true);
-        this->effect->update();
-        this->setGraphicsEffect(effect);
-        this->setFocus();
-    }
-
     this->setCenterPos();
 }
 
@@ -297,7 +292,6 @@ void Gate::deleteEffect()
 {
     this->prepareGeometryChange();
     this->effect->setEnabled(false);
-    this->effect->update();
     this->clearFocus();
 }
 
