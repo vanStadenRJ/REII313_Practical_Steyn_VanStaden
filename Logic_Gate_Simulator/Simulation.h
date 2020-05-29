@@ -48,8 +48,7 @@ public:
     QList<Gate *> list_Gates;
 
     BuildMode * andIcon;
-    BuildMode * highIcon;
-    BuildMode * lowIcon;
+    QList<BuildMode *> list_Icons;
     int typeIcon;
 
     int src_NodeNr;

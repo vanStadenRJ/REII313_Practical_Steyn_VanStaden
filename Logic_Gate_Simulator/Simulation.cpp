@@ -9,7 +9,7 @@
 
 Simulation::Simulation(QWidget * parent)
 {
-    //Set scene and show on view
+    // Set scene and show on view
     this->setSceneRect(0,0,1600,900);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,1600,900);
@@ -19,10 +19,10 @@ Simulation::Simulation(QWidget * parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Initialize Panel where all logic gates to be put
-    panel = new ButtonPanel();
+    panel = new ButtonPanel();    
     scene->addItem(panel);
 
-    //this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
+    this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
     isBuildMode = false;
     isMove = false;
@@ -34,12 +34,42 @@ Simulation::Simulation(QWidget * parent)
     nr_Wires = 0;
 
     this->setMouseTracking(true);
-
+    int y_coordinate = 0;
     for(int i = 1; i <= 9; i++)
     {
         andIcon = new BuildMode(i);
         scene->addItem(andIcon);
-        andIcon->setPos((i-1)*100,0);
+        list_Icons << andIcon;
+
+        int tet = 100;
+        if(i%2 == 0)
+        {
+            andIcon->setPos(9 + 75 - andIcon->pixmap().width()/2,
+                            45);
+            andIcon->setY(45 +y_coordinate*tet);
+            y_coordinate++;
+        }
+        else
+        {
+            andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
+
+            andIcon->setY(45 + y_coordinate*tet);
+
+        }
+        // andIcon->setPos((i-1)*100,45);
+    }
+
+    for(int i = 1; i <= list_Icons.size(); i++)
+    {
+        if(i%2 == 0)
+        {
+
+        }
+        else
+        {
+
+        }
+
     }
 }
 

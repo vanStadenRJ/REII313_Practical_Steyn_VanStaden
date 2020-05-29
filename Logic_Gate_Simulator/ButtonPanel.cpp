@@ -8,11 +8,12 @@ extern Simulation * simulation;
 ButtonPanel::ButtonPanel()
 {
     this->setZValue(0);
+    //this->setRect(0,0,300,860);
 
     QGraphicsTextItem * text = new QGraphicsTextItem(this);
-    text->setPlainText("Logic Gates");
+    text->setPlainText("Intput Components");
     QFont seriFont("Times", 12, QFont::Bold);
-    text->setDefaultTextColor(QColor(53,53,66));
+    text->setDefaultTextColor(QColor(0,0,0));
     text->setFont(seriFont);
     text->setPos(300/2-text->boundingRect().width()/2, 10);
 }
