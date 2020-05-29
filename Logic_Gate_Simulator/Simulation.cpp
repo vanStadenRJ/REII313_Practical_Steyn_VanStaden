@@ -35,34 +35,82 @@ Simulation::Simulation(QWidget * parent)
 
     this->setMouseTracking(true);
     int y_coordinate = 0;
-    for(int i = 1; i <= 9; i++)
+    int plus = 0;
+    for(int i = 1; i <= 10; i++)
     {
+        gateDesc = new QGraphicsTextItem();
+        QFont seriFont("Times", 8, QFont::Bold);
+        gateDesc->setDefaultTextColor(QColor(0,0,0));
+        gateDesc->setFont(seriFont);
+        switch(i)
+        {
+        case 1:
+            this->gateDesc->setPlainText("LOW Logic");
+            break;
+
+        case 2:
+            this->gateDesc->setPlainText("HIGH Logic");
+            break;
+
+        case 3:
+            this->gateDesc->setPlainText("AND Gate");
+            break;
+
+        case 4:
+            this->gateDesc->setPlainText("NAND Gate");
+            break;
+
+        case 5:
+            this->gateDesc->setPlainText("OR Gate");
+            break;
+
+        case 6:
+            this->gateDesc->setPlainText("NOR Gate");
+            break;
+
+        case 7:
+            this->gateDesc->setPlainText("XOR Gate");
+            break;
+
+        case 8:
+            this->gateDesc->setPlainText("XNOR Gate");
+            break;
+
+        case 9:
+            this->gateDesc->setPlainText("NOT Gate");
+            break;
+        }
+
         andIcon = new BuildMode(i);
-        scene->addItem(andIcon);
         list_Icons << andIcon;
 
         int tet = 100;
+
+        if (i > 2)
+        {
+            plus = 50;
+        }
+        andIcon->setY(45 + y_coordinate*tet + plus);
+
         if(i%2 == 0)
         {
-            andIcon->setPos(9 + 75 - andIcon->pixmap().width()/2,
-                            45);
-            andIcon->setY(45 +y_coordinate*tet);
+            andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
+            gateDesc->setPos(309 - 80 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
             y_coordinate++;
         }
         else
         {
-            andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
-
-            andIcon->setY(45 + y_coordinate*tet);
-
+            andIcon->setX(9 + 75 - andIcon->pixmap().width()/2);
+            gateDesc->setPos(9 + 75 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
         }
-        // andIcon->setPos((i-1)*100,45);
+
+        scene->addItem(andIcon);
+        scene->addItem(gateDesc);
     }
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "Toetsssss";
     if(!(gate == nullptr))
     {
         emit un_Select();
@@ -79,7 +127,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         {
             if(!(this->typeIcon == 1) && !(this->typeIcon == 2))
             {
-                if(this->typeIcon == 9)
+                if(this->typeIcon == 9 || this->typeIcon == 10)
                 {
                     this->initGates(1, event->x(), event->y());
                 }
@@ -244,6 +292,7 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         line.setPoints(move_wire->source, move_wire->dest);
         move_wire->setLine(line);
         scene->update();
+        QGraphicsView::mousePressEvent(event);
     }
 
     if(isBuildMode)
@@ -251,15 +300,17 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         if(this->mapFromGlobal(QCursor::pos()).x() < 300)
         {
             this->insidePanel = true;
+            QGraphicsView::mousePressEvent(event);
         }
         else
         {
             this->insidePanel = false;
+            QGraphicsView::mousePressEvent(event);
         }
     }
 
     // Enable default QGraphicsView mousePressEvent()
-    QGraphicsView::mousePressEvent(event);
+    QGraphicsView::mouseMoveEvent(event);
 }
 
 void Simulation::updateWireLogic()

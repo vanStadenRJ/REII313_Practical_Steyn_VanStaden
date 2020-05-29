@@ -59,10 +59,10 @@ public:
 
     QPixmap viewPix;
     bool isNot;
+    QGraphicsTextItem * gateDesc;
 
 private:
     void initGates(int nrIn, int x, int y);
-
 
 signals:
     void clicked();
@@ -75,9 +75,6 @@ signals:
     void changeInputLogic();
     void changeGateLogic();
     void changeWireColor();
-
-public slots:
-    //void mousepress(QMouseEvent * event);
 };
 
 #endif // SIMULATION_H

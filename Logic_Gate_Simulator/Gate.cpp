@@ -25,9 +25,10 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
-    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
+    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));    
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
+    this->gateType = typeGate;
     this->gate_Nr = gateNr;
     this->rightClick = simulation->cursor().pixmap();
     this->LogicalOutput = 0;
@@ -36,7 +37,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         this->LogicalOutput = 1;
     }
     this->setPixmap(simulation->viewPix);
-    this->gateType = typeGate;
+
     this->isNot = simulation->isNot;
 
     // For different input size, nr of input nodes need to be configured
@@ -80,7 +81,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         list_Inputs << in;                                          // Add input nodes to list
     }
 
-    // set draw output branch
     rect = new QGraphicsRectItem(this);
     rect->setRect(x(), y(), 20, 2);
     this->plusC = 0;
@@ -102,6 +102,10 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     rect->setParentItem(this);
     rect->setX(pixmap().width() + this->plusC);
     rect->setY(pixmap().height()/2 - rect->rect().height()/2);
+    if(gateType == 10)
+    {
+        rect->hide();
+    }
     this->updateLogic();
 
     // set output nodes and configure
@@ -109,13 +113,17 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
     out->parent_Gate = gate_Nr;
+    if(gateType == 10)
+    {
+        out->hide();
+    }
     this->list_Outputs << out;
 }
 
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    this->prepareGeometryChange();
+    //this->prepareGeometryChange();
     this->effect->setEnabled(true);
     this->setFocus();
 
@@ -181,9 +189,9 @@ void Gate::keyPressEvent(QKeyEvent *event)
 // Delete Effect of gate to be reset
 void Gate::deleteEffect()
 {
-    this->prepareGeometryChange();
+    //this->prepareGeometryChange();
     this->effect->setEnabled(false);
-    this->clearFocus();
+    //this->clearFocus();
 }
 
 // Update Logic of gate when new wires connected and deleted
@@ -216,6 +224,16 @@ void Gate::updateLogic()
             this->LogicalOutput = 0;
         }
         break;
+
+    case 10:
+        if(in->Logic == 1)
+        {
+            this->setPixmap(QPixmap(":/images/outputSmile.png"));
+        }
+        else
+        {
+            this->setPixmap(QPixmap(":/images/outputFrown.png"));
+        }
     }
 }
 

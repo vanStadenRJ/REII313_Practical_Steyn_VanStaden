@@ -10,12 +10,19 @@ ButtonPanel::ButtonPanel()
     this->setZValue(0);
     //this->setRect(0,0,300,860);
 
-    QGraphicsTextItem * text = new QGraphicsTextItem(this);
-    text->setPlainText("Intput Components");
+    QGraphicsTextItem * input = new QGraphicsTextItem(this);
+    input->setPlainText("INPUT COMPONENTS");
     QFont seriFont("Times", 12, QFont::Bold);
-    text->setDefaultTextColor(QColor(0,0,0));
-    text->setFont(seriFont);
-    text->setPos(300/2-text->boundingRect().width()/2, 10);
+    input->setDefaultTextColor(QColor(0,0,0));
+    input->setFont(seriFont);
+    input->setPos(300/2-input->boundingRect().width()/2, 10);
+
+
+    QGraphicsTextItem * logic = new QGraphicsTextItem(this);
+    logic->setPlainText("LOGIC GATES");
+    logic->setDefaultTextColor(QColor(0,0,0));
+    logic->setFont(seriFont);
+    logic->setPos(300/2-logic->boundingRect().width()/2, 150);
 }
 
 void ButtonPanel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

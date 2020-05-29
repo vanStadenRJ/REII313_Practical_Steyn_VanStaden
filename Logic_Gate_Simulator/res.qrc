@@ -21,5 +21,7 @@
         <file>NOT_Gate_View.png</file>
         <file>NOT_Gate.png</file>
         <file>NOT_Icon.png</file>
+        <file>outputFrown.png</file>
+        <file>outputSmile.png</file>
     </qresource>
 </RCC>
