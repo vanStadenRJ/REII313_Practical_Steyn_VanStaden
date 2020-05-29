@@ -48,8 +48,7 @@ public:
     QList<Gate *> list_Gates;
 
     BuildMode * andIcon;
-    BuildMode * highIcon;
-    BuildMode * lowIcon;
+    QList<BuildMode *> list_Icons;
     int typeIcon;
 
     int src_NodeNr;
@@ -58,9 +57,12 @@ public:
     QPointF sourceNode;
     QPointF destNode;
 
+    QPixmap viewPix;
+    bool isNot;
+    QGraphicsTextItem * gateDesc;
+
 private:
     void initGates(int nrIn, int x, int y);
-
 
 signals:
     void clicked();
@@ -73,9 +75,6 @@ signals:
     void changeInputLogic();
     void changeGateLogic();
     void changeWireColor();
-
-public slots:
-    //void mousepress(QMouseEvent * event);
 };
 
 #endif // SIMULATION_H

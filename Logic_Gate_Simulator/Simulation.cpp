@@ -9,7 +9,7 @@
 
 Simulation::Simulation(QWidget * parent)
 {
-    //Set scene and show on view
+    // Set scene and show on view
     this->setSceneRect(0,0,1600,900);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,1600,900);
@@ -19,10 +19,10 @@ Simulation::Simulation(QWidget * parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Initialize Panel where all logic gates to be put
-    panel = new ButtonPanel();
+    panel = new ButtonPanel();    
     scene->addItem(panel);
 
-    //this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
+    this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
     isBuildMode = false;
     isMove = false;
@@ -34,18 +34,98 @@ Simulation::Simulation(QWidget * parent)
     nr_Wires = 0;
 
     this->setMouseTracking(true);
-
-    for(int i = 1; i <= 9; i++)
+    int y_coordinate = 0;
+    int plus = 0;
+    for(int i = 1; i <= 10; i++)
     {
+        gateDesc = new QGraphicsTextItem();
+        QFont seriFont("Times", 8, QFont::Bold);
+        gateDesc->setDefaultTextColor(QColor(0,0,0));
+        gateDesc->setFont(seriFont);
+        switch(i)
+        {
+        case 1:
+            this->gateDesc->setPlainText("LOW Logic");
+            break;
+
+        case 2:
+            this->gateDesc->setPlainText("HIGH Logic");
+            break;
+
+        case 3:
+            this->gateDesc->setPlainText("AND Gate");
+            break;
+
+        case 4:
+            this->gateDesc->setPlainText("NAND Gate");
+            break;
+
+        case 5:
+            this->gateDesc->setPlainText("OR Gate");
+            break;
+
+        case 6:
+            this->gateDesc->setPlainText("NOR Gate");
+            break;
+
+        case 7:
+            this->gateDesc->setPlainText("XOR Gate");
+            break;
+
+        case 8:
+            this->gateDesc->setPlainText("XNOR Gate");
+            break;
+
+        case 9:
+            this->gateDesc->setPlainText("NOT Gate");
+            break;
+
+        case 10:
+            this->gateDesc->setPlainText("Output Gate");
+            break;
+        }
+
         andIcon = new BuildMode(i);
+        list_Icons << andIcon;
+
+        int tet = 100;
+
+        if (i > 2)
+        {
+            if(i == 10)
+            {
+                plus = 100;
+            }
+            else
+            {
+                plus = 50;
+            }
+        }
+        andIcon->setY(45 + y_coordinate*tet + plus);
+
+        if(i%2 == 0 && !(i == 10))
+        {
+            andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
+            gateDesc->setPos(309 - 80 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
+            y_coordinate++;
+        }
+        else
+        {
+            if(i == 9)
+            {
+                y_coordinate++;
+            }
+            andIcon->setX(9 + 75 - andIcon->pixmap().width()/2);
+            gateDesc->setPos(9 + 75 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
+        }
+
         scene->addItem(andIcon);
-        andIcon->setPos((i-1)*100,0);
+        scene->addItem(gateDesc);
     }
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "Toetsssss";
     if(!(gate == nullptr))
     {
         emit un_Select();
@@ -60,9 +140,9 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
-            if(!(this->typeIcon == 2) && !(this->typeIcon == 3))
+            if(!(this->typeIcon == 1) && !(this->typeIcon == 2))
             {
-                if(this->typeIcon == 9)
+                if(this->typeIcon == 9 || this->typeIcon == 10)
                 {
                     this->initGates(1, event->x(), event->y());
                 }
@@ -227,6 +307,7 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         line.setPoints(move_wire->source, move_wire->dest);
         move_wire->setLine(line);
         scene->update();
+        QGraphicsView::mousePressEvent(event);
     }
 
     if(isBuildMode)
@@ -234,15 +315,17 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         if(this->mapFromGlobal(QCursor::pos()).x() < 300)
         {
             this->insidePanel = true;
+            QGraphicsView::mousePressEvent(event);
         }
         else
         {
             this->insidePanel = false;
+            QGraphicsView::mousePressEvent(event);
         }
     }
 
     // Enable default QGraphicsView mousePressEvent()
-    QGraphicsView::mousePressEvent(event);
+    QGraphicsView::mouseMoveEvent(event);
 }
 
 void Simulation::updateWireLogic()

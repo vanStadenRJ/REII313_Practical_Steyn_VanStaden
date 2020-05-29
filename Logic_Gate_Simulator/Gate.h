@@ -49,7 +49,7 @@ public:
 
     int LogicalOutput;                      // Logic of gate
     uint plus;                              // Value inputrect should be adjusted to
-    uint plusC;
+    double plusC;
     uint plusB;
     bool isMove;                            // Is gate being moved
     bool isNot;                             // Does gate have not output

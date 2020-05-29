@@ -17,211 +17,116 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     this->isMove = false;
     this->isNot = false;
 
-    // Set up QGraphicsEffect
+    // Apply QGraphicsEffect
     this->effect = new QGraphicsDropShadowEffect();
     this->effect->setColor(Qt::lightGray);
     this->effect->setOffset(8);
+    this->setGraphicsEffect(effect);
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
-    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
+    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));    
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
+    this->gateType = typeGate;
     this->gate_Nr = gateNr;
-    gateType = typeGate;
-    if(typeGate == 2 || typeGate == 3)                                  // If gate is of input type!
+    this->rightClick = simulation->cursor().pixmap();
+    this->LogicalOutput = 0;
+    if(gateType == 2)
     {
-        if(typeGate == 2)                                               // If type High Input
-        {
-            this->setPixmap(QPixmap(":/images/High_Icon.png"));
-            this->rightClick = QPixmap(":/images/High_Icon.png");
-            this->LogicalOutput = 1;                                    // Set logic of gate
-        }
-        else                                                            // If type Low Input
-        {
-            this->setPixmap(QPixmap(":/images/Low_Icon.png"));
-            this->rightClick = QPixmap(":/images/Low_Icon.png");
-            this->LogicalOutput = 0;                                    // Set logic of gate
-        }
+        this->LogicalOutput = 1;
     }
-    else
+    this->setPixmap(simulation->viewPix);
+
+    this->isNot = simulation->isNot;
+
+    // For different input size, nr of input nodes need to be configured
+    input_size = amnt;
+    space = (pixmap().height() - input_size*2)/(input_size+1);
+    for(int i = 1; i <= input_size; i++)
     {
-        switch(gateType)
+        // input_rect is visual connection of node and gate
+        input_rect = new QGraphicsRectItem(this);
+
+        // If OR, NOR, XOR, XNOR, position of lines need adjusting
+        this->plus = 0;
+        this->plusB = 0;
+        if(gateType == 5 || gateType == 6)
         {
-        case 1:
-            this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/And_Gate.png");
-            break;
-
-        case 4:
-            this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/Nand_Gate.png");
-            this->isNot = true;
-            break;
-
-        case 5:
-            this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/Or_Gate.png");
-            break;
-
-        case 6:
-            this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/Nor_Gate.png");
-            this->isNot = true;
-            break;
-
-        case 7:
-            this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/XOR_Gate.png");
-            break;
-
-        case 8:
-            this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/XNOR_Gate.png");
-            this->isNot = true;
-            break;
-
-        case 9:
-            this->setPixmap(QPixmap(":/images/NOT_Gate_View.png"));
-            this->rightClick = QPixmap(":/images/NOT_Gate.png");
-            this->isNot = true;
-            break;
+            plus = 16;
         }
-        this->LogicalOutput = 0;
-
-        // For different input size, nr of input nodes need to be configured
-        input_size = amnt;
-        space = (pixmap().height() - input_size*2)/(input_size+1);
-        for(int i = 1; i <= input_size; i++)
+        else
         {
-            // input_rect is visual connection of node and gate
-
-            input_rect = new QGraphicsRectItem(this);
-
-
-            // If OR, NOR, XOR, XNOR, position of lines need adjusting
-            this->plus = 0;
-            this->plusB = 0;
-            if(gateType == 5 || gateType == 6)
+            if(gateType == 7 || gateType == 8)
             {
-                plus = 16;
+                plusB = 15;
+                plus = 31;
+
             }
-            else
-            {
-                if(gateType == 7 || gateType == 8)
-                {
-                    plusB = 15;
-                    plus = 31;
-
-                }
-            }
-            input_rect->setRect(x(), y(), 20 + plusB, 2);
-            input_rect->setParentItem(this);
-            input_rect->setPos(this->x() - input_rect->rect().width() + plus,
-                               space*i + input_rect->rect().height()*(i-1));
-
-            input_rect->setBrush(QColor(0,0,0));
-
-            // in is of InputCon node
-            in = new InputCon(input_rect);
-            in->setParentItem(input_rect);
-            in->setPos(-in->rect().width(), - in->rect().height()/2 +
-                       input_rect->rect().height()/2);
-            in->posGate = i;
-            in->parent_Gate = gate_Nr;                                  // Set parent as gate, to be moved and deleted
-            list_Inputs << in;                                          // Add input nodes to list
         }
+        input_rect->setRect(x(), y(), 20 + plusB, 2);
+        input_rect->setParentItem(this);
+        input_rect->setPos(this->x() - input_rect->rect().width() + plus,
+                           space*i + input_rect->rect().height()*(i-1));
+
+        input_rect->setBrush(QColor(0,0,0));
+
+        // in is of InputCon node
+        in = new InputCon(input_rect);
+        in->setParentItem(input_rect);
+        in->setPos(-in->rect().width(), - in->rect().height()/2 +
+                   input_rect->rect().height()/2);
+        in->posGate = i;
+        in->parent_Gate = gate_Nr;                                  // Set parent as gate, to be moved and deleted
+        list_Inputs << in;                                          // Add input nodes to list
     }
 
-    // set draw output branch
     rect = new QGraphicsRectItem(this);
-    if(gateType == 7 || gateType == 8)
-    {
-        rect->setRect(x(), y(), 20, 2);
-    }
-    else
-    {
-        rect->setRect(x(), y(), 20, 2);
-    }
-
+    rect->setRect(x(), y(), 20, 2);
+    this->plusC = 0;
     if(isNot == true)
     {
         circle = new QGraphicsEllipseItem(this);
         circle->setRect(0,0,10,10);
         circle->setParentItem(this);
-        this->plusC = 0;
-        if(gateType == 6)
-        {
-            this->plusC = 2;
-        }
-        circle->setPos(pixmap().width() - plusC, pixmap().height()/2 - circle->rect().height()/2);
+        circle->setPos(pixmap().width(), pixmap().height()/2 - circle->rect().height()/2);
         circle->setBrush(QColor(255,255,255));
 
         QPen pen;
         pen.setWidth(2);
         circle->setPen(pen);
+        this->plusC = circle->rect().width();
     }
 
     rect->setBrush(QColor(0,0,0));
     rect->setParentItem(this);
-    switch (typeGate)
+    rect->setX(pixmap().width() + this->plusC);
+    rect->setY(pixmap().height()/2 - rect->rect().height()/2);
+    if(gateType == 10)
     {
-    case 1:
-        rect->setPos(pixmap().width(), pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
-
-    case 2:
-        rect->setPos(pixmap().width(), pixmap().height()/2 - rect->rect().height()/2);
-        break;
-
-    case 3:
-        rect->setPos(pixmap().width(), pixmap().height()/2 - rect->rect().height()/2);
-        break;
-
-    case 4:
-        rect->setPos(pixmap().width() + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
-
-    case 5:
-        rect->setPos(pixmap().width() - 2, pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
-
-    case 6:
-        rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
-
-    case 7:
-        rect->setPos(pixmap().width() - 2, pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
-
-    case 8:
-        rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
-
-    case 9:
-        rect->setPos(pixmap().width() - plusC + circle->rect().width(), pixmap().height()/2 - rect->rect().height()/2);
-        this->updateLogic();
-        break;
+        rect->hide();
     }
+    this->updateLogic();
 
     // set output nodes and configure
     out = new OutputCon(rect);
     out->setParentItem(rect);
     out->setPos(rect->rect().width(), rect->rect().height()/2 - out->rect().height()/2);
     out->parent_Gate = gate_Nr;
-    this->list_Outputs << out;    
+    if(gateType == 10)
+    {
+        out->hide();
+    }
+    this->list_Outputs << out;
 }
 
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    //this->prepareGeometryChange();
+    this->effect->setEnabled(true);
     this->setFocus();
+
     // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {
@@ -231,19 +136,8 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             simulation->isMove = true;
             this->isMove = true;
             simulation->moveGate = this->gate_Nr;
-            this->deleteEffect();
         }
     }
-    else
-    {
-        // Left Button to show effect and make gate ready for delete
-        this->prepareGeometryChange();
-        this->effect->setEnabled(true);
-        this->effect->update();
-        this->setGraphicsEffect(effect);
-        this->setFocus();
-    }
-
     this->setCenterPos();
 }
 
@@ -295,10 +189,9 @@ void Gate::keyPressEvent(QKeyEvent *event)
 // Delete Effect of gate to be reset
 void Gate::deleteEffect()
 {
-    this->prepareGeometryChange();
+    //this->prepareGeometryChange();
     this->effect->setEnabled(false);
-    this->effect->update();
-    this->clearFocus();
+    //this->clearFocus();
 }
 
 // Update Logic of gate when new wires connected and deleted
@@ -306,26 +199,17 @@ void Gate::updateLogic()
 {
     switch(this->gateType)
     {
-    case 1:
-        this->andLogic();
-        break;
-
+    case 3:
     case 4:
         this->andLogic();
         break;
 
     case 5:
-        this->orLogic();
-        break;
-
     case 6:
         this->orLogic();
         break;
 
     case 7:
-        this->xorLogic();
-        break;
-
     case 8:
         this->xorLogic();
         break;
@@ -340,6 +224,16 @@ void Gate::updateLogic()
             this->LogicalOutput = 0;
         }
         break;
+
+    case 10:
+        if(in->Logic == 1)
+        {
+            this->setPixmap(QPixmap(":/images/outputSmile.png"));
+        }
+        else
+        {
+            this->setPixmap(QPixmap(":/images/outputFrown.png"));
+        }
     }
 }
 

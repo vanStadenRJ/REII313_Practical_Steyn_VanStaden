@@ -123,7 +123,7 @@ void Wire::deleteEffect()
     if (!(effect == nullptr))
     {
         effect->setEnabled(false);
-        this->clearFocus();
+        //this->clearFocus();
     }
 }
 

@@ -18,6 +18,8 @@ public:
 
     // Public Attributes
     int Icon;
+    QPixmap viewPix;
+    bool isNot;
 
 private:
     // Private Methods
