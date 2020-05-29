@@ -58,19 +58,6 @@ Simulation::Simulation(QWidget * parent)
         }
         // andIcon->setPos((i-1)*100,45);
     }
-
-    for(int i = 1; i <= list_Icons.size(); i++)
-    {
-        if(i%2 == 0)
-        {
-
-        }
-        else
-        {
-
-        }
-
-    }
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
@@ -90,7 +77,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
-            if(!(this->typeIcon == 2) && !(this->typeIcon == 3))
+            if(!(this->typeIcon == 1) && !(this->typeIcon == 2))
             {
                 if(this->typeIcon == 9)
                 {

@@ -57,6 +57,9 @@ public:
     QPointF sourceNode;
     QPointF destNode;
 
+    QPixmap viewPix;
+    bool isNot;
+
 private:
     void initGates(int nrIn, int x, int y);
 
