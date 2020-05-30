@@ -25,5 +25,6 @@
         <file>outputSmile.png</file>
         <file>output_Gate.png</file>
         <file>output_Icon.png</file>
+        <file>Pulse_Icon.png</file>
     </qresource>
 </RCC>

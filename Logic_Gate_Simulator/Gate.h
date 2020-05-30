@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QObject>
+#include <QTimer>
 #include <QDebug>
 #include <QList>
 
@@ -54,6 +55,8 @@ public:
     bool isMove;                            // Is gate being moved
     bool isNot;                             // Does gate have not output
 
+    QTimer * timer;
+
 private:
     // Private Attributes
     int input_size;                         // How many inputs does gate have
@@ -67,6 +70,7 @@ private:
 public slots:
     void deleteEffect();                    // Delete effect when deselct gate
     void updateLogic();                     // Updates logic output of gates
+    void updateClock();
 };
 
 #endif // GATE_H

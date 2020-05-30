@@ -25,14 +25,20 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
-    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));    
+    QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
+    if(typeGate == 0)
+    {
+        timer = new QTimer();
+        timer->start(500);
+        QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateClock()));
+    }
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
     this->gateType = typeGate;
     this->gate_Nr = gateNr;
     this->rightClick = simulation->cursor().pixmap();
     this->LogicalOutput = 0;
-    if(gateType == 2)
+    if(gateType == 2 || gateType == 0)
     {
         this->LogicalOutput = 1;
     }
@@ -139,6 +145,7 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
     this->setCenterPos();
+    qDebug() << gate_Nr << ": " << LogicalOutput;
 }
 
 // KeyPressEvent as gate needs to be deleted
@@ -235,6 +242,35 @@ void Gate::updateLogic()
             this->setPixmap(QPixmap(":/images/outputFrown.png"));
         }
     }
+}
+
+void Gate::updateClock()
+{
+
+    if(LogicalOutput == 0)
+    {
+        LogicalOutput = 1;
+        qDebug() << 1;
+    }
+    else
+    {
+        LogicalOutput = 0;
+        qDebug() << 0;
+    }
+
+    for(int i = 0; i < simulation->list_Wires.size(); i++)
+    {
+        if(simulation->list_Wires.at(i)->src_Gate == this->gate_Nr)
+        {
+            simulation->list_Wires.at(i)->Logic_Wire = this->LogicalOutput;
+            break;
+        }
+    }
+
+    simulation->updateWireLogic();
+    emit simulation->changeGateLogic();
+    simulation->updateWireLogic();
+    timer->start(1000);
 }
 
 // Function to center gate upon moving

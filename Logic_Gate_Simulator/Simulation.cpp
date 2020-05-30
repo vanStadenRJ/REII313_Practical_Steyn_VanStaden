@@ -36,7 +36,7 @@ Simulation::Simulation(QWidget * parent)
     this->setMouseTracking(true);
     int y_coordinate = 0;
     int plus = 0;
-    for(int i = 1; i <= 10; i++)
+    for(int i = 0; i <= 10; i++)
     {
         gateDesc = new QGraphicsTextItem();
         QFont seriFont("Times", 8, QFont::Bold);
@@ -44,6 +44,10 @@ Simulation::Simulation(QWidget * parent)
         gateDesc->setFont(seriFont);
         switch(i)
         {
+        case 0:
+            this->gateDesc->setPlainText("CLOCK Input");
+            break;
+
         case 1:
             this->gateDesc->setPlainText("LOW Logic");
             break;
@@ -86,7 +90,6 @@ Simulation::Simulation(QWidget * parent)
         }
 
         andIcon = new BuildMode(i);
-        list_Icons << andIcon;
 
         int tet = 100;
 
@@ -94,20 +97,29 @@ Simulation::Simulation(QWidget * parent)
         {
             if(i == 10)
             {
-                plus = 100;
+                plus = 200;
             }
             else
             {
-                plus = 50;
+                plus = 150;
             }
         }
-        andIcon->setY(45 + y_coordinate*tet + plus);
+        if(i == 0)
+        {
+            andIcon->setY(45 + plus + tet);
+        }
+        else
+        {
+            andIcon->setY(45 + y_coordinate*tet + plus);
+        }
 
-        if(i%2 == 0 && !(i == 10))
+
+        if(i%2 == 0 && !(i == 10) && !(i == 0))
         {
             andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
             gateDesc->setPos(309 - 80 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
             y_coordinate++;
+
         }
         else
         {
@@ -117,6 +129,8 @@ Simulation::Simulation(QWidget * parent)
             }
             andIcon->setX(9 + 75 - andIcon->pixmap().width()/2);
             gateDesc->setPos(9 + 75 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
+
+            //if()
         }
 
         scene->addItem(andIcon);
@@ -140,7 +154,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
-            if(!(this->typeIcon == 1) && !(this->typeIcon == 2))
+            if(!(this->typeIcon == 1) && !(this->typeIcon == 2) && !(this->typeIcon == 0))
             {
                 if(this->typeIcon == 9 || this->typeIcon == 10)
                 {
@@ -251,7 +265,6 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                     if(list_Gates.at(g)->gate_Nr == wire->src_Gate)
                     {
                         wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
-                        qDebug() << "Gate " << list_Gates.at(g)->gate_Nr << " found!";
                         break;
                     }
                 }

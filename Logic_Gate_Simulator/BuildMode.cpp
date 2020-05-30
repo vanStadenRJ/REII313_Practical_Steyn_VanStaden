@@ -10,6 +10,13 @@ BuildMode::BuildMode(int typeIcon)
     this->Icon = typeIcon;
     switch(Icon)
     {
+    case 0:     // 0 = PULSE
+        this->setPixmap(QPixmap(":/images/Pulse_Icon.png"));
+        this->cur = this->pixmap();
+        this->viewPix = this->pixmap();
+        this->isNot = false;
+        break;
+
     case 1:     // 1 = Low Input
         this->setPixmap(QPixmap(":/images/Low_Icon.png"));
         this->cur = this->pixmap();

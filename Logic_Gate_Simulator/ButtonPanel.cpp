@@ -22,13 +22,13 @@ ButtonPanel::ButtonPanel()
     logic->setPlainText("LOGIC GATES");
     logic->setDefaultTextColor(QColor(0,0,0));
     logic->setFont(seriFont);
-    logic->setPos(300/2-logic->boundingRect().width()/2, 150);
+    logic->setPos(300/2-logic->boundingRect().width()/2, 250);
 
     QGraphicsTextItem *output = new QGraphicsTextItem(this);
     output->setPlainText("OUTPUT COMPONENTS");
     output->setDefaultTextColor(QColor(0,0,0));
     output->setFont(seriFont);
-    output->setPos(300/2-output->boundingRect().width()/2, 600);
+    output->setPos(300/2-output->boundingRect().width()/2, 700);
     //output->setPos(20, 600);
 }
 
