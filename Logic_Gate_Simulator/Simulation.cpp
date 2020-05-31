@@ -231,10 +231,8 @@ void Simulation::mousePressEvent(QMouseEvent *event)
     {
         if(move_wire == nullptr)
         {
-            qDebug() << "Wire";
             move_wire = new Wire();
             move_wire->source = this->sourceNode;
-            qDebug() << move_wire->source;
 
             scene->addItem(move_wire);
             canMove = true;
@@ -253,8 +251,11 @@ void Simulation::mousePressEvent(QMouseEvent *event)
         {
             if(event->button() == Qt::LeftButton)
             {
+
                 //QGraphicsView::mousePressEvent(event);
                 wire = new Wire();
+
+
                 wire->source = move_wire->source;
                 wire->dest = move_wire->dest;
                 wire->dest = this->destNode;
@@ -263,25 +264,52 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->src_NodeNr = this->src_NodeNr;
                 wire->dest_NodeNr = this->dest_NodeNr;
 
-                for(int g = 0; g < list_Gates.size(); g++)
-                {
-                    if(list_Gates.at(g)->gate_Nr == wire->src_Gate)
-                    {
-                        wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
-                        break;
-                    }
-                }
-
                 QLineF line;
                 line.setPoints(wire->source, wire->dest);
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
-                qDebug() << "Amount of wires: " << list_Wires.size();
+                //qDebug() << "Amount of wires: " << list_Wires.size();
                 nr_Wires++;
-                emit connected_Node(wire->Logic_Wire, wire->src_Gate);
-                this->setCursor(Qt::ArrowCursor);            
-                this->updateWireLogic();
+                //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
+                this->setCursor(Qt::ArrowCursor);
+
+                for(int g = 0; g < list_Gates.size(); g++)
+                {
+                    if(list_Gates.at(g)->gate_Nr == wire->src_Gate)
+                    {
+                        //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
+                        if(list_Gates.at(g)->gateType == 0)
+                        {
+                            list_Gates.at(g)->lowTimer->stop();
+                            list_Gates.at(g)->highTimer->stop();
+                            list_Gates.at(g)->LogicalOutput = 0;
+                            list_Gates.at(g)->lowTimer->start(list_Gates.at(g)->lowTime);
+                            emit connected_Node(wire->Logic_Wire, wire->src_Gate);
+                            updateWireLogic();
+                            //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
+                        }
+                        else
+                        {
+                            wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
+                            emit connected_Node(wire->Logic_Wire, wire->src_Gate);
+                            this->updateWireLogic();
+                        }
+
+                        //wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
+                        //wire->colorLogic();
+                        //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
+                        //emit changeInputLogic();
+                        //emit changeGateLogic();
+
+                        //this->updateWireLogic();
+                        break;
+                    }
+                }
+
+
+                //this->updateWireLogic();
+
 
                 emit clear_Node(false, 0, 0);
             }
@@ -345,35 +373,37 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
 }
 
 void Simulation::updateWireLogic()
-{
-    // Update gate logic on current logic of inputs
-    emit changeGateLogic();
-
-    // Update logic of each wire
-    for(int v = 0; v < list_Wires.size(); v++)
+{    
+    // Loop 2 times as to ensure all logic updated
+    for(int t = 0; t <= 1; t++)
     {
-        for(int b = 0; b < list_Gates.size(); b++)
+        // Update logic of each wire
+        for(int v = 0; v < list_Wires.size(); v++)
         {
-            if(list_Gates.at(b)->gate_Nr == list_Wires.at(v)->src_Gate)
+            for(int b = 0; b < list_Gates.size(); b++)
             {
-                list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
-                emit changeInputLogic();
-                emit changeGateLogic();
-                emit changeWireColor();
+                if(list_Gates.at(b)->gate_Nr == list_Wires.at(v)->src_Gate)
+                {
+                    list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
+                    emit changeWireColor();
+                    list_Wires.at(v)->colorLogic();
+                    emit changeInputLogic();
+                    emit changeGateLogic();
+                }
             }
         }
-    }
 
-    // Update Logic of all Inputs
-    //emit changeInputLogic();
+        // Update Logic of all Inputs
+        emit changeInputLogic();
 
-    // Update Logic of all gates
-    //emit changeGateLogic();
+        // Update Logic of all gates
+        emit changeGateLogic();
 
-    // Only change color logic of wire if there are wires
-    if(!(this->list_Wires.size() == 0))
-    {
-        //emit changeWireColor();
+        // Only change color logic of wire if there are wires
+        if(!(this->list_Wires.size() == 0))
+        {
+            emit changeWireColor();
+        }
     }
 }
 
