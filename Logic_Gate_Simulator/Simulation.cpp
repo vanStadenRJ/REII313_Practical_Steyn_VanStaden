@@ -354,20 +354,23 @@ void Simulation::updateWireLogic()
             if(list_Gates.at(b)->gate_Nr == list_Wires.at(v)->src_Gate)
             {
                 list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
-            }            
+                emit changeInputLogic();
+                emit changeGateLogic();
+                emit changeWireColor();
+            }
         }
     }
 
     // Update Logic of all Inputs
-    emit changeInputLogic();
+    //emit changeInputLogic();
 
     // Update Logic of all gates
-    emit changeGateLogic();
+    //emit changeGateLogic();
 
     // Only change color logic of wire if there are wires
     if(!(this->list_Wires.size() == 0))
     {
-        emit changeWireColor();
+        //emit changeWireColor();
     }
 }
 

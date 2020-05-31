@@ -129,6 +129,8 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    qDebug() << "Yeeeeeeet" << simulation->list_Gates.size();
+
     //this->prepareGeometryChange();
     this->effect->setEnabled(true);
     this->setFocus();
@@ -246,7 +248,6 @@ void Gate::updateLogic()
 
 void Gate::updateClock()
 {
-
     if(LogicalOutput == 0)
     {
         LogicalOutput = 1;
@@ -255,20 +256,10 @@ void Gate::updateClock()
     else
     {
         LogicalOutput = 0;
+
         qDebug() << 0;
     }
 
-    for(int i = 0; i < simulation->list_Wires.size(); i++)
-    {
-        if(simulation->list_Wires.at(i)->src_Gate == this->gate_Nr)
-        {
-            simulation->list_Wires.at(i)->Logic_Wire = this->LogicalOutput;
-            break;
-        }
-    }
-
-    simulation->updateWireLogic();
-    emit simulation->changeGateLogic();
     simulation->updateWireLogic();
     timer->start(1000);
 }
