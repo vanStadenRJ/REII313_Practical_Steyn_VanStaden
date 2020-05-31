@@ -55,7 +55,11 @@ public:
     bool isMove;                            // Is gate being moved
     bool isNot;                             // Does gate have not output
 
-    QTimer * timer;
+    QTimer * highTimer;
+    QTimer * lowTimer;
+
+    int highTime;
+    int lowTime;
 
 private:
     // Private Attributes
@@ -70,7 +74,8 @@ private:
 public slots:
     void deleteEffect();                    // Delete effect when deselct gate
     void updateLogic();                     // Updates logic output of gates
-    void updateClock();
+    void updateHigh();
+    void updateLow();
 };
 
 #endif // GATE_H

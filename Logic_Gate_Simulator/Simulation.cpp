@@ -1,6 +1,7 @@
 #include "Simulation.h"
 #include "OutputCon.h"
 #include "Wire.h"
+#include "inputbox.h"
 
 #include <QMainWindow>
 #include <QCursor>
@@ -136,6 +137,8 @@ Simulation::Simulation(QWidget * parent)
         scene->addItem(andIcon);
         scene->addItem(gateDesc);
     }
+
+
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)

@@ -28,7 +28,8 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-{    
+{
+    //this->setToolTip(QString("Yeet"));
     if((connected == false && simulation->isBuildMode == false && simulation->isMove == false) && (simulation->move_wire == nullptr))
     {
         //Change color
@@ -63,6 +64,7 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    this->setToolTip(QString(""));
     this -> setRect(0,0,12,12);
     if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
     {

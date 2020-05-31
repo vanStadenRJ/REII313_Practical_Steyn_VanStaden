@@ -1,13 +1,16 @@
 #include "ButtonPanel.h"
 #include "Simulation.h"
 
+#include <QToolTip>
 #include <QFont>
 
 extern Simulation * simulation;
 
 ButtonPanel::ButtonPanel()
 {
+    //QToolTip::showText(this->pos(), QString("Poep"), simulation);
     this->setZValue(0);
+    this->setToolTip(QString("Poep"));
     //this->setRect(0,0,300,860);
 
     QGraphicsTextItem * input = new QGraphicsTextItem(this);

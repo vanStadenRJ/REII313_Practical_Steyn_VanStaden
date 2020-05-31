@@ -1,10 +1,15 @@
 #include "Gate.h"
 #include "Simulation.h"
+#include "inputbox.h"
 
+#include <QToolTip>
 extern Simulation * simulation;
 
 Gate::Gate(int gateNr, int typeGate, int amnt)
 {
+
+    //this->setToolTip(QString("Piele Pella"));
+
     qDebug() << simulation->list_Gates.size();
 
     // Change z value as to ensure that gate on top of wire
@@ -28,9 +33,15 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
     if(typeGate == 0)
     {
-        timer = new QTimer();
-        timer->start(500);
-        QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateClock()));
+        lowTimer = new QTimer();
+        highTimer = new QTimer();
+        QObject::connect(lowTimer, SIGNAL(timeout()), this, SLOT(updateLow()));
+        QObject::connect(highTimer, SIGNAL(timeout()), this, SLOT(updateHigh()));
+        lowTime = 500;
+        highTime = 1000;
+        lowTimer->start(lowTime);
+        //highTimer->start(2000);
+
     }
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
@@ -153,6 +164,25 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 // KeyPressEvent as gate needs to be deleted
 void Gate::keyPressEvent(QKeyEvent *event)
 {
+    if(effect->isEnabled() && event->key() == Qt::Key_Space && this->gateType == 0)
+    {
+        int low;
+        int high;
+        bool ok;
+        QList<int> list = InputBox::getStrings(simulation, &ok);
+        if (ok)
+        {
+            this->lowTime = list[0];
+            //lowTimer->time
+            //lowTimer->start()
+            this->highTime = list[1];
+            lowTimer->stop();
+            highTimer->stop();
+            lowTimer->start(lowTime);
+        }
+    }
+
+
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
     {
         if(!(simulation->nr_Wires == 0))
@@ -246,22 +276,38 @@ void Gate::updateLogic()
     }
 }
 
-void Gate::updateClock()
+void Gate::updateLow()
 {
-    if(LogicalOutput == 0)
-    {
-        LogicalOutput = 1;
-        qDebug() << 1;
-    }
-    else
-    {
-        LogicalOutput = 0;
+    lowTimer->stop();
+    this->LogicalOutput = 1;
+    qDebug() << 1;
+    simulation->updateWireLogic();
+    highTimer->start(highTime);
 
-        qDebug() << 0;
-    }
+}
+
+void Gate::updateHigh()
+{
+    highTimer->stop();
+    this->LogicalOutput = 0;
+    qDebug() << 0;
+
+
+//    if(LogicalOutput == 0)
+//    {
+//        LogicalOutput = 1;
+//        qDebug() << 1;
+//    }
+//    else
+//    {
+//        LogicalOutput = 0;
+
+//        qDebug() << 0;
+//    }
 
     simulation->updateWireLogic();
-    timer->start(1000);
+    lowTimer->start(lowTime);
+    //timer->start(1000);
 }
 
 // Function to center gate upon moving
