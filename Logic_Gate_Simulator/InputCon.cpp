@@ -33,6 +33,8 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
+    qDebug() << this->parent_Gate << "(" << this->posGate << ")";
+
     if((connected == false && simulation->isBuildMode == false  && simulation->isMove == false) && !(simulation->move_wire == nullptr))
     {
         //Change color
@@ -145,10 +147,13 @@ void InputCon::getWireLogic()
 
 void InputCon::conNode(int k, int h)
 {
+    qDebug() << "1";
     if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
     {
+        qDebug() << "2";
         if(test == true)
         {
+            qDebug() << "3";
             this->connected = true;
             QBrush brush;
             brush.setColor(Qt::white);

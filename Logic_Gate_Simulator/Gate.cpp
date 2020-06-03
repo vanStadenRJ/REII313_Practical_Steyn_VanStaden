@@ -152,6 +152,8 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
     this->setCenterPos();
+
+    qDebug() << this->gate_Nr << ":" << this->LogicalOutput;
 }
 
 // KeyPressEvent as gate needs to be deleted

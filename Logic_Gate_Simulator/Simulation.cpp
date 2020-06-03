@@ -269,48 +269,28 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 wire->setLine(line);
                 scene->addItem(wire);
                 list_Wires << wire;
-                //qDebug() << "Amount of wires: " << list_Wires.size();
                 nr_Wires++;
-                //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
                 this->setCursor(Qt::ArrowCursor);
 
                 for(int g = 0; g < list_Gates.size(); g++)
                 {
                     if(list_Gates.at(g)->gate_Nr == wire->src_Gate)
                     {
-                        //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
                         if(list_Gates.at(g)->gateType == 0)
                         {
                             list_Gates.at(g)->lowTimer->stop();
                             list_Gates.at(g)->highTimer->stop();
                             list_Gates.at(g)->LogicalOutput = 0;
                             list_Gates.at(g)->lowTimer->start(list_Gates.at(g)->lowTime);
-                            emit connected_Node(wire->Logic_Wire, wire->src_Gate);
-                            updateWireLogic();
-                            //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
                         }
                         else
                         {
                             wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
-                            emit connected_Node(wire->Logic_Wire, wire->src_Gate);
-                            this->updateWireLogic();
-                        }
-
-                        //wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
-                        //wire->colorLogic();
-                        //emit connected_Node(wire->Logic_Wire, wire->src_Gate);
-                        //emit changeInputLogic();
-                        //emit changeGateLogic();
-
-                        //this->updateWireLogic();
+                                                    }
+                        this->updateMWLogic(wire->Logic_Wire, wire->src_Gate);
                         break;
                     }
                 }
-
-
-                //this->updateWireLogic();
-
-
                 emit clear_Node(false, 0, 0);
             }
             else
@@ -413,6 +393,12 @@ QJsonArray Simulation::toJson()
     for (auto & user : list_Gates)
           array.append(user->toJson());
     return array;
+}
+
+void Simulation::updateMWLogic(int x, int y)
+{
+    emit connected_Node(x,y);
+    this->updateWireLogic();
 }
 
 void Simulation::initGates(int nrIn, int x, int y)

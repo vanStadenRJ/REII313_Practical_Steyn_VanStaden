@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "Simulation.h"
 #include "Gate.h"
+#include "Wire.h"
 
 #include <QVBoxLayout>
 #include <QMessageBox>
@@ -63,21 +64,14 @@ void MainWindow::on_actionOpen_triggered()
 
             auto json_doc = QJsonDocument::fromJson(json_bytes);
 
-            if(json_doc["Gates"].isArray())
-            {
-                qDebug() << "Object";
-            }
-
-            //QJsonObject obj_Load = json_doc.object();
             QJsonArray arr_Gates = json_doc["Gates"].toArray();
-
             simulation->nr_Gates = 0;
             for(int i = 0; i < arr_Gates.count(); i++)
             {
                 QJsonObject obj_Gates;
                 obj_Gates = arr_Gates.at(i).toObject();
                 Gate * gate = new Gate(i+1, obj_Gates["Type"].toInt(), obj_Gates["nr_Inputs"].toInt());
-                simulation->nr_Gates = simulation->nr_Gates++;
+                simulation->nr_Gates++;
                 gate->setPos(obj_Gates["x_Pos"].toDouble(), obj_Gates["y_Pos"].toDouble());
                 simulation->scene->addItem(gate);
                 gate->pos_Gate = gate->pos();
@@ -88,6 +82,66 @@ void MainWindow::on_actionOpen_triggered()
                     simulation->list_Gates.at(j)->setCenterPos();
                 }
             }
+
+            QJsonArray arr_Wires = json_doc["Wires"].toArray();
+            simulation->nr_Wires = 0;
+            for(int i = 0; i < arr_Wires.count(); i++)
+            {
+                QJsonObject obj_Wires;
+                obj_Wires = arr_Wires.at(i).toObject();
+                Wire * wire = new Wire();
+                wire->dest = QPointF(obj_Wires["Dest_X"].toDouble(), obj_Wires["Dest_Y"].toDouble());
+                wire->source = QPointF(obj_Wires["Src_X"].toDouble(), obj_Wires["Src_Y"].toDouble());
+                wire->dest_Gate = obj_Wires["Dest_Gate"].toInt();
+                simulation->dest_Gate = wire->dest_Gate;
+                simulation->src_Gate = wire->src_Gate;
+                wire->src_Gate = obj_Wires["Src_Gate"].toInt();
+                wire->src_NodeNr = obj_Wires["Src_Node"].toInt();
+                wire->dest_NodeNr = obj_Wires["Dest_Node"].toInt();
+
+                QLineF line;
+                line.setPoints(wire->source, wire->dest);
+                wire->setLine(line);
+                simulation->scene->addItem(wire);
+                simulation->list_Wires << wire;
+                simulation->nr_Wires++;
+
+                for(int g = 0; g < simulation->list_Gates.size(); g++)
+                {
+                    if(simulation->list_Gates.at(g)->gate_Nr == wire->src_Gate)
+                    {
+                        if(simulation->list_Gates.at(g)->gateType == 0)
+                        {
+                            simulation->list_Gates.at(g)->lowTimer->stop();
+                            simulation->list_Gates.at(g)->highTimer->stop();
+                            simulation->list_Gates.at(g)->LogicalOutput = 0;
+                            simulation->list_Gates.at(g)->lowTimer->start(simulation->list_Gates.at(g)->lowTime);
+                        }
+                        else
+                        {
+                            wire->Logic_Wire = simulation->list_Gates.at(g)->LogicalOutput;
+                        }
+                        simulation->updateMWLogic(wire->Logic_Wire, wire->src_Gate);
+                        //break;
+                    }
+
+                    for(int h = 0; h < simulation->list_Wires.size(); h++)
+                    {
+                        for(int k = 0; k < simulation->list_Gates.at(g)->list_Inputs.size(); k++)
+                        {
+                            if(simulation->list_Wires.at(h)->dest_Gate == simulation->list_Gates.at(g)->list_Inputs.at(k)->parent_Gate &&
+                                    simulation->list_Wires.at(h)->dest_NodeNr == simulation->list_Gates.at(g)->list_Inputs.at(k)->posGate)
+                            {
+                                qDebug() << "55";
+                                simulation->list_Gates.at(g)->list_Inputs.at(k)->test = true;
+                                break;
+                            }
+                        }
+                    }
+                    simulation->updateMWLogic(wire->Logic_Wire, wire->src_Gate);
+                }
+            }
+
             QMessageBox::information(this, tr("Message"), tr("Document Loaded Successfully"));
         }
     }
@@ -118,10 +172,24 @@ void MainWindow::on_actionSave_triggered()
             arr_Gates << obj_Gates;
         }
 
-
+        QJsonArray arr_Wires;
+        for(int i = 0; i < simulation->list_Wires.size(); i++)
+        {
+            QJsonObject obj_Wires;
+            obj_Wires["Dest_X"] = simulation->list_Wires.at(i)->dest.x();
+            obj_Wires["Dest_Y"] = simulation->list_Wires.at(i)->dest.y();
+            obj_Wires["Src_X"] = simulation->list_Wires.at(i)->source.x();
+            obj_Wires["Src_Y"] = simulation->list_Wires.at(i)->source.y();
+            obj_Wires["Dest_Node"] = simulation->list_Wires.at(i)->dest_NodeNr;
+            obj_Wires["Src_Node"] = simulation->list_Wires.at(i)->src_NodeNr;
+            obj_Wires["Src_Gate"] = simulation->list_Wires.at(i)->src_Gate;
+            obj_Wires["Dest_Gate"] = simulation->list_Wires.at(i)->dest_Gate;
+            arr_Wires << obj_Wires;
+        }
 
         QJsonObject obj_Save;
         obj_Save.insert("Gates", arr_Gates);
+        obj_Save.insert("Wires", arr_Wires);
         QJsonDocument json_save(obj_Save);
         QString json_string = json_save.toJson();
 
@@ -152,9 +220,7 @@ void MainWindow::clearScene()
         delete simulation->list_Wires.at(i);
     }
     simulation->list_Wires.clear();
-}
 
-void MainWindow::newGates()
-{
-
+    simulation->nr_Gates = 0;
+    simulation->nr_Wires = 0;
 }

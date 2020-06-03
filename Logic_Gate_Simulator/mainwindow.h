@@ -26,7 +26,6 @@ private:
     Ui::MainWindow *ui;
 
     void clearScene();
-    void newGates();
 };
 
 #endif // MAINWINDOW_H

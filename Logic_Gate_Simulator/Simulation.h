@@ -66,6 +66,8 @@ public:
 
     QJsonArray toJson();
 
+    void updateMWLogic(int x, int y);
+
 private:
     void initGates(int nrIn, int x, int y);
 

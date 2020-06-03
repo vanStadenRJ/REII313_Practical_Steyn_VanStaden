@@ -49,7 +49,7 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << "Wire: " << this->Logic_Wire;
+    qDebug() << "Wire connecting gate nr" << this->src_Gate <<" and gate nr" << this->dest_Gate << "(" << this->dest_NodeNr << ")";
     this->setFocus();
     if(effect == nullptr)
     {
