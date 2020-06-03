@@ -49,7 +49,7 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Wire: " << this->Logic_Wire;
+    //qDebug() << "Wire: " << this->Logic_Wire;
     this->setFocus();
     if(effect == nullptr)
     {
@@ -107,7 +107,7 @@ void Wire::keyPressEvent(QKeyEvent *event)
             if(simulation->list_Wires.at(v)->source == this->source && simulation->list_Wires.at(v)->dest == this->dest)
             {
                 simulation->list_Wires.takeAt(v);
-                qDebug() << "Amount of wires: " << simulation->list_Wires.size();
+                //qDebug() << "Amount of wires: " << simulation->list_Wires.size();
                 break;
             }
         }

@@ -26,5 +26,8 @@
         <file>output_Gate.png</file>
         <file>output_Icon.png</file>
         <file>Pulse_Icon.png</file>
+        <file>new_icon.png</file>
+        <file>open_icon.png</file>
+        <file>save2_icon.png</file>
     </qresource>
 </RCC>

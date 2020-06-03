@@ -58,11 +58,11 @@ void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         }
         simulation->destNode = this->centerPoint;
 
-        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
+       // qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
     }
     else
     {
-        qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic << " Con Gate: " << conGate;
+       //qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic << " Con Gate: " << conGate;
     }
 }
 
@@ -154,7 +154,7 @@ void InputCon::conNode(int k, int h)
             brush.setColor(Qt::white);
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
-            qDebug() << k;
+            //qDebug() << k;
             this->Logic = k;
             this->conGate = h;
             test = false;

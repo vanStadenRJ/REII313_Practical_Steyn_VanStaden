@@ -42,5 +42,5 @@ void ButtonPanel::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     QPen pen;
     pen.setWidth(3);
     painter->setPen(pen);
-    painter->drawRoundedRect(7, 7, 300, 860, 5, 5);
+    painter->drawRoundedRect(7, 7, 300, 852, 5, 5);
 }

@@ -10,8 +10,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 
     //this->setToolTip(QString("Piele Pella"));
 
-    qDebug() << simulation->list_Gates.size();
-
     // Change z value as to ensure that gate on top of wire
     this->setZValue(1);
 
@@ -140,8 +138,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Yeeeeeeet" << simulation->list_Gates.size();
-
     //this->prepareGeometryChange();
     this->effect->setEnabled(true);
     this->setFocus();
@@ -158,7 +154,6 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
     this->setCenterPos();
-    qDebug() << gate_Nr << ": " << LogicalOutput;
 }
 
 // KeyPressEvent as gate needs to be deleted
@@ -280,7 +275,6 @@ void Gate::updateLow()
 {
     lowTimer->stop();
     this->LogicalOutput = 1;
-    qDebug() << 1;
     simulation->updateWireLogic();
     highTimer->start(highTime);
 
@@ -290,7 +284,6 @@ void Gate::updateHigh()
 {
     highTimer->stop();
     this->LogicalOutput = 0;
-    qDebug() << 0;
 
 
 //    if(LogicalOutput == 0)
