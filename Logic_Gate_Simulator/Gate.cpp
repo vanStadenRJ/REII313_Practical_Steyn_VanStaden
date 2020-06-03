@@ -29,7 +29,9 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     // Connect Signal and Slots
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
     QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
-    if(typeGate == 0)
+
+    this->gateType = typeGate;
+    if(gateType == 0)
     {
         lowTimer = new QTimer();
         highTimer = new QTimer();
@@ -39,21 +41,17 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         highTime = 1000;
         lowTimer->start(lowTime);
         //highTimer->start(2000);
-
     }
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
-    this->gateType = typeGate;
+
     this->gate_Nr = gateNr;
-    this->rightClick = simulation->cursor().pixmap();
+    this->setPix();
     this->LogicalOutput = 0;
     if(gateType == 2 || gateType == 0)
     {
         this->LogicalOutput = 1;
     }
-    this->setPixmap(simulation->viewPix);
-
-    this->isNot = simulation->isNot;
 
     // For different input size, nr of input nodes need to be configured
     input_size = amnt;
@@ -317,6 +315,84 @@ void Gate::setCenterPos()
 
         this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
                                                   + (i)*rect->rect().height() + (i+1)*space);
+    }
+}
+
+QJsonObject Gate::toJson() const
+{
+    return{{"Object", "GATE"}, {"Logic", this->LogicalOutput}, {"type", this->gateType},
+        {"xpos", this->x()}, {"ypos", this->y()}};
+}
+
+void Gate::setPix()
+{
+    switch(this->gateType)
+    {
+    case 0:     // 0 = PULSE
+        this->setPixmap(QPixmap(":/images/Pulse_Icon.png"));
+        this->rightClick = this->pixmap();
+        this->isNot = false;
+        break;
+
+    case 1:     // 1 = Low Input
+        this->setPixmap(QPixmap(":/images/Low_Icon.png"));
+        this->rightClick = this->pixmap();
+        this->isNot = false;
+        break;
+
+    case 2:     // 2 = High Input
+        this->setPixmap(QPixmap(":/images/High_Icon.png"));
+        this->rightClick = this->pixmap();
+        this->isNot = false;
+        break;
+
+    case 3:     // 3 = AND Gate
+        this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/And_Gate.png");
+        this->isNot = false;
+        break;
+
+    case 4:     // 4 = NAND Gate
+        this->setPixmap(QPixmap(":/images/And_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/Nand_Gate.png");
+        this->isNot = true;
+        break;
+
+    case 5:     // 5 = OR Gate
+        this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/Or_Gate.png");
+        this->isNot = false;
+        break;
+
+    case 6:     // 6 = NOR Gate
+        this->setPixmap(QPixmap(":/images/Or_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/Nor_Gate.png");
+        this->isNot = true;
+        break;
+
+    case 7:     // 7 = XOR Gate
+        this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/XOR_Gate.png");
+        this->isNot = false;
+        break;
+
+    case 8:     // 8 = XNOR Gate
+        this->setPixmap(QPixmap(":/images/XOR_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/XNOR_Gate.png");
+        this->isNot = true;
+        break;
+
+    case 9:     // 9 = NOT Gate
+        this->setPixmap(QPixmap(":/images/NOT_Gate_View.png"));
+        this->rightClick = QPixmap(":/images/NOT_Gate.png");
+        this->isNot = true;
+        break;
+
+    case 10:     // 10 = OUTPUT
+        this->setPixmap(QPixmap(":/images/output_Gate.png"));
+        this->rightClick = QPixmap(":/images/output_Gate.png");
+        this->isNot = false;
+        break;
     }
 }
 

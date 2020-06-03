@@ -4,8 +4,11 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
+#include <QJsonDocument>
 #include <QGraphicsView>
+#include <QJsonObject>
 #include <QMouseEvent>
+#include <QJsonArray>
 #include <QString>
 #include <QObject>
 
@@ -60,6 +63,8 @@ public:
     QPixmap viewPix;
     bool isNot;
     QGraphicsTextItem * gateDesc;
+
+    QJsonArray toJson();
 
 private:
     void initGates(int nrIn, int x, int y);

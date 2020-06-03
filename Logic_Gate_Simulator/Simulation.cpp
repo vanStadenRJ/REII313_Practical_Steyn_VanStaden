@@ -407,6 +407,14 @@ void Simulation::updateWireLogic()
     }
 }
 
+QJsonArray Simulation::toJson()
+{
+    QJsonArray array;
+    for (auto & user : list_Gates)
+          array.append(user->toJson());
+    return array;
+}
+
 void Simulation::initGates(int nrIn, int x, int y)
 {
     this->nr_Gates = this->nr_Gates + 1;

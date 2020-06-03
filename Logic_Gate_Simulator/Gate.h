@@ -7,6 +7,7 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsEffect>
 #include <QInputDialog>
+#include <QJsonObject>
 #include <QKeyEvent>
 #include <QObject>
 #include <QTimer>
@@ -28,8 +29,6 @@ public:
     void keyPressEvent(QKeyEvent * event);
     void setCenterPos();
 
-
-
     // Public Attributes
     QGraphicsDropShadowEffect * effect;     // Shadow Effect when gate is pressed
     QGraphicsRectItem *input_rect;          // Input rect connecting nodes and gates
@@ -40,6 +39,8 @@ public:
 
     QList<InputCon *> list_Inputs;          // List of Inputs connected to gate
     QList<OutputCon *> list_Outputs;        // List of Outputs connected to gate
+
+    QJsonObject toJson() const;
 
     QPointF pos_Gate;                       // QPointF position of gate
     QPointF change;
@@ -61,10 +62,12 @@ public:
     int highTime;
     int lowTime;
 
+    int input_size;                         // How many inputs does gate have
+
 private:
     // Private Attributes
-    int input_size;                         // How many inputs does gate have
     int space;                              // Space between input nodes
+    void setPix();
 
     // Logic Functions
     void andLogic();
