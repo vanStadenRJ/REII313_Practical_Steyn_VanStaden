@@ -64,8 +64,6 @@ public:
     bool isNot;
     QGraphicsTextItem * gateDesc;
 
-    QJsonArray toJson();
-
     void updateMWLogic(int x, int y);
 
 private:

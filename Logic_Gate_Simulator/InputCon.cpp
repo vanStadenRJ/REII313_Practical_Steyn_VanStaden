@@ -1,5 +1,6 @@
 #include "InputCon.h"
 #include "Simulation.h"
+
 extern Simulation * simulation;
 
 InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)

@@ -3,7 +3,6 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
-#include <QGraphicsItem>
 #include <QPixmap>
 #include <QCursor>
 
@@ -18,11 +17,9 @@ public:
 
     // Public Attributes
     int Icon;
-    QPixmap viewPix;
-    bool isNot;
 
 private:
-    // Private Methods
+    // Private Attributes
     QCursor cur;
 };
 

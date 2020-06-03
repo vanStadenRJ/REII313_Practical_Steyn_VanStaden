@@ -5,57 +5,58 @@
 #include <QDialogButtonBox>
 #include <QFormLayout>
 
-
 InputBox::InputBox(QWidget *parent) : QDialog(parent)
 {
+    // Initialize Layout of InputBox
     QFormLayout *lytMain = new QFormLayout(this);
 
+    // SpinBox to input time LOW
     QLabel *lblLow = new QLabel(QString("Time Low (ms):"), this);
     QSpinBox * sLow = new QSpinBox(this);
-    sLow->setRange(100, 10000);
+    sLow->setRange(10, 10000);
+    sLow->setValue(500);            // Set Default Low value of 500ms
     lytMain->addRow(lblLow, sLow);
-    fields << sLow;
+    this->val_field << sLow;
 
     QLabel *lblHigh = new QLabel(QString("Time High (ms):"), this);
     QSpinBox * sHigh = new QSpinBox(this);
-    sHigh->setRange(100, 10000);
+    sHigh->setRange(10, 10000);
+    sHigh->setValue(1000);          // Set Default High value of 1000ms
     lytMain->addRow(lblHigh, sHigh);
-    fields << sHigh;
+    this->val_field << sHigh;
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox
-            ( QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
-              Qt::Horizontal, this );
-    lytMain->addWidget(buttonBox);
-
-    bool conn = connect(buttonBox, &QDialogButtonBox::accepted,
-                   this, &InputBox::accept);
+    // Add Buttons to InputDialog
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    lytMain->addWidget(buttons);
+    bool conn = connect(buttons, &QDialogButtonBox::accepted, this, &InputBox::accept);
     Q_ASSERT(conn);
-    conn = connect(buttonBox, &QDialogButtonBox::rejected,
-                   this, &InputBox::reject);
+    conn = connect(buttons, &QDialogButtonBox::rejected, this, &InputBox::reject);
     Q_ASSERT(conn);
 
-    setLayout(lytMain);
-
-
+    // Set Layout of custom InputBox
+    this->setLayout(lytMain);
 }
 
-QList<int> InputBox::getStrings(QWidget *parent, bool *ok)
+QList<int> InputBox::getValues(QWidget *parent, bool *ok)
 {
+    // Get values from QInputBox
     InputBox *dialog = new InputBox(parent);
-
     QList<int> list;
 
-    const int ret = dialog->exec();
-    if (ok)
-        *ok = !!ret;
-
-    if (ret) {
-        foreach (auto field, dialog->fields) {
+    int ex_d = dialog->exec();
+    if(ok)
+    {
+        *ok = !!ex_d;
+    }
+    if(ex_d)
+    {
+        foreach (auto field, dialog->val_field)
+        {
             list << field->value();
         }
     }
 
+    // When values gathered, Dialog can be deleted.
     dialog->deleteLater();
-
     return list;
 }
