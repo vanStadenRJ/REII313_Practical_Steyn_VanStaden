@@ -84,7 +84,7 @@ void MainWindow::on_actionOpen_triggered()
                 {
                     QJsonObject obj_Gates;
                     obj_Gates = arr_Gates.at(i).toObject();
-                    Gate * gate = new Gate(i+1, obj_Gates["Type"].toInt(), obj_Gates["nr_Inputs"].toInt());
+                    Gate * gate = new Gate(obj_Gates["Nr"].toInt(), obj_Gates["Type"].toInt(), obj_Gates["nr_Inputs"].toInt());
                     simulation->nr_Gates++;
                     gate->setPos(obj_Gates["x_Pos"].toDouble(), obj_Gates["y_Pos"].toDouble());
                     simulation->scene->addItem(gate);
@@ -188,6 +188,7 @@ void MainWindow::on_actionSave_triggered()
             // Each gate treated as own object
             QJsonObject obj_Gates;
             obj_Gates["Type"] = simulation->list_Gates.at(i)->gateType;
+            obj_Gates["Nr"] = simulation->list_Gates.at(i)->gate_Nr;
             obj_Gates["x_Pos"] = simulation->list_Gates.at(i)->x();
             obj_Gates["y_Pos"] = simulation->list_Gates.at(i)->y();
             obj_Gates["Logic"] = simulation->list_Gates.at(i)->LogicalOutput;
