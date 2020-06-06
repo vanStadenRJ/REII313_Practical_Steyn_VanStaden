@@ -12,11 +12,15 @@ class InputBox : public QDialog
 {
     Q_OBJECT
 public:
-    explicit InputBox(QWidget *parent = nullptr);
-    static QList<int> getStrings(QWidget *parent, bool *ok = nullptr);
+    // Constructors
+    InputBox(QWidget *parent = nullptr);
+
+    // Public Methods
+    static QList<int> getValues(QWidget *parent, bool *ok = nullptr);
 
 private:
-    QList<QSpinBox*> fields;
+    // Private Attributes
+    QList<QSpinBox*> val_field;                                                // QList of fields; 1 for high time; 1 for low time
 };
 
 #endif // INPUTBOX_H

@@ -11,11 +11,11 @@
 Simulation::Simulation(QWidget * parent)
 {
     // Set scene and show on view
-    this->setSceneRect(0,0,1600,900);
+    this->setSceneRect(0,0,1800,950);
     scene = new QGraphicsScene(this);
-    scene->setSceneRect(0,0,1600,900);
+    scene->setSceneRect(0,0,1800,950);
     this->setScene(scene);
-    this->setFixedSize(1600,900);
+    this->setFixedSize(1800,950);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -385,14 +385,6 @@ void Simulation::updateWireLogic()
             emit changeWireColor();
         }
     }
-}
-
-QJsonArray Simulation::toJson()
-{
-    QJsonArray array;
-    for (auto & user : list_Gates)
-          array.append(user->toJson());
-    return array;
 }
 
 void Simulation::updateMWLogic(int x, int y)
