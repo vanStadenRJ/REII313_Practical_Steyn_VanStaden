@@ -22,17 +22,10 @@ public:
     // Public Methods
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-    void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     // Public Attributes
-    QPointF wire_Pos;
     QPointF centerPoint;
-
     int parent_Gate;
-    bool connected;
-    bool test_src;
-    bool test;    
-
 };
 
 #endif // OUTPUTCON_H

@@ -242,6 +242,7 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         line.setPoints(move_wire->source, move_wire->dest);
         this->move_wire->setLine(line);
         this->scene->update();
+        QGraphicsView::mousePressEvent(event);
     }
 
     // If user has clicked on new gate icon or wants to move existing gate, then gate needs to be placed outside button pannel
@@ -250,15 +251,16 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
         if(this->mapFromGlobal(QCursor::pos()).x() < 300)
         {
             this->insidePanel = true;
+            QGraphicsView::mousePressEvent(event);
         }
         else
         {
-            this->insidePanel = false;            
+            this->insidePanel = false;
+            QGraphicsView::mousePressEvent(event);
         }
     }
 
     // Enable default QGraphicsView mousePressEvent()
-    QGraphicsView::mousePressEvent(event);
     QGraphicsView::mouseMoveEvent(event);    
 }
 
@@ -333,6 +335,8 @@ void Simulation::printIcons()
     int plus = 0;
     for(int i = 0; i <= 10; i++)
     {
+        andIcon = new BuildMode(i);
+
         // Add Icon Descriptions to scene
         QGraphicsTextItem * gateDesc = new QGraphicsTextItem();
         QFont seriFont("Times", 8, QFont::Bold);
@@ -342,51 +346,61 @@ void Simulation::printIcons()
         {
         case 0:
             gateDesc->setPlainText("CLOCK Input");
+            andIcon->setToolTip("Provides CLOCKED logical input that can be set");
             break;
 
         case 1:
             gateDesc->setPlainText("LOW Logic");
+            andIcon->setToolTip("Provides LOW logical input");
             break;
 
         case 2:
             gateDesc->setPlainText("HIGH Logic");
+            andIcon->setToolTip("Provides HIGH logical input");
             break;
 
         case 3:
             gateDesc->setPlainText("AND Gate");
+            andIcon->setToolTip("Add a new AND Logic Gate with up to 5 inputs");
             break;
 
         case 4:
             gateDesc->setPlainText("NAND Gate");
+            andIcon->setToolTip("Add a new NAND Logic Gate with up to 5 inputs");
             break;
 
         case 5:
             gateDesc->setPlainText("OR Gate");
+            andIcon->setToolTip("Add a new OR Logic Gate with up to 5 inputs");
             break;
 
         case 6:
             gateDesc->setPlainText("NOR Gate");
+            andIcon->setToolTip("Add a new NOR Logic Gate with up to 5 inputs");
             break;
 
         case 7:
             gateDesc->setPlainText("XOR Gate");
+            andIcon->setToolTip("Add a new XOR Logic Gate with up to 5 inputs");
             break;
 
         case 8:
             gateDesc->setPlainText("XNOR Gate");
+            andIcon->setToolTip("Add a new XNOR Logic Gate with up to 5 inputs");
             break;
 
         case 9:
             gateDesc->setPlainText("NOT Gate");
+            andIcon->setToolTip("Add a new NOT Logic Gate with up to 5 inputs");
             break;
 
         case 10:
             gateDesc->setPlainText("Output Gate");
+            andIcon->setToolTip("Add an OUTPUT gate that will provide constant updated output of your schematic");
             break;
         }
 
-        // Create new Icon and ad to scene
-        andIcon = new BuildMode(i);
+        // Create new Icon and add to scene
         int tet = 100;
         if (i > 2)
         {

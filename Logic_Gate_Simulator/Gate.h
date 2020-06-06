@@ -30,10 +30,8 @@ public:
     // Public Attributes
     QGraphicsDropShadowEffect * effect;     // Shadow Effect when gate is pressed
     QList<InputCon *> list_Inputs;          // List of Inputs connected to gate
-    QList<OutputCon *> list_Outputs;        // List of Outputs connected to gate
     QPointF pos_Gate;                       // QPointF position of gate
     QPointF change;                         // Change in coordinates upon moving gate
-    QPixmap rightClick;                     // Pixmap of cursor upon moving gate
     QTimer * highTimer;                     // Timer to aid high time in clocked input gate
     QTimer * lowTimer;                      // Timer to aid low time in clocked input gate
     int gateType;                           // Normal gate, Input or Output gate
@@ -47,6 +45,7 @@ public:
 
 private:
     // Private Attributes
+    QPixmap rightClick;                     // Pixmap of cursor upon moving gate
     QGraphicsRectItem *input_rect;          // Input rect connecting nodes and gates
     QGraphicsRectItem *rect;                // Output rect connecting nodes and gates
     QGraphicsEllipseItem * circle;          // Not circle visual

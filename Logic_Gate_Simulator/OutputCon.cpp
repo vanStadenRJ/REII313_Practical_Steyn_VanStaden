@@ -15,33 +15,20 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     QPen pen;
     pen.setWidth(2);
     this->setPen(pen);
+    this->setBrush(QBrush(QColor(255,255,255)));
 
     //ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
-    connected = false;
-    test = false;
-    test_src = false;
-
-    QBrush brush;
-    brush.setColor(QColor(255,255,255));
-    brush.setStyle(Qt::SolidPattern);
-    this->setBrush(brush);
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    //this->setToolTip(QString("Yeet"));
-    if((connected == false && simulation->isBuildMode == false && simulation->isMove == false) && (simulation->move_wire == nullptr))
+    if(simulation->isBuildMode == false && simulation->isMove == false && simulation->move_wire == nullptr)
     {
         //Change color
-        this -> setRect(0,0,13,13);
+        this -> setRect(0,0,13,13);        
+        this->setBrush(QBrush(QColor(0,0,0)));
 
-        QBrush brush;
-        brush.setColor(Qt::black);
-        brush.setStyle(Qt::SolidPattern);
-        this->setBrush(brush);
-
-        test = true;
         simulation->setCursor(Qt::CrossCursor);
         simulation->wireMode = true;
         if(!(simulation->move_wire == nullptr))
@@ -58,31 +45,11 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this->setToolTip(QString(""));
     this -> setRect(0,0,12,12);
-    if(connected == false && simulation->isBuildMode == false && simulation->isMove == false)
+    if(simulation->isBuildMode == false && simulation->isMove == false)
     {
-        if(test_src == false)
-        {
-            test = false;
-            //this->setBrush(Qt::NoBrush);
-            QBrush brush;
-            brush.setColor(QColor(255,255,255));
-            brush.setStyle(Qt::SolidPattern);
-            this->setBrush(brush);
-        }
         simulation->setCursor(Qt::ArrowCursor);
         simulation->wireMode = false;
     }
-    QBrush brush;
-    brush.setColor(QColor(255,255,255));
-    brush.setStyle(Qt::SolidPattern);
-    this->setBrush(brush);
-}
-
-void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    test = true;
-    test_src = true;
-    wire_Pos = simulation->mapFromGlobal(QCursor::pos());;
+    this->setBrush(QBrush(QColor(255,255,255)));
 }

@@ -127,7 +127,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     {
         out->hide();
     }
-    this->list_Outputs << out;
 }
 
 // MousePressEvent to handle effects and movement of gates
