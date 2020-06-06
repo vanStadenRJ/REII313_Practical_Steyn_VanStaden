@@ -4,26 +4,32 @@
 extern Simulation * simulation;
 
 InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
-{    
+{
+    // Set z-value to ensure wire placed underneath node
+    this->setZValue(2);
+
+    // Set width of node outline
     QPen pen;
     pen.setWidth(2);
     this->setPen(pen);
-    posGate = 0;
-    Logic = 0;
-    setRect(0,0,12,12);
+
+    // White fill look of the node
     QBrush brush;
     brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
 
+    // Node is a circle with radius = 6
+    this->setRect(0,0,12,12);
+
+    // Initialize 0 logic to the node, if not connected, node has 0 logic
+    this->posGate = 0;
+    this->Logic = 0;
+    this->connected = false;
+    this->test = false;
+
     // ALLOW RESPONDING TO HOVER EVENTS
     this->setAcceptHoverEvents(true);
-
-    // Initialize Variables
-    connected = false;
-    test = false;
-    Logic = 0;
-
 
     // Connect Signals and Slots
     QObject::connect(simulation, SIGNAL(Input_Show()), this, SLOT(OutputToInput()));
@@ -34,59 +40,44 @@ InputCon::InputCon(QGraphicsItem *parent): QGraphicsEllipseItem (parent)
 
 void InputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    qDebug() << this->parent_Gate << "(" << this->posGate << ")";
-
-    if((connected == false && simulation->isBuildMode == false  && simulation->isMove == false) && !(simulation->move_wire == nullptr))
+    // Only accept hoverEnterEvents if user is busy drawing wire, and node is disconnected, and not connecting output to same gates input
+    if((this->connected == false) && !(simulation->move_wire == nullptr) && !(simulation->src_Gate == this->parent_Gate))
     {
-        //Change color
+        //Change color and appearance to fill node and color black
         QBrush brush;
         brush.setColor(Qt::black);
         brush.setStyle(Qt::SolidPattern);
         this->setBrush(brush);
-        test = true;
 
+        // If user clicks, then the program knows not to make node available again, node is already connected
+        this->test = true;                                  // Used in the conNode() slot
+
+        // More visual clues that user can click on node
         simulation->setCursor(Qt::CrossCursor);
+
+        // If user clicks, the program knows that the node can be connected
         simulation->wireMode = true;
-        simulation->Output = false;
-
-        if(!(simulation->move_wire == nullptr))
-        {
-            simulation->dest_Gate = this->parent_Gate;
-            simulation->dest_NodeNr = this->posGate;
-        }
-        else
-        {
-            simulation->src_Gate = this->parent_Gate;
-            simulation->src_NodeNr = this->posGate;
-        }
+        simulation->dest_Gate = this->parent_Gate;
+        simulation->dest_NodeNr = this->posGate;
         simulation->destNode = this->centerPoint;
-
-       // qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic;
-    }
-    else
-    {
-       //qDebug() << "Gate Nr: " << this->parent_Gate << "; Node Nr: " << this->posGate << " Logig: " << Logic << " Con Gate: " << conGate;
     }
 }
 
 void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    if((connected == false && simulation->isBuildMode == false && simulation->isMove == false) && !(simulation->move_wire == nullptr))
+    // Only accept hoverLeaveEvents if user is busy drawing wire, and node is disconnected, and not connecting output to same gates input
+    if((connected == false) && !(simulation->move_wire == nullptr) && !(simulation->src_Gate == this->parent_Gate))
     {
-        test = false;
-        if(simulation->wireMode == false)
-        {
-            this->setBrush(QColor(255,255,255));
-        }
-        else
-        {
-            QBrush brush;
-            brush.setColor(Qt::darkGreen);
-            brush.setStyle(Qt::SolidPattern);
-            this->setBrush(brush);
-        }
+        // If user clicks, node is not connected
+        this->test = false;
 
+        // Change color back to green to show user node is available to be connected
+        QBrush brush;
+        brush.setColor(Qt::darkGreen);
+        brush.setStyle(Qt::SolidPattern);
+        this->setBrush(brush);
 
+        // Set variables to defualt and change cursor
         simulation->setCursor(Qt::ArrowCursor);
         simulation->wireMode = false;
         simulation->src_NodeNr = 0;
@@ -95,6 +86,7 @@ void InputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void InputCon::OutputToInput()
 {
+    // If user connects nodes, the nodes that are not connected, must be reset
     if(!(simulation->src_Gate == this->parent_Gate) && (this->connected == false))
     {
         QBrush brush;
@@ -106,6 +98,8 @@ void InputCon::OutputToInput()
 
 void InputCon::clearNode(bool gate, int g, int h)
 {
+    // Function is called when wire or gate is deleted.
+    // If node was connected, logic must be reset
     if(gate == true)
     {
         if(g == conGate && h == posGate)
@@ -128,6 +122,7 @@ void InputCon::clearNode(bool gate, int g, int h)
 
 void InputCon::getWireLogic()
 {
+    // Function called when logic of whole simulation is updated
     if(this->connected == true)
     {
         for(int i = 0; i < simulation->list_Wires.size(); i++)
@@ -141,29 +136,31 @@ void InputCon::getWireLogic()
     }
     else
     {
-        Logic = 0;
+        this->Logic = 0;
         return;
     }
 }
 
 void InputCon::conNode(int k, int h)
 {
-    qDebug() << "1";
+    // Upon connection of new wire, the node gets the logic of the wire.
     if(simulation->dest_Gate == this->parent_Gate || simulation->src_Gate == this->parent_Gate)
     {
-        qDebug() << "2";
         if(test == true)
         {
-            qDebug() << "3";
+            // Change Visual of node
             this->connected = true;
             QBrush brush;
             brush.setColor(Qt::white);
             brush.setStyle(Qt::SolidPattern);
             this->setBrush(brush);
-            //qDebug() << k;
+
+            // Set node attributes
             this->Logic = k;
             this->conGate = h;
-            test = false;
+
+            // Reset test, as when wire gets deleted, the node needs to be connected again
+            this->test = false;
         }
     }
 }

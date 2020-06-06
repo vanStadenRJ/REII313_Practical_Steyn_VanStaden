@@ -209,6 +209,10 @@ void Gate::keyPressEvent(QKeyEvent *event)
         // Update logic of all other gates
         emit simulation->updateWireLogic();
 
+        // Set effect to nullptr before deleting gate
+        this->prepareGeometryChange();
+        this->effect = nullptr;
+
         // Delete the gate
         delete this;
         return;
@@ -457,7 +461,7 @@ void Gate::xorLogic()
 
 void Gate::notLogic()
 {
-    // Toglle input logic to deliver inversed output logic
+    // Toggle input logic to deliver inversed output logic
     if(in->Logic == 0)
     {
         this->LogicalOutput = 1;

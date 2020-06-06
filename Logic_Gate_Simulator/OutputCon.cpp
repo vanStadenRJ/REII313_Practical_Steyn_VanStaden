@@ -7,8 +7,11 @@ extern Simulation * simulation;
 
 OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
 {
-    this->setRect(0,0,12,12);
+    // Set z-value to ensure wire placed underneath node
     this->setZValue(2);
+
+    // Set visual of node
+    this->setRect(0,0,12,12);    
     QPen pen;
     pen.setWidth(2);
     this->setPen(pen);
@@ -23,8 +26,6 @@ OutputCon::OutputCon(QGraphicsItem * parent): QGraphicsEllipseItem(parent)
     brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
-
-    QObject::connect(simulation, SIGNAL(Output_Show()), this, SLOT(InputToOutput()));
 }
 
 void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -40,16 +41,9 @@ void OutputCon::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
         brush.setStyle(Qt::SolidPattern);
         this->setBrush(brush);
 
-        effect = new QGraphicsDropShadowEffect();
-        effect->setEnabled(true);
-        effect->setColor(Qt::lightGray);
-        effect->setOffset(6);
-        this->setGraphicsEffect(effect);
-
         test = true;
         simulation->setCursor(Qt::CrossCursor);
         simulation->wireMode = true;
-        simulation->Output = true;
         if(!(simulation->move_wire == nullptr))
         {
             simulation->dest_Gate = this->parent_Gate;
@@ -84,8 +78,6 @@ void OutputCon::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     brush.setColor(QColor(255,255,255));
     brush.setStyle(Qt::SolidPattern);
     this->setBrush(brush);
-
-    effect->setEnabled(false);
 }
 
 void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -93,18 +85,4 @@ void OutputCon::mousePressEvent(QGraphicsSceneMouseEvent *event)
     test = true;
     test_src = true;
     wire_Pos = simulation->mapFromGlobal(QCursor::pos());;
-}
-
-void OutputCon::InputToOutput()
-{
-    if(!(simulation->src_Gate == this->parent_Gate))
-    {
-        if(this->connected == false)
-        {
-            QBrush brush;
-            brush.setColor(Qt::darkGreen);
-            brush.setStyle(Qt::SolidPattern);
-            this->setBrush(brush);
-        }
-    }
 }

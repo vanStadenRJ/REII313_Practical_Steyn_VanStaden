@@ -1,12 +1,13 @@
 #ifndef WIRE_H
 #define WIRE_H
 
-#include <QGraphicsLineItem>
-#include <QObject>
-#include <QPointF>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsLineItem>
 #include <QGraphicsEffect>
 #include <QKeyEvent>
+#include <QObject>
+#include <QPointF>
+#include <QPen>
 
 class Wire: public QObject, public QGraphicsLineItem
 {
@@ -25,7 +26,7 @@ public:
 
     QGraphicsDropShadowEffect * effect;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void keyPressEvent(QKeyEvent * event);
     bool draw;

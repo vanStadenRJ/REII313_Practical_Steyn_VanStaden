@@ -8,12 +8,11 @@
  *                      30026792
  * First Commit Date:   25/04/2020
  * Last Commit Date:    11/06/2020
- * Version:             v0.01
+ * Version:             v2.0
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <QApplication>
 #include <QMainWindow>
-#include <QLayout>
 
 #include "Simulation.h"
 #include "mainwindow.h"

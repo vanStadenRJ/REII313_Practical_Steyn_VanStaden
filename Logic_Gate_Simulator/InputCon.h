@@ -6,7 +6,6 @@
 #include <QGraphicsLineItem>
 #include <QMouseEvent>
 #include <QObject>
-#include <QDebug>
 
 class InputCon: public QObject, public QGraphicsEllipseItem
 {
@@ -20,7 +19,7 @@ public:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 
     // Public Attributes
-    QPointF centerPoint;
+    QPointF centerPoint;                        // Coordinate of center point of node to make wiring visually appealing
     int parent_Gate;                            // Gate Number of parent gate
     int posGate;                                // Position of node when gate created
     int conGate;                                // Gate that is connected to this node

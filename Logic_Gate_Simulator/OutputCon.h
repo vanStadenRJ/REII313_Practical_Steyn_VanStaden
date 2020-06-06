@@ -23,21 +23,16 @@ public:
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
-    //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     // Public Attributes
     QPointF wire_Pos;
     QPointF centerPoint;
-
-    QGraphicsDropShadowEffect * effect;
 
     int parent_Gate;
     bool connected;
     bool test_src;
     bool test;    
 
-public slots:
-    void InputToOutput();
 };
 
 #endif // OUTPUTCON_H

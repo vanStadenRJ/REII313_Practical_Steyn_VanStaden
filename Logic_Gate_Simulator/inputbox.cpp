@@ -18,6 +18,7 @@ InputBox::InputBox(QWidget *parent) : QDialog(parent)
     lytMain->addRow(lblLow, sLow);
     this->val_field << sLow;
 
+    // SpinBox to input time HIGH
     QLabel *lblHigh = new QLabel(QString("Time High (ms):"), this);
     QSpinBox * sHigh = new QSpinBox(this);
     sHigh->setRange(10, 10000);
