@@ -51,8 +51,6 @@ void MainWindow::on_actionOpen_triggered()
 
     if(reply == QMessageBox::Yes)
     {
-        // Clears gates and wires first before
-        this->clearScene();
         QString json_filter = "JSON (*.json)";
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/",
                                                               tr("Any File (*);;%1").arg(json_filter),
@@ -62,7 +60,8 @@ void MainWindow::on_actionOpen_triggered()
 
         }
         else
-        {            
+        {
+            // Clears gates and wires first before
             this->clearScene();
 
             // Load file chosen into QFile

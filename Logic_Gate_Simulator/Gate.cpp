@@ -428,30 +428,39 @@ void Gate::orLogic()
 
 void Gate::xorLogic()
 {
-    // XOR: If all input nodes have same logic, the output logic will be low
-    // XNOR: If all input nodes have same logic, the output logic will be high
-    int change = list_Inputs.at(0)->Logic;
-    bool bCheck = true;
-    for(int i = 0; i < list_Inputs.size(); i++)
+    // XOR: For 2 inputs - If all input nodes have same logic, the output logic will be low
+    // XOR: For >2 inputs - HIGH if nr of high inputs is odd
+
+    // XNOR: For 2 inputs - If all inputs have same logic, output will be high
+    // XNOR: For >2 inputs - HIGH if nr of high inputs is even
+
+    int nrHigh = 0;
+
+    for(int i = 0; i < this->list_Inputs.size(); i++)
     {
-        if(!(change == list_Inputs.at(i)->Logic))
+        if(list_Inputs.at(i)->Logic == 1)
         {
-            bCheck = false;
-            break;
+            nrHigh++;
         }
     }
-    if(bCheck == false)
+    if(this->isNot == true)
     {
-        LogicalOutput = 1;
-        if(this->isNot == true)
+        if(nrHigh % 2 == 0)
+        {
+            this->LogicalOutput = 1;
+        }
+        else
         {
             this->LogicalOutput = 0;
         }
     }
     else
     {
-        LogicalOutput = 0;
-        if(this->isNot == true)
+        if(nrHigh % 2 == 0)
+        {
+            this->LogicalOutput = 0;
+        }
+        else
         {
             this->LogicalOutput = 1;
         }
