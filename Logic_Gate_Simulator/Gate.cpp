@@ -30,6 +30,8 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     this->gateType = typeGate;
 
     // Initialize Clocked Input Gate
+    this->lowTime = 0;
+    this->highTime = 0;
     if(gateType == 0)
     {
         lowTimer = new QTimer();

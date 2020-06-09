@@ -24,6 +24,7 @@ Wire::Wire()
 
     // Item can respond to keypress event
     this->setFlag(QGraphicsItem::ItemIsFocusable);
+    this->Logic_Wire = -1;
 }
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -143,10 +144,13 @@ void Wire::colorLogic()
     }
     else
     {
-        QPen pen;
-        pen.setColor(QColor(255,255,255));
-        pen.setWidth(5);
-        pen.setCapStyle(Qt::RoundCap);
-        this->setPen(pen);
+        if(this->Logic_Wire == 0)
+        {
+            QPen pen;
+            pen.setColor(QColor(255,255,255));
+            pen.setWidth(5);
+            pen.setCapStyle(Qt::RoundCap);
+            this->setPen(pen);
+        }
     }
 }

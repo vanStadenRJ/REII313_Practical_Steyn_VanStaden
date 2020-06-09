@@ -88,6 +88,8 @@ void MainWindow::on_actionOpen_triggered()
                     gate->setPos(obj_Gates["x_Pos"].toDouble(), obj_Gates["y_Pos"].toDouble());
                     simulation->scene->addItem(gate);
                     gate->pos_Gate = gate->pos();
+                    gate->lowTime = obj_Gates["low"].toInt();
+                    gate->highTime = obj_Gates["high"].toInt();
 
                     simulation->list_Gates << gate;
                     for(int j = 0; j < simulation->list_Gates.size(); j++)
@@ -170,7 +172,7 @@ void MainWindow::on_actionSave_triggered()
     // Get filename to svae file to
     // User must input .json at the end of their filename
     QString json_filter = "JSON (*.json)";
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Open File"), "/",
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "/",
                                                           tr("Any File (*);;%1").arg(json_filter),
                                                           &json_filter, QFileDialog::DontUseNativeDialog);
 
@@ -192,6 +194,8 @@ void MainWindow::on_actionSave_triggered()
             obj_Gates["y_Pos"] = simulation->list_Gates.at(i)->y();
             obj_Gates["Logic"] = simulation->list_Gates.at(i)->LogicalOutput;
             obj_Gates["nr_Inputs"] = simulation->list_Gates.at(i)->input_size;
+            obj_Gates["low"] = simulation->list_Gates.at(i)->lowTime;
+            obj_Gates["high"] = simulation->list_Gates.at(i)->highTime;
 
             // Add object to array of gate objects
             arr_Gates << obj_Gates;
