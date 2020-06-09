@@ -8,12 +8,11 @@
  *                      30026792
  * First Commit Date:   25/04/2020
  * Last Commit Date:    11/06/2020
- * Version:             v0.01
+ * Version:             v2.0
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <QApplication>
 #include <QMainWindow>
-#include <QLayout>
 
 #include "Simulation.h"
 #include "mainwindow.h"
@@ -31,8 +30,8 @@ int main(int argc, char *argv[])
 
     //Set GraphicsView as central widget
     mw.setCentralWidget(simulation);
-    mw.setFixedSize(1600,900);
-    mw.centralWidget()->setGeometry(0,0,1600,900);
+    mw.setFixedSize(1800,885);
+    mw.centralWidget()->setGeometry(0,0,1800,885);
     mw.show();
 
     return a.exec();

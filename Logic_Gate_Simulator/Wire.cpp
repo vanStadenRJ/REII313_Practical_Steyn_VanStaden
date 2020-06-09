@@ -1,9 +1,6 @@
 #include "Wire.h"
 #include "Simulation.h"
 
-#include <QDebug>
-#include <QPen>
-
 extern Simulation * simulation;
 
 Wire::Wire()
@@ -11,13 +8,15 @@ Wire::Wire()
     // Set ZValue to 0 to enable wire to be under the input nodes
     setZValue(0);
 
+    // Set visual of wire to be moved and placed
     QPen pen;
     pen.setWidth(5);
     pen.setCapStyle(Qt::RoundCap);
     pen.setColor(Qt::magenta);
     this->setPen(pen);
 
-    effect = nullptr;
+    // Set effect to nullptr, needs to be clicked on to create new effect
+    this->effect = nullptr;
 
     // Connect Signals and Slots
     QObject::connect(simulation, SIGNAL(unWire()), this, SLOT(deleteEffect()));
@@ -25,15 +24,15 @@ Wire::Wire()
 
     // Item can respond to keypress event
     this->setFlag(QGraphicsItem::ItemIsFocusable);
+    this->Logic_Wire = -1;
 }
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    // Complemented each wire with visual appealing look
     QPainterPath outline;
-
     outline.moveTo(line().p1());
     outline.lineTo(line().p2());
-
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
     QPen pen1;
@@ -49,21 +48,21 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Wire connecting gate nr" << this->src_Gate <<" and gate nr" << this->dest_Gate << "(" << this->dest_NodeNr << ")";
+    // Wire needs to be selected to be able to be deleted
     this->setFocus();
     if(effect == nullptr)
     {
-        effect = new QGraphicsDropShadowEffect();
+        this->effect = new QGraphicsDropShadowEffect();
         if(event->button() == Qt::LeftButton)
         {
-            effect->setEnabled(true);
-            effect->setColor(Qt::lightGray);
-            effect->setOffset(8);
+            this->effect->setEnabled(true);
+            this->effect->setColor(Qt::lightGray);
+            this->effect->setOffset(8);
         }        
     }
     else
     {
-        effect->setEnabled(true);
+        this->effect->setEnabled(true);
     }
     this->setFocus();
     this->setGraphicsEffect(effect);
@@ -71,12 +70,14 @@ void Wire::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Wire::keyPressEvent(QKeyEvent *event)
 {
+    // Wire needs to be selected before it can be removed and deleted
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
     {
         simulation->nr_Wires = simulation->nr_Wires - 1;
         bool bFound = false;
         int i = 0;
 
+        // Loop until specific wire found in list, and then remove from list
         while(bFound == false)
         {
             //int n = simulation->list_Gates.at(i)->list_Inputs.size();
@@ -88,13 +89,8 @@ void Wire::keyPressEvent(QKeyEvent *event)
                     {
                         bFound = true;
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->connected = false;
-                        QBrush brush;
-
-                        //emit simulation->clear_Node();
-                        simulation->list_Gates.at(i)->list_Inputs.at(j)->setBrush(brush);
+                        simulation->list_Gates.at(i)->list_Inputs.at(j)->setBrush(QBrush(QColor(255,255,255)));
                         simulation->list_Gates.at(i)->list_Inputs.at(j)->Logic = 0;
-                        //delete this;
-                        //return;
                     }
                 }
             }
@@ -107,13 +103,18 @@ void Wire::keyPressEvent(QKeyEvent *event)
             if(simulation->list_Wires.at(v)->source == this->source && simulation->list_Wires.at(v)->dest == this->dest)
             {
                 simulation->list_Wires.takeAt(v);
-                //qDebug() << "Amount of wires: " << simulation->list_Wires.size();
                 break;
             }
         }
 
+        // Update Logic of whole schematic
         simulation->updateWireLogic();
 
+        // Set effect to nullptr before wire deleted
+        this->prepareGeometryChange();
+        this->effect = nullptr;
+
+        // Delete wire
         delete this;
         return;
     }
@@ -121,15 +122,18 @@ void Wire::keyPressEvent(QKeyEvent *event)
 
 void Wire::deleteEffect()
 {
+    // Disable effect if user clicks anywhere else after clicked on wire
+    this->prepareGeometryChange();
     if (!(effect == nullptr))
     {
         effect->setEnabled(false);
-        //this->clearFocus();
     }
 }
 
 void Wire::colorLogic()
 {
+    // If wire has high(1) logic: Color = blue
+    // If wire has low(0) logic: Color = white
     if(this->Logic_Wire == 1)
     {
         QPen pen;
@@ -140,10 +144,13 @@ void Wire::colorLogic()
     }
     else
     {
-        QPen pen;
-        pen.setColor(QColor(255,255,255));
-        pen.setWidth(5);
-        pen.setCapStyle(Qt::RoundCap);
-        this->setPen(pen);
+        if(this->Logic_Wire == 0)
+        {
+            QPen pen;
+            pen.setColor(QColor(255,255,255));
+            pen.setWidth(5);
+            pen.setCapStyle(Qt::RoundCap);
+            this->setPen(pen);
+        }
     }
 }

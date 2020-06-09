@@ -1,162 +1,67 @@
 #include "Simulation.h"
 #include "OutputCon.h"
-#include "Wire.h"
 #include "inputbox.h"
+#include "Wire.h"
 
 #include <QMainWindow>
 #include <QCursor>
-#include <QDebug>
 #include <QList>
 
 Simulation::Simulation(QWidget * parent)
 {
     // Set scene and show on view
-    this->setSceneRect(0,0,1600,900);
-    scene = new QGraphicsScene(this);
-    scene->setSceneRect(0,0,1600,900);
+    this->setSceneRect(0,0,1800,950);
+    this->scene = new QGraphicsScene(this);
+    this->scene->setSceneRect(0,0,1800,950);
     this->setScene(scene);
-    this->setFixedSize(1600,900);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setFixedSize(1800,950);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // View tracks mouse position
+    this->setMouseTracking(true);
 
     // Initialize Panel where all logic gates to be put
     panel = new ButtonPanel();    
     scene->addItem(panel);
 
+    // Set Background to gridded lines
     this->setBackgroundBrush(QBrush(QImage(":/images/pp.jpg")));
 
-    isBuildMode = false;
-    isMove = false;
-    wireMode = false;
-    move_wire = nullptr;    
-    canMove = false;
-    Output = true;
-    nr_Gates = 0;
-    nr_Wires = 0;
+    // Initialize global variables
+    this->isBuildMode = false;
+    this->isMove = false;
+    this->wireMode = false;
+    this->move_wire = nullptr;
+    this->canMove = false;
+    this->nr_Gates = 0;
+    this->nr_Wires = 0;
 
-    this->setMouseTracking(true);
-    int y_coordinate = 0;
-    int plus = 0;
-    for(int i = 0; i <= 10; i++)
-    {
-        gateDesc = new QGraphicsTextItem();
-        QFont seriFont("Times", 8, QFont::Bold);
-        gateDesc->setDefaultTextColor(QColor(0,0,0));
-        gateDesc->setFont(seriFont);
-        switch(i)
-        {
-        case 0:
-            this->gateDesc->setPlainText("CLOCK Input");
-            break;
-
-        case 1:
-            this->gateDesc->setPlainText("LOW Logic");
-            break;
-
-        case 2:
-            this->gateDesc->setPlainText("HIGH Logic");
-            break;
-
-        case 3:
-            this->gateDesc->setPlainText("AND Gate");
-            break;
-
-        case 4:
-            this->gateDesc->setPlainText("NAND Gate");
-            break;
-
-        case 5:
-            this->gateDesc->setPlainText("OR Gate");
-            break;
-
-        case 6:
-            this->gateDesc->setPlainText("NOR Gate");
-            break;
-
-        case 7:
-            this->gateDesc->setPlainText("XOR Gate");
-            break;
-
-        case 8:
-            this->gateDesc->setPlainText("XNOR Gate");
-            break;
-
-        case 9:
-            this->gateDesc->setPlainText("NOT Gate");
-            break;
-
-        case 10:
-            this->gateDesc->setPlainText("Output Gate");
-            break;
-        }
-
-        andIcon = new BuildMode(i);
-
-        int tet = 100;
-
-        if (i > 2)
-        {
-            if(i == 10)
-            {
-                plus = 200;
-            }
-            else
-            {
-                plus = 150;
-            }
-        }
-        if(i == 0)
-        {
-            andIcon->setY(45 + plus + tet);
-        }
-        else
-        {
-            andIcon->setY(45 + y_coordinate*tet + plus);
-        }
-
-
-        if(i%2 == 0 && !(i == 10) && !(i == 0))
-        {
-            andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
-            gateDesc->setPos(309 - 80 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
-            y_coordinate++;
-
-        }
-        else
-        {
-            if(i == 9)
-            {
-                y_coordinate++;
-            }
-            andIcon->setX(9 + 75 - andIcon->pixmap().width()/2);
-            gateDesc->setPos(9 + 75 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
-
-            //if()
-        }
-
-        scene->addItem(andIcon);
-        scene->addItem(gateDesc);
-    }
-
-
+    // Print Icons and Labes on ButtonPanel
+    this->printIcons();
 }
 
 void Simulation::mousePressEvent(QMouseEvent *event)
 {
+    // Unclick gate to remove graphicseffect
     if(!(gate == nullptr))
     {
         emit un_Select();
     }
 
+    // Unselect wire to remove graphicseffect
     if(!(wire == nullptr))
     {
         emit unWire();
     }
 
+    // Executes when user has selected to place a new gate
     if(isBuildMode)
     {
+        // Ensures that user cannot place gate inside ButtonPanel.
         if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
+            // Initialize and create newly placed gates at position of cursor
             if(!(this->typeIcon == 1) && !(this->typeIcon == 2) && !(this->typeIcon == 0))
             {
                 if(this->typeIcon == 9 || this->typeIcon == 10)
@@ -165,6 +70,7 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                 }
                 else
                 {
+                    // Get mount of variable inputs to gate
                     bool ok;
                     int input_size = QInputDialog::getInt(this, "Logic Gate Input Selector", "Input Count", 2, 2, 5, 1, &ok);
                     if(ok == true)
@@ -176,100 +82,98 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             else
             {
                 this->initGates(0, event->x(), event->y());
-            }
-            isBuildMode = false;
-            this->setCursor(QCursor(Qt::ArrowCursor));
+            }            
         }
-        else
-        {
-            this->setCursor(QCursor(Qt::ArrowCursor));
-            isBuildMode = false;            
-        }
-        //return;
+
+        // Deactivate BuildMode
+        this->isBuildMode = false;
+        this->setCursor(QCursor(Qt::ArrowCursor));
     }
 
+    // If gate has been right clicked to be moved
     if(isMove)
     {
-        for(int i = 0; i < list_Gates.size(); i++)
+        if((event->button() == Qt::LeftButton) && (insidePanel == false))
         {
-            if(list_Gates.at(i)->gate_Nr == this->moveGate)
+            for(int i = 0; i < list_Gates.size(); i++)
             {
-                list_Gates.at(i)->effect->setEnabled(false);
-                list_Gates.at(i)->setPos(event->x()-list_Gates.at(i)->pixmap()
-                                         .width()/2, event->y() - list_Gates.at(i)
-                                         ->pixmap().height()/2);
-                QPointF dif;
-                dif = list_Gates.at(i)->pos() - list_Gates.at(i)->pos_Gate;
-                list_Gates.at(i)->pos_Gate = list_Gates.at(i)->pos();
-                QLineF line;
-                for(int j = 0; j < list_Wires.size(); j++)
+                if(list_Gates.at(i)->gate_Nr == this->moveGate)
                 {
-                    if(list_Wires.at(j)->src_Gate == this->moveGate)
+                    list_Gates.at(i)->effect->setEnabled(false);
+                    list_Gates.at(i)->setPos(event->x()-list_Gates.at(i)->pixmap()
+                                             .width()/2, event->y() - list_Gates.at(i)
+                                             ->pixmap().height()/2);
+
+                    // Calculate difference in position to be added to position of gate
+                    QPointF dif;
+                    dif = list_Gates.at(i)->pos() - list_Gates.at(i)->pos_Gate;
+                    list_Gates.at(i)->pos_Gate = list_Gates.at(i)->pos();
+                    QLineF line;
+
+                    // For each connected wire, setLine with new coordinates
+                    for(int j = 0; j < list_Wires.size(); j++)
                     {
-                        list_Wires.at(j)->source = list_Wires.at(j)->source + dif;
-                        line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
-                        list_Wires.at(j)->setLine(line);
-                    }
-                    else
-                    {
-                        if(list_Wires.at(j)->dest_Gate == this->moveGate)
+                        if(list_Wires.at(j)->src_Gate == this->moveGate)
                         {
-                            list_Wires.at(j)->dest = list_Wires.at(j)->dest + dif;
+                            list_Wires.at(j)->source = list_Wires.at(j)->source + dif;
                             line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
                             list_Wires.at(j)->setLine(line);
                         }
+                        else
+                        {
+                            if(list_Wires.at(j)->dest_Gate == this->moveGate)
+                            {
+                                list_Wires.at(j)->dest = list_Wires.at(j)->dest + dif;
+                                line.setPoints(list_Wires.at(j)->source, list_Wires.at(j)->dest);
+                                list_Wires.at(j)->setLine(line);
+                            }
+                        }
                     }
                 }
-                this->setCursor(Qt::ArrowCursor);
-                isMove = false;
             }
         }
-        //return;
+
+        // Deactivate MoveMode
+        this->setCursor(Qt::ArrowCursor);
+        this->isMove = false;
     }
 
     if(wireMode)
     {
+        // If clicked to start wire: clicked on output node
         if(move_wire == nullptr)
         {
-            move_wire = new Wire();
-            move_wire->source = this->sourceNode;
+            // Create a new wire to be tracked upon mousemove event
+            this->move_wire = new Wire();
+            this->move_wire->source = this->sourceNode;
 
-            scene->addItem(move_wire);
-            canMove = true;
+            // Add move wire to scene
+            this->scene->addItem(move_wire);
+            this->canMove = true;
 
-            if(this->Output == true)
-            {
-                emit Input_Show();
-            }
-            else
-            {
-                emit Output_Show();
-            }
-            emit clicked();
+            // Show nodes that are available to be connected
+            emit Input_Show();
         }
         else
         {
+            // If clicked on Input node, meaning wire placed at destination
             if(event->button() == Qt::LeftButton)
             {
-
-                //QGraphicsView::mousePressEvent(event);
-                wire = new Wire();
-
-
-                wire->source = move_wire->source;
-                wire->dest = move_wire->dest;
-                wire->dest = this->destNode;
-                wire->src_Gate = this->src_Gate;
-                wire->dest_Gate = this->dest_Gate;
-                wire->src_NodeNr = this->src_NodeNr;
-                wire->dest_NodeNr = this->dest_NodeNr;
+                this->wire = new Wire();
+                this->wire->source = move_wire->source;
+                this->wire->dest = move_wire->dest;
+                this->wire->dest = this->destNode;
+                this->wire->src_Gate = this->src_Gate;
+                this->wire->dest_Gate = this->dest_Gate;
+                this->wire->src_NodeNr = this->src_NodeNr;
+                this->wire->dest_NodeNr = this->dest_NodeNr;
 
                 QLineF line;
                 line.setPoints(wire->source, wire->dest);
-                wire->setLine(line);
-                scene->addItem(wire);
-                list_Wires << wire;
-                nr_Wires++;
+                this->wire->setLine(line);
+                this->scene->addItem(wire);
+                this->list_Wires << wire;
+                this->nr_Wires++;
                 this->setCursor(Qt::ArrowCursor);
 
                 for(int g = 0; g < list_Gates.size(); g++)
@@ -278,14 +182,14 @@ void Simulation::mousePressEvent(QMouseEvent *event)
                     {
                         if(list_Gates.at(g)->gateType == 0)
                         {
-                            list_Gates.at(g)->lowTimer->stop();
-                            list_Gates.at(g)->highTimer->stop();
-                            list_Gates.at(g)->LogicalOutput = 0;
-                            list_Gates.at(g)->lowTimer->start(list_Gates.at(g)->lowTime);
+                            this->list_Gates.at(g)->lowTimer->stop();
+                            this->list_Gates.at(g)->highTimer->stop();
+                            this->list_Gates.at(g)->LogicalOutput = 0;
+                            this->list_Gates.at(g)->lowTimer->start(list_Gates.at(g)->lowTime);
                         }
                         else
                         {
-                            wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
+                            this->wire->Logic_Wire = list_Gates.at(g)->LogicalOutput;
                                                     }
                         this->updateMWLogic(wire->Logic_Wire, wire->src_Gate);
                         break;
@@ -296,45 +200,53 @@ void Simulation::mousePressEvent(QMouseEvent *event)
             else
             {
                 emit clear_Node(false, 0, 0);
+                this->setCursor(Qt::ArrowCursor);
             }
-            canMove = false;
-            scene->removeItem(move_wire);
-            move_wire = nullptr;
-            delete move_wire;           
-            wireMode = false;
+
+            // Reset Attributes
+            this->canMove = false;
+            this->scene->removeItem(move_wire);
+            this->move_wire = nullptr;
+            this->wireMode = false;
+
+            // Delete temporary wire
+            delete move_wire;
         }
-        //return;
     }
     else
     {
-        //QGraphicsView::mousePressEvent(event);
+        // If user busy creating new wire, but did not place wire at correct location
         if (!(move_wire == nullptr))
         {
-            canMove = false;
-            scene->removeItem(move_wire);
-            move_wire = nullptr;
+            // Reset Attributes
+            this->canMove = false;
+            this->scene->removeItem(move_wire);
+            this->move_wire = nullptr;
             emit clear_Node(false, 0, 0);
-
             delete move_wire;
-            wireMode = false;
+            this->wireMode = false;
         }
     }
+
+    // Ensures that GraphicsView defualt event called to ensure user can continue pressing and moving
     QGraphicsView::mousePressEvent(event);
 }
 
 void Simulation::mouseMoveEvent(QMouseEvent *event)
 {
+    // If wire is busy being drawn and user moves the mouse
     if(canMove == true)
     {        
-        move_wire->dest = this->mapFromGlobal(QCursor::pos());
+        this->move_wire->dest = this->mapFromGlobal(QCursor::pos());
         QLineF line;
         line.setPoints(move_wire->source, move_wire->dest);
-        move_wire->setLine(line);
-        scene->update();
+        this->move_wire->setLine(line);
+        this->scene->update();
         QGraphicsView::mousePressEvent(event);
     }
 
-    if(isBuildMode)
+    // If user has clicked on new gate icon or wants to move existing gate, then gate needs to be placed outside button pannel
+    if(isBuildMode || isMove)
     {
         if(this->mapFromGlobal(QCursor::pos()).x() < 300)
         {
@@ -349,12 +261,13 @@ void Simulation::mouseMoveEvent(QMouseEvent *event)
     }
 
     // Enable default QGraphicsView mousePressEvent()
-    QGraphicsView::mouseMoveEvent(event);
+    QGraphicsView::mouseMoveEvent(event);    
 }
 
 void Simulation::updateWireLogic()
 {    
     // Loop 2 times as to ensure all logic updated
+    // Reason being, wires created after other wires, also needs to update if logic of previous wires changed.
     for(int t = 0; t <= 1; t++)
     {
         // Update logic of each wire
@@ -364,9 +277,9 @@ void Simulation::updateWireLogic()
             {
                 if(list_Gates.at(b)->gate_Nr == list_Wires.at(v)->src_Gate)
                 {
-                    list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
+                    this->list_Wires.at(v)->Logic_Wire = list_Gates.at(b)->LogicalOutput;
                     emit changeWireColor();
-                    list_Wires.at(v)->colorLogic();
+                    this->list_Wires.at(v)->colorLogic();
                     emit changeInputLogic();
                     emit changeGateLogic();
                 }
@@ -387,31 +300,147 @@ void Simulation::updateWireLogic()
     }
 }
 
-QJsonArray Simulation::toJson()
-{
-    QJsonArray array;
-    for (auto & user : list_Gates)
-          array.append(user->toJson());
-    return array;
-}
 
 void Simulation::updateMWLogic(int x, int y)
 {
+    // Updates Gate Input Nodes Logic
     emit connected_Node(x,y);
+
+    // Updates Logic of Wires
     this->updateWireLogic();
 }
 
 void Simulation::initGates(int nrIn, int x, int y)
 {
+    // Initialize new gate
     this->nr_Gates = this->nr_Gates + 1;
-    gate = new Gate(this->nr_Gates, this->typeIcon, nrIn);
-    scene->addItem(gate);
-    gate->setPos(x-gate->pixmap().width()/2, y -
+    this->gate = new Gate(this->nr_Gates, this->typeIcon, nrIn);
+    this->scene->addItem(gate);
+    this->gate->setPos(x-gate->pixmap().width()/2, y -
                  gate->pixmap().height()/2);
-    gate->pos_Gate = gate->pos();
-    list_Gates << gate;
+    this->gate->pos_Gate = gate->pos();
+
+    // Add gate to list of gates
+    this->list_Gates << gate;
     for(int j = 0; j < list_Gates.size(); j++)
     {
-        list_Gates.at(j)->setCenterPos();
+        this->list_Gates.at(j)->setCenterPos();
+    }
+}
+
+void Simulation::printIcons()
+{
+    // Display all icons and descriptions to ButtonPanel
+    int y_coordinate = 0;
+    int plus = 0;
+    for(int i = 0; i <= 10; i++)
+    {
+        andIcon = new BuildMode(i);
+
+        // Add Icon Descriptions to scene
+        QGraphicsTextItem * gateDesc = new QGraphicsTextItem();
+        QFont seriFont("Times", 8, QFont::Bold);
+        gateDesc->setDefaultTextColor(QColor(0,0,0));
+        gateDesc->setFont(seriFont);
+        switch(i)
+        {
+        case 0:
+            gateDesc->setPlainText("CLOCK Input");
+            andIcon->setToolTip("Provides CLOCKED logical input that can be set");
+            break;
+
+        case 1:
+            gateDesc->setPlainText("LOW Logic");
+            andIcon->setToolTip("Provides LOW logical input");
+            break;
+
+        case 2:
+            gateDesc->setPlainText("HIGH Logic");
+            andIcon->setToolTip("Provides HIGH logical input");
+            break;
+
+        case 3:
+            gateDesc->setPlainText("AND Gate");
+            andIcon->setToolTip("Add a new AND Logic Gate with up to 5 inputs");
+            break;
+
+        case 4:
+            gateDesc->setPlainText("NAND Gate");
+            andIcon->setToolTip("Add a new NAND Logic Gate with up to 5 inputs");
+            break;
+
+        case 5:
+            gateDesc->setPlainText("OR Gate");
+            andIcon->setToolTip("Add a new OR Logic Gate with up to 5 inputs");
+            break;
+
+        case 6:
+            gateDesc->setPlainText("NOR Gate");
+            andIcon->setToolTip("Add a new NOR Logic Gate with up to 5 inputs");
+            break;
+
+        case 7:
+            gateDesc->setPlainText("XOR Gate");
+            andIcon->setToolTip("Add a new XOR Logic Gate with up to 5 inputs");
+            break;
+
+        case 8:
+            gateDesc->setPlainText("XNOR Gate");
+            andIcon->setToolTip("Add a new XNOR Logic Gate with up to 5 inputs");
+            break;
+
+        case 9:
+            gateDesc->setPlainText("NOT Gate");
+            andIcon->setToolTip("Add a new NOT Logic Gate with up to 5 inputs");
+            break;
+
+        case 10:
+            gateDesc->setPlainText("Output Gate");
+            andIcon->setToolTip("Add an OUTPUT gate that will provide constant updated output of your schematic");
+            break;
+        }
+
+        // Create new Icon and add to scene
+        int tet = 100;
+        if (i > 2)
+        {
+            if(i == 10)
+            {
+                plus = 200;
+            }
+            else
+            {
+                plus = 150;
+            }
+        }
+        if(i == 0)
+        {
+            andIcon->setY(45 + plus + tet);
+        }
+        else
+        {
+            andIcon->setY(45 + y_coordinate*tet + plus);
+        }
+
+        if(i%2 == 0 && !(i == 10) && !(i == 0))
+        {
+            andIcon->setX(309 - andIcon->pixmap().width()/2 - 80);
+            gateDesc->setPos(309 - 80 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
+            y_coordinate++;
+
+        }
+        else
+        {
+            if(i == 9)
+            {
+                y_coordinate++;
+            }
+            andIcon->setX(9 + 75 - andIcon->pixmap().width()/2);
+            gateDesc->setPos(9 + 75 - gateDesc->boundingRect().width()/2, andIcon->y()+50);
+        }
+
+        // Add Icons and descriptions to scene
+        scene->addItem(andIcon);
+        scene->addItem(gateDesc);
     }
 }

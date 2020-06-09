@@ -2,14 +2,10 @@
 #include "Simulation.h"
 #include "inputbox.h"
 
-#include <QToolTip>
 extern Simulation * simulation;
 
 Gate::Gate(int gateNr, int typeGate, int amnt)
 {
-
-    //this->setToolTip(QString("Piele Pella"));
-
     // Change z value as to ensure that gate on top of wire
     this->setZValue(1);
 
@@ -30,7 +26,12 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     QObject::connect(simulation, SIGNAL(un_Select()), this, SLOT(deleteEffect()));
     QObject::connect(simulation, SIGNAL(changeGateLogic()), this, SLOT(updateLogic()));
 
+    // Initialize type of gate
     this->gateType = typeGate;
+
+    // Initialize Clocked Input Gate
+    this->lowTime = 0;
+    this->highTime = 0;
     if(gateType == 0)
     {
         lowTimer = new QTimer();
@@ -40,11 +41,9 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         lowTime = 500;
         highTime = 1000;
         lowTimer->start(lowTime);
-        //highTimer->start(2000);
     }
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
-
     this->gate_Nr = gateNr;
     this->setPix();
     this->LogicalOutput = 0;
@@ -74,7 +73,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
             {
                 plusB = 15;
                 plus = 31;
-
             }
         }
         input_rect->setRect(x(), y(), 20 + plusB, 2);
@@ -94,11 +92,13 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         list_Inputs << in;                                          // Add input nodes to list
     }
 
+    // Draw output branch and node of the gate
     rect = new QGraphicsRectItem(this);
     rect->setRect(x(), y(), 20, 2);
     this->plusC = 0;
     if(isNot == true)
     {
+        // If gate is a NOT related gate, the circle at the end of gate must be drawn
         circle = new QGraphicsEllipseItem(this);
         circle->setRect(0,0,10,10);
         circle->setParentItem(this);
@@ -110,7 +110,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         circle->setPen(pen);
         this->plusC = circle->rect().width();
     }
-
     rect->setBrush(QColor(0,0,0));
     rect->setParentItem(this);
     rect->setX(pixmap().width() + this->plusC);
@@ -130,16 +129,11 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
     {
         out->hide();
     }
-    this->list_Outputs << out;
 }
 
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //this->prepareGeometryChange();
-    this->effect->setEnabled(true);
-    this->setFocus();
-
     // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {
@@ -151,33 +145,34 @@ void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
             simulation->moveGate = this->gate_Nr;
         }
     }
+    else
+    {
+        this->prepareGeometryChange();
+        this->effect->setEnabled(true);
+    }
     this->setCenterPos();
-
-    qDebug() << this->gate_Nr << ":" << this->LogicalOutput;
 }
 
 // KeyPressEvent as gate needs to be deleted
 void Gate::keyPressEvent(QKeyEvent *event)
 {
+    // SPACE pressed on clocked input gate lets user change time high and time low
     if(effect->isEnabled() && event->key() == Qt::Key_Space && this->gateType == 0)
     {
-        int low;
-        int high;
+        // Input Box to ask user input for time high and low
         bool ok;
-        QList<int> list = InputBox::getStrings(simulation, &ok);
+        QList<int> list = InputBox::getValues(simulation, &ok);
         if (ok)
         {
             this->lowTime = list[0];
-            //lowTimer->time
-            //lowTimer->start()
             this->highTime = list[1];
-            lowTimer->stop();
-            highTimer->stop();
-            lowTimer->start(lowTime);
+            this->lowTimer->stop();
+            this->highTimer->stop();
+            this->lowTimer->start(lowTime);
         }
     }
 
-
+    // DELETE pressed, deletes gate and connected wires
     if(effect->isEnabled() && event->key() == Qt::Key_Delete)
     {
         if(!(simulation->nr_Wires == 0))
@@ -202,7 +197,7 @@ void Gate::keyPressEvent(QKeyEvent *event)
             }
         }
 
-        // Upon Gate Delete, Remove Gate from list
+        // Upon Wires Deleted, Remove Gate from list
         for(int g = 0; g < simulation->list_Gates.size(); g++)
         {
             if(this->gate_Nr == simulation->list_Gates.at(g)->gate_Nr)
@@ -212,9 +207,14 @@ void Gate::keyPressEvent(QKeyEvent *event)
             }
         }
 
-        //Update logic of all other gates
+        // Update logic of all other gates
         emit simulation->updateWireLogic();
 
+        // Set effect to nullptr before deleting gate
+        this->prepareGeometryChange();
+        this->effect = nullptr;
+
+        // Delete the gate
         delete this;
         return;
     }
@@ -223,9 +223,8 @@ void Gate::keyPressEvent(QKeyEvent *event)
 // Delete Effect of gate to be reset
 void Gate::deleteEffect()
 {
-    //this->prepareGeometryChange();
+    this->prepareGeometryChange();
     this->effect->setEnabled(false);
-    //this->clearFocus();
 }
 
 // Update Logic of gate when new wires connected and deleted
@@ -233,99 +232,77 @@ void Gate::updateLogic()
 {
     switch(this->gateType)
     {
+    // AND-NAND Gate Logic Called
     case 3:
     case 4:
         this->andLogic();
         break;
 
+    // OR-NOR Gate Logic Called
     case 5:
     case 6:
         this->orLogic();
         break;
 
+    // XOR-XNOR Gate Logic Called
     case 7:
     case 8:
         this->xorLogic();
         break;
 
+    // NOT GATE LOGIC
     case 9:
-        if(in->Logic == 0)
-        {
-            this->LogicalOutput = 1;
-        }
-        else
-        {
-            this->LogicalOutput = 0;
-        }
+        this->notLogic();
         break;
 
+    // CHANGE PIXMAP UPON LOGIC OF OUTPUT GATE
     case 10:
-        if(in->Logic == 1)
-        {
-            this->setPixmap(QPixmap(":/images/outputSmile.png"));
-        }
-        else
-        {
-            this->setPixmap(QPixmap(":/images/outputFrown.png"));
-        }
+        this->outputLogic();
+        break;
     }
 }
 
+// SLOT called when High Timer timeout
 void Gate::updateLow()
 {
-    lowTimer->stop();
+    this->lowTimer->stop();
     this->LogicalOutput = 1;
     simulation->updateWireLogic();
-    highTimer->start(highTime);
 
+    // After low timer timeout, start high timer
+    this->highTimer->start(highTime);
 }
 
+// SLOT called when Low Timer timeout
 void Gate::updateHigh()
 {
-    highTimer->stop();
+    this->highTimer->stop();
     this->LogicalOutput = 0;
-
-
-//    if(LogicalOutput == 0)
-//    {
-//        LogicalOutput = 1;
-//        qDebug() << 1;
-//    }
-//    else
-//    {
-//        LogicalOutput = 0;
-
-//        qDebug() << 0;
-//    }
-
     simulation->updateWireLogic();
-    lowTimer->start(lowTime);
-    //timer->start(1000);
+
+    // After high timer timeout, start low timer
+    this->lowTimer->start(lowTime);
 }
 
-// Function to center gate upon moving
+// Function to center output and input nodes to better wire placement upon click
 void Gate::setCenterPos()
 {
+    // User can click anywhere inside output node, but the wire start QPointF value is the center of the node
     this->out->centerPoint = this->pos() + this->rect->pos();
     this->out->centerPoint.setX(this->out->centerPoint.x() + this->rect->rect().width() + this->out->rect().width()/2);
 
+    // User can click anywhere inside input node, but the wire destination QPointF value is the center of the node
     for(int i = 0; i < list_Inputs.size(); i++)
     {
         this->list_Inputs.at(i)->centerPoint = this->pos();
         this->list_Inputs.at(i)->centerPoint.setX(this->list_Inputs.at(i)->centerPoint.x() + this->plus - plusB
                                                   - this->rect->rect().width() - this->out->rect().width()/2);
-
         this->list_Inputs.at(i)->centerPoint.setY(this->list_Inputs.at(i)->centerPoint.y()
                                                   + (i)*rect->rect().height() + (i+1)*space);
     }
 }
 
-QJsonObject Gate::toJson() const
-{
-    return{{"Object", "GATE"}, {"Logic", this->LogicalOutput}, {"type", this->gateType},
-        {"xpos", this->x()}, {"ypos", this->y()}};
-}
-
+// Function called to set working QPixmap
 void Gate::setPix()
 {
     switch(this->gateType)
@@ -401,6 +378,7 @@ void Gate::setPix()
 // Function handling AND logic of gate
 void Gate::andLogic()
 {
+    // A Default logic is assigned, if one of the input nodes has logic 0, the logic is changed
     int def;
     int change;
     if(isNot == false)
@@ -413,12 +391,12 @@ void Gate::andLogic()
         def = 0;
         change = 1;
     }
-    LogicalOutput = def;
+    this->LogicalOutput = def;
     for(int i = 0; i < list_Inputs.size(); i++)
     {
         if(list_Inputs.at(i)->Logic == 0)
         {
-            LogicalOutput = change;
+            this->LogicalOutput = change;
             return;
         }
     }
@@ -426,6 +404,7 @@ void Gate::andLogic()
 
 void Gate::orLogic()
 {
+    // A Default logic is assigned, if one of the input nodes has logic 1, the logic is changed
     int def;
     int change;
     if(isNot == false)
@@ -438,12 +417,12 @@ void Gate::orLogic()
         def = 1;
         change = 0;
     }
-    LogicalOutput = def;
+    this->LogicalOutput = def;
     for(int i = 0; i < list_Inputs.size(); i++)
     {
-        if(list_Inputs.at(i)->Logic == 1)
+        if(this->list_Inputs.at(i)->Logic == 1)
         {
-            LogicalOutput = change;
+            this->LogicalOutput = change;
             return;
         }
     }
@@ -451,30 +430,68 @@ void Gate::orLogic()
 
 void Gate::xorLogic()
 {
-    int change = list_Inputs.at(0)->Logic;
-    bool bCheck = true;
-    for(int i = 0; i < list_Inputs.size(); i++)
+    // XOR: For 2 inputs - If all input nodes have same logic, the output logic will be low
+    // XOR: For >2 inputs - HIGH if nr of high inputs is odd
+
+    // XNOR: For 2 inputs - If all inputs have same logic, output will be high
+    // XNOR: For >2 inputs - HIGH if nr of high inputs is even
+
+    int nrHigh = 0;
+
+    for(int i = 0; i < this->list_Inputs.size(); i++)
     {
-        if(!(change == list_Inputs.at(i)->Logic))
+        if(list_Inputs.at(i)->Logic == 1)
         {
-            bCheck = false;
-            break;
+            nrHigh++;
         }
     }
-    if(bCheck == false)
+    if(this->isNot == true)
     {
-        LogicalOutput = 1;
-        if(this->isNot == true)
+        if(nrHigh % 2 == 0)
         {
-            LogicalOutput = 0;
+            this->LogicalOutput = 1;
+        }
+        else
+        {
+            this->LogicalOutput = 0;
         }
     }
     else
     {
-        LogicalOutput = 0;
-        if(this->isNot == true)
+        if(nrHigh % 2 == 0)
         {
-            LogicalOutput = 1;
+            this->LogicalOutput = 0;
         }
+        else
+        {
+            this->LogicalOutput = 1;
+        }
+    }
+}
+
+void Gate::notLogic()
+{
+    // Toggle input logic to deliver inversed output logic
+    if(in->Logic == 0)
+    {
+        this->LogicalOutput = 1;
+    }
+    else
+    {
+        this->LogicalOutput = 0;
+    }
+}
+
+void Gate::outputLogic()
+{
+    // Logic 1: Blue Smiley output
+    // Logic 0: White Frowny output
+    if(in->Logic == 1)
+    {
+        this->setPixmap(QPixmap(":/images/outputSmile.png"));
+    }
+    else
+    {
+        this->setPixmap(QPixmap(":/images/outputFrown.png"));
     }
 }
