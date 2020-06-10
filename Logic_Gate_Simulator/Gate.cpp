@@ -2,8 +2,6 @@
 #include "Simulation.h"
 #include "inputbox.h"
 
-#include <QDebug>
-
 extern Simulation * simulation;
 
 Gate::Gate(int gateNr, int typeGate, int amnt)
@@ -137,7 +135,6 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Nr of gates: " << simulation->nr_Gates << ":" << this->gate_Nr;
     // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {

@@ -1,0 +1,386 @@
+{
+    "Gates": [
+        {
+            "Logic": 1,
+            "Nr": 1,
+            "Type": 2,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 0,
+            "x_Pos": 407,
+            "y_Pos": 112
+        },
+        {
+            "Logic": 0,
+            "Nr": 2,
+            "Type": 1,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 0,
+            "x_Pos": 405,
+            "y_Pos": 194
+        },
+        {
+            "Logic": 1,
+            "Nr": 3,
+            "Type": 9,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 587,
+            "y_Pos": 236
+        },
+        {
+            "Logic": 0,
+            "Nr": 4,
+            "Type": 9,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 585,
+            "y_Pos": 44
+        },
+        {
+            "Logic": 0,
+            "Nr": 5,
+            "Type": 3,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 2,
+            "x_Pos": 778,
+            "y_Pos": 58
+        },
+        {
+            "Logic": 1,
+            "Nr": 6,
+            "Type": 3,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 2,
+            "x_Pos": 763,
+            "y_Pos": 224
+        },
+        {
+            "Logic": 1,
+            "Nr": 7,
+            "Type": 5,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 2,
+            "x_Pos": 940,
+            "y_Pos": 133
+        },
+        {
+            "Logic": 0,
+            "Nr": 8,
+            "Type": 10,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 1123,
+            "y_Pos": 133
+        },
+        {
+            "Logic": 1,
+            "Nr": 9,
+            "Type": 7,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 2,
+            "x_Pos": 1421,
+            "y_Pos": 130
+        },
+        {
+            "Logic": 0,
+            "Nr": 10,
+            "Type": 10,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 1623,
+            "y_Pos": 127
+        },
+        {
+            "Logic": 1,
+            "Nr": 11,
+            "Type": 2,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 0,
+            "x_Pos": 1293,
+            "y_Pos": 93
+        },
+        {
+            "Logic": 0,
+            "Nr": 12,
+            "Type": 1,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 0,
+            "x_Pos": 1295,
+            "y_Pos": 195
+        },
+        {
+            "Logic": 0,
+            "Nr": 13,
+            "Type": 0,
+            "high": 1000,
+            "low": 500,
+            "nr_Inputs": 0,
+            "x_Pos": 766,
+            "y_Pos": 509
+        },
+        {
+            "Logic": 1,
+            "Nr": 14,
+            "Type": 9,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 986,
+            "y_Pos": 555
+        },
+        {
+            "Logic": 0,
+            "Nr": 15,
+            "Type": 10,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 1194,
+            "y_Pos": 556
+        },
+        {
+            "Logic": 0,
+            "Nr": 16,
+            "Type": 5,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 5,
+            "x_Pos": 993,
+            "y_Pos": 465
+        },
+        {
+            "Logic": 0,
+            "Nr": 17,
+            "Type": 10,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 1,
+            "x_Pos": 1194,
+            "y_Pos": 466
+        },
+        {
+            "Logic": 0,
+            "Nr": 18,
+            "Type": 1,
+            "high": 0,
+            "low": 0,
+            "nr_Inputs": 0,
+            "x_Pos": 766,
+            "y_Pos": 437
+        }
+    ],
+    "Wires": [
+        {
+            "Dest_Gate": 4,
+            "Dest_Node": 1,
+            "Dest_X": 559,
+            "Dest_Y": 80,
+            "Src_Gate": 1,
+            "Src_Node": 7143533,
+            "Src_X": 483,
+            "Src_Y": 135
+        },
+        {
+            "Dest_Gate": 5,
+            "Dest_Node": 1,
+            "Dest_X": 752,
+            "Dest_Y": 81,
+            "Src_Gate": 4,
+            "Src_Node": 7143533,
+            "Src_X": 673,
+            "Src_Y": 80
+        },
+        {
+            "Dest_Gate": 7,
+            "Dest_Node": 1,
+            "Dest_X": 930,
+            "Dest_Y": 156,
+            "Src_Gate": 5,
+            "Src_Node": 7143533,
+            "Src_X": 872,
+            "Src_Y": 94
+        },
+        {
+            "Dest_Gate": 8,
+            "Dest_Node": 1,
+            "Dest_X": 1097,
+            "Dest_Y": 169,
+            "Src_Gate": 7,
+            "Src_Node": 0,
+            "Src_X": 1039,
+            "Src_Y": 169
+        },
+        {
+            "Dest_Gate": 7,
+            "Dest_Node": 2,
+            "Dest_X": 930,
+            "Dest_Y": 181,
+            "Src_Gate": 6,
+            "Src_Node": 0,
+            "Src_X": 857,
+            "Src_Y": 260
+        },
+        {
+            "Dest_Gate": 6,
+            "Dest_Node": 2,
+            "Dest_X": 737,
+            "Dest_Y": 272,
+            "Src_Gate": 3,
+            "Src_Node": 0,
+            "Src_X": 675,
+            "Src_Y": 272
+        },
+        {
+            "Dest_Gate": 3,
+            "Dest_Node": 1,
+            "Dest_X": 561,
+            "Dest_Y": 272,
+            "Src_Gate": 2,
+            "Src_Node": 0,
+            "Src_X": 481,
+            "Src_Y": 217
+        },
+        {
+            "Dest_Gate": 6,
+            "Dest_Node": 1,
+            "Dest_X": 737,
+            "Dest_Y": 247,
+            "Src_Gate": 1,
+            "Src_Node": 0,
+            "Src_X": 483,
+            "Src_Y": 135
+        },
+        {
+            "Dest_Gate": 5,
+            "Dest_Node": 2,
+            "Dest_X": 752,
+            "Dest_Y": 106,
+            "Src_Gate": 2,
+            "Src_Node": 0,
+            "Src_X": 481,
+            "Src_Y": 217
+        },
+        {
+            "Dest_Gate": 10,
+            "Dest_Node": 1,
+            "Dest_X": 1597,
+            "Dest_Y": 163,
+            "Src_Gate": 9,
+            "Src_Node": 0,
+            "Src_X": 1535,
+            "Src_Y": 166
+        },
+        {
+            "Dest_Gate": 9,
+            "Dest_Node": 1,
+            "Dest_X": 1411,
+            "Dest_Y": 153,
+            "Src_Gate": 11,
+            "Src_Node": 0,
+            "Src_X": 1369,
+            "Src_Y": 116
+        },
+        {
+            "Dest_Gate": 9,
+            "Dest_Node": 2,
+            "Dest_X": 1411,
+            "Dest_Y": 178,
+            "Src_Gate": 12,
+            "Src_Node": 0,
+            "Src_X": 1371,
+            "Src_Y": 218
+        },
+        {
+            "Dest_Gate": 17,
+            "Dest_Node": 1,
+            "Dest_X": 1168,
+            "Dest_Y": 502,
+            "Src_Gate": 16,
+            "Src_Node": 0,
+            "Src_X": 1092,
+            "Src_Y": 501
+        },
+        {
+            "Dest_Gate": 15,
+            "Dest_Node": 1,
+            "Dest_X": 1168,
+            "Dest_Y": 592,
+            "Src_Gate": 14,
+            "Src_Node": 0,
+            "Src_X": 1074,
+            "Src_Y": 591
+        },
+        {
+            "Dest_Gate": 14,
+            "Dest_Node": 1,
+            "Dest_X": 960,
+            "Dest_Y": 591,
+            "Src_Gate": 13,
+            "Src_Node": 0,
+            "Src_X": 842,
+            "Src_Y": 532
+        },
+        {
+            "Dest_Gate": 16,
+            "Dest_Node": 1,
+            "Dest_X": 983,
+            "Dest_Y": 475,
+            "Src_Gate": 18,
+            "Src_Node": 0,
+            "Src_X": 842,
+            "Src_Y": 460
+        },
+        {
+            "Dest_Gate": 16,
+            "Dest_Node": 2,
+            "Dest_X": 983,
+            "Dest_Y": 487,
+            "Src_Gate": 18,
+            "Src_Node": 0,
+            "Src_X": 842,
+            "Src_Y": 460
+        },
+        {
+            "Dest_Gate": 16,
+            "Dest_Node": 5,
+            "Dest_X": 983,
+            "Dest_Y": 523,
+            "Src_Gate": 13,
+            "Src_Node": 0,
+            "Src_X": 842,
+            "Src_Y": 532
+        },
+        {
+            "Dest_Gate": 16,
+            "Dest_Node": 4,
+            "Dest_X": 983,
+            "Dest_Y": 511,
+            "Src_Gate": 13,
+            "Src_Node": 0,
+            "Src_X": 842,
+            "Src_Y": 532
+        },
+        {
+            "Dest_Gate": 16,
+            "Dest_Node": 3,
+            "Dest_X": 983,
+            "Dest_Y": 499,
+            "Src_Gate": 13,
+            "Src_Node": 0,
+            "Src_X": 842,
+            "Src_Y": 532
+        }
+    ]
+}
