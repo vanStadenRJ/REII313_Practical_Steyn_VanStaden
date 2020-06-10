@@ -4,7 +4,14 @@ Contributers:
 * Ruben Johann van Staden 30026792 (vanStadenRJ)
 * Cornelia Elizabeth Steyn 30070147 (CorrieSteyn)
 
-Use Case Study:
+* User Case Study:
+  - Load the file testcase.json located in the program file
+  - A simple schematic will appear
+  - The schematic top-left is an equivalent circuit representing XOR logic
+  - The schematic top-right is an XOR-gate outputting the same logic
+  - The bottom configuration is an example of a clocked configuration.
+
+Instructions:
 * TO PLACE A GATE
   - Left-Click on choice of gate located in the panel to the left
   - Move your mouse to the approipriate place
