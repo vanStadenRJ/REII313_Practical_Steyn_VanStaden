@@ -1,5 +1,8 @@
 # REII313_Practical_Steyn_VanStaden
 Logic Gate Simulator by CE Steyn (30070147) and RJ van Staden (30026792) for REII 313.
+Contributers:
+* Ruben Johann van Staden 30026792 (vanStadenRJ)
+* Cornelia Elizabeth Steyn 30070147 (CorrieSteyn)
 
 Use Case Study:
 * TO PLACE A GATE
