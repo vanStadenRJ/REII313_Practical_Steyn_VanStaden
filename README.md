@@ -1,15 +1,9 @@
 # REII313_Practical_Steyn_VanStaden
 Logic Gate Simulator by CE Steyn (30070147) and RJ van Staden (30026792) for REII 313.
+
 Contributers:
 * Ruben Johann van Staden 30026792 (vanStadenRJ)
 * Cornelia Elizabeth Steyn 30070147 (CorrieSteyn)
-
-* User Case Study:
-  - Load the file testcase.json located in the program file
-  - A simple schematic will appear
-  - The schematic top-left is an equivalent circuit representing XOR logic
-  - The schematic top-right is an XOR-gate outputting the same logic
-  - The bottom configuration is an example of a clocked configuration.
 
 Instructions:
 * TO PLACE A GATE
@@ -64,4 +58,9 @@ Instructions:
   - Any unsaved progress will be lost if you open a saved file
   - By clicking on the appropriate .json file, your schematic will load
   
-  
+User Case Study:
+  - Load the file testcase.json located in the program file
+  - A simple schematic will appear
+  - The schematic top-left is an equivalent circuit representing XOR logic
+  - The schematic top-right is an XOR-gate outputting the same logic
+  - The bottom configuration is an example of a clocked configuration.  
