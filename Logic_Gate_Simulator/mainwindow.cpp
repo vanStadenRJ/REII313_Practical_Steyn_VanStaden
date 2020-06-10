@@ -83,8 +83,11 @@ void MainWindow::on_actionOpen_triggered()
                 {
                     QJsonObject obj_Gates;
                     obj_Gates = arr_Gates.at(i).toObject();
+                    if(obj_Gates["Nr"].toInt() > simulation->nr_Gates)
+                    {
+                        simulation->nr_Gates = obj_Gates["Nr"].toInt();
+                    }
                     Gate * gate = new Gate(obj_Gates["Nr"].toInt(), obj_Gates["Type"].toInt(), obj_Gates["nr_Inputs"].toInt());
-                    simulation->nr_Gates++;
                     gate->setPos(obj_Gates["x_Pos"].toDouble(), obj_Gates["y_Pos"].toDouble());
                     simulation->scene->addItem(gate);
                     gate->pos_Gate = gate->pos();

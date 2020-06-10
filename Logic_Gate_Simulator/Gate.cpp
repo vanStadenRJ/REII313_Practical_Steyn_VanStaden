@@ -2,6 +2,8 @@
 #include "Simulation.h"
 #include "inputbox.h"
 
+#include <QDebug>
+
 extern Simulation * simulation;
 
 Gate::Gate(int gateNr, int typeGate, int amnt)
@@ -41,6 +43,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
         lowTime = 500;
         highTime = 1000;
         lowTimer->start(lowTime);
+        this->setToolTip("Click and press Space to change the clocked input attributes");
     }
 
     // Upon icon clicked, type of gate needs to be identified and correct gate placed
@@ -134,6 +137,7 @@ Gate::Gate(int gateNr, int typeGate, int amnt)
 // MousePressEvent to handle effects and movement of gates
 void Gate::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    qDebug() << "Nr of gates: " << simulation->nr_Gates << ":" << this->gate_Nr;
     // Right Button to move gate
     if(event->button() == Qt::RightButton)
     {
